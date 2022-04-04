@@ -25,12 +25,12 @@ build_%/tests/venv/pyvenv.cfg: build_%/Makefile
 
 # build using cmake
 build-impl-%: build_%/Makefile
-	@cmake --build build_$* -j$(NPROCS) --target service_template
+	@cmake --build build_$* -j$(NPROCS) --target service_dynamic_configs
 
 # test
 test-impl-%: build-impl-% build_%/tests/venv/pyvenv.cfg
 	@cd tests && \
-        ../build_$*/tests/venv-service_template-testsuite/bin/pytest --build-dir=../build_$*
+        ../build_$*/tests/venv-service_dynamic_configs-testsuite/bin/pytest --build-dir=../build_$*
 	@pep8 tests
 
 # clean

@@ -9,7 +9,7 @@ pytest_plugins = [
     'testsuite.pytest_plugin',
 ]
 
-SERVICE_NAME = 'service_template'
+SERVICE_NAME = 'service_dynamic_configs'
 SERVICE_BASEURL = 'http://localhost:8080/'
 ROOT_PATH = pathlib.Path(__file__).parent.parent
 
@@ -24,13 +24,13 @@ def pytest_addoption(parser) -> None:
 
 
 @pytest.fixture
-async def service_template_client(
-        service_template_daemon,
+async def service_dynamic_configs_client(
+        service_dynamic_configs_daemon,
         service_client_options,
         ensure_daemon_started,
         mockserver,
 ):
-    await ensure_daemon_started(service_template_daemon)
+    await ensure_daemon_started(service_dynamic_configs_daemon)
     return service_client.Client(SERVICE_BASEURL, **service_client_options)
 
 
@@ -40,7 +40,7 @@ def build_dir(request) -> pathlib.Path:
 
 
 @pytest.fixture(scope='session')
-async def service_template_daemon(
+async def service_dynamic_configs_daemon(
         create_daemon_scope,
         tmp_path_factory,
         build_dir,
@@ -56,7 +56,7 @@ async def service_template_daemon(
 
     async with create_daemon_scope(
             args=[
-                str(build_dir.joinpath('service_template')),
+                str(build_dir.joinpath('service_dynamic_configs')),
                 '--config',
                 str(temp_dir_name.joinpath('static_config.yaml')),
             ],

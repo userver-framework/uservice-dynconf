@@ -30,12 +30,12 @@ components_manager:
                     overflow_behavior: discard  # Drop logs if the system is too busy to write them down.
 
         tracer:                              # Component that helps to trace execution times and requests in logs.
-            service-name: service_template   # "You know. You all know exactly who I am. Say my name. " (c)
+            service-name: service_dynamic_configs   # "You know. You all know exactly who I am. Say my name. " (c)
 
         taxi-config:                      # Dynamic config storage options, do nothing
             fs-cache-path: ''
         taxi-config-fallbacks:            # Load options from file and push them into the dynamic config storage.
-            fallback-path: /etc/service_template/dynamic_config_fallback.json
+            fallback-path: /etc/service_dynamic_configs/dynamic_config_fallback.json
         manager-controller:
         statistics-storage:
         auth-checker-settings:
