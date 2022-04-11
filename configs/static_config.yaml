@@ -51,10 +51,18 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-hello:                    # Finally! Our handler.
+        handler-configs-values:                    # Finally! Our handler.
             path: /configs/values                  # Registering handler by URL '/hello'.
-            method: GET,POST              # It will only reply to GET (HEAD) and POST requests.
+            method: POST              # It will only reply to GET (HEAD) and POST requests.
             task_processor: main-task-processor  # Run it on CPU bound task processor
+              #        handler-configs:
+              #            path: /configs
+              #            method: POST
+              #            task-processor: main-task-processor
+              #        handler-configs-delete:
+              #            path: /configs/delete
+              #            method: POST
+              #            task-processor: main-task-processor
 
         testsuite-support: {}
 
@@ -64,7 +72,7 @@ components_manager:
             update-interval: 10s
             full-update-interval: 1m
             update-correction: 2s
-            update-jitter: 4s
+            update-jitter: 1s
             chunk-size: 100
         settings-database:
           #dbconnection: 'postgresql://testsuite@localhost:15433/postgres'

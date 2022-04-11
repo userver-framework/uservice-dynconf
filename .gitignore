@@ -2,6 +2,8 @@ __pycache__
 build*
 compile_commands.json
 .cache/
+.idea/
+cmake-build-debug/
 Testing/
 !Makefile.local
 !third_party/

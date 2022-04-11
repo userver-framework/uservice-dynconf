@@ -1,4 +1,4 @@
-CMAKE_COMMON_FLAGS ?= -DOPEN_SOURCE_BUILD=1 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+CMAKE_COMMON_FLAGS ?= -DUSERVER_OPEN_SOURCE_BUILD=1 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 CMAKE_DEBUG_FLAGS ?= #-DSANITIZE='addr ub'
 CMAKE_RELESEAZE_FLAGS ?=
 CMAKE_OS_FLAGS ?= -DUSERVER_FEATURE_CRYPTOPP_BLAKE2=0 -DUSERVER_FEATURE_REDIS_HI_MALLOC=1
@@ -30,7 +30,7 @@ build-impl-%: build_%/Makefile
 # test
 test-impl-%: build-impl-% #build_%/tests/venv/pyvenv.cfg
 	@cd tests && \
-        ../build_$*/venv-userver-testenv/bin/py.test --build-dir=../build_$* -vv
+        ../build_$*/tests/venv-service_dynamic_configs-testsuite/bin/py.test --build-dir=../build_$* -vv
 	@pep8 tests
 
 # clean

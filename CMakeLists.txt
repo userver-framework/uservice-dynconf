@@ -14,9 +14,15 @@ add_executable(${PROJECT_NAME}
 	src/cache/settings_cache.cpp
 	src/components/pg_init.hpp
 	src/components/pg_init.cpp
+	src/handlers/configs.hpp
+	src/handlers/configs.cpp
+	src/handlers/configs_values.hpp
+	src/handlers/configs_values.cpp
+	src/handlers/configs_delete.hpp
+	src/handlers/configs_delete.cpp
 	src/sql/sql_query.hpp
-    src/hello.hpp
-    src/hello.cpp
+	#    src/hello.hpp
+	# src/hello.cpp
     src/main.cpp
 )
 

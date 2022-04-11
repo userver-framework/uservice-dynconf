@@ -10,7 +10,7 @@ pytest_plugins = [
 ]
 
 SERVICE_NAME = 'service_dynamic_configs'
-SERVICE_BASEURL = 'http://localhost:8080/'
+SERVICE_BASEURL = 'http://localhost:8083/'
 ROOT_PATH = pathlib.Path(__file__).parent.parent
 
 
