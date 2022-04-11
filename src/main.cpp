@@ -4,7 +4,6 @@
 
 #include "cache/settings_cache.hpp"
 #include "handlers/configs_values.hpp"
-#include "hello.hpp"
 #include "userver/clients/dns/component.hpp"
 #include "userver/testsuite/testsuite_support.hpp"
 
