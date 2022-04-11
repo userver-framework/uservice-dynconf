@@ -1,5 +1,8 @@
 __pycache__
 build*
+compile_commands.json
+.cache/
+Testing/
 !Makefile.local
 !third_party/
 !third_party/userver/

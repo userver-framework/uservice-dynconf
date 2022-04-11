@@ -1,5 +1,5 @@
 CMAKE_COMMON_FLAGS ?= -DOPEN_SOURCE_BUILD=1 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-CMAKE_DEBUG_FLAGS ?= -DSANITIZE='addr ub'
+CMAKE_DEBUG_FLAGS ?= #-DSANITIZE='addr ub'
 CMAKE_RELESEAZE_FLAGS ?=
 CMAKE_OS_FLAGS ?= -DUSERVER_FEATURE_CRYPTOPP_BLAKE2=0 -DUSERVER_FEATURE_REDIS_HI_MALLOC=1
 NPROCS ?= $(shell nproc)
@@ -21,16 +21,16 @@ build_release/Makefile:
 
 # virtualenv setup for running pytests
 build_%/tests/venv/pyvenv.cfg: build_%/Makefile
-	@cmake --build build_$* -j$(NPROCS) --target testsuite-venv-all
+	@cmake --build build_$* -j$(NPROCS) --target venv-service_synamic_configs-testsuite
 
 # build using cmake
 build-impl-%: build_%/Makefile
 	@cmake --build build_$* -j$(NPROCS) --target service_dynamic_configs
 
 # test
-test-impl-%: build-impl-% build_%/tests/venv/pyvenv.cfg
+test-impl-%: build-impl-% #build_%/tests/venv/pyvenv.cfg
 	@cd tests && \
-        ../build_$*/tests/venv-service_dynamic_configs-testsuite/bin/pytest --build-dir=../build_$*
+        ../build_$*/venv-userver-testenv/bin/py.test --build-dir=../build_$* -vv
 	@pep8 tests
 
 # clean
@@ -45,7 +45,7 @@ dist-clean:
 # format
 .PHONY: format
 format:
-	@find src -name '*pp' -type f | xargs clang-format -i
+	@find src -name '*pp' -type f | xargs clang-format-9 -i
 
 .PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release
 
