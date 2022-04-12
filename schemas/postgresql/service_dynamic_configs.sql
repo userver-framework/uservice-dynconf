@@ -1,12 +1,8 @@
-#pragma once
+DROP SCHEMA IF EXISTS service_dynamic_configs CASCADE;
 
-namespace service_dynamic_configs::sql {
-
-constexpr static const char *kCreateSchema = R"~(
 CREATE SCHEMA IF NOT EXISTS service_dynamic_configs;
-)~";
 
-constexpr static const char *kCreateTable = R"~(
+
 CREATE TABLE IF NOT EXISTS service_dynamic_configs.configs (
     service TEXT NOT NULL DEFAULT '__default__',
     config_name TEXT NOT NULL,
@@ -16,24 +12,16 @@ CREATE TABLE IF NOT EXISTS service_dynamic_configs.configs (
 
     PRIMARY KEY (service, config_name)
 );
-)~";
 
-constexpr static const char *kCreateIndexCreated = R"~(
 CREATE INDEX IF NOT EXISTS idx__created_at__configs
 ON service_dynamic_configs.configs USING btree (created_at);
-)~";
 
-constexpr static const char *kCreateIndexUpdate = R"~(
 CREATE INDEX IF NOT EXISTS idx__updated_at__configs
 ON service_dynamic_configs.configs USING btree (updated_at);
-)~";
 
-constexpr static const char *kCreateIndexPair = R"~(
 CREATE UNIQUE INDEX IF NOT EXISTS idx__pair_service_and_connfig
 ON service_dynamic_configs.configs USING btree (service, config_name);
-)~";
 
-constexpr static const char *kInsertDefaultConfigs = R"~(
 INSERT INTO service_dynamic_configs.configs (config_name, config_value)
 VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "http-limit": 6000,
@@ -43,10 +31,10 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "per-host-limit": 3000,
   "per-host-per-second": 500
 }'),
-       ('HTTP_CLIENT_CONNECTION_POOL_SIZE',
+('HTTP_CLIENT_CONNECTION_POOL_SIZE',
         '5000'),
-        ('HTTP_CLIENT_ENFORCE_TASK_DEADLINE',
-        '{
+('HTTP_CLIENT_ENFORCE_TASK_DEADLINE',
+'{
   "cancel-request": false,
   "update-timeout": false
 }'),
@@ -124,26 +112,3 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
    }')
 ON CONFLICT (service, config_name)
 DO NOTHING;
-)~";
-
-constexpr static const char *kSelectSettingsForCache = R"~(
-SELECT (service, config_name), config_value, updated_at
-FROM service_dynamic_configs.configs
-)~";
-
-constexpr static const char *kInsertConfigValue = R"~(
-INSERT INTO service_dynamic_configs.configs
-(service, config_name, config_value)
-VALUES ($1, $2, $3)
-ON CONFLICT (service, config_name)
-DO UPDATE SET 
-config_value = EXCLUDED.config_value,
-updated_at = NOW();
-)~";
-
-constexpr static const char *kDeleteConfigValues = R"~(
-DELETE FROM service_dynamic_configs.configs
-WHERE service = $1 and config_name IN (SELECT unnest($2));
-)~";
-
-} // namespace service_dynamic_configs::sql

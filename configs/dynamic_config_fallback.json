@@ -1,4 +1,17 @@
 {
+  "HTTP_CLIENT_CONNECTION_POOL_SIZE": 1000,
+  "HTTP_CLIENT_CONNECT_THROTTLE": {
+    "http-limit": 6000,
+    "http-per-second": 1500,
+    "https-limit": 100,
+    "https-per-second": 25,
+    "per-host-limit": 3000,
+    "per-host-per-second": 500
+  },
+  "HTTP_CLIENT_ENFORCE_TASK_DEADLINE": {
+    "cancel-request": false,
+    "update-timeout": false
+  },
   "POSTGRES_CONNECTION_POOL_SETTINGS": {
     "key-value-database": {
       "max_pool_size": 15,

@@ -1,5 +1,7 @@
 #include "configs_values.hpp"
 #include "userver/formats/json/value.hpp"
+#include "userver/utils/datetime.hpp"
+#include <chrono>
 
 namespace service_dynamic_configs::handlers::configs_values::post {
 
@@ -38,15 +40,17 @@ Handler::Handler(const userver::components::ComponentConfig &config,
              service_synamic_configs::cache::settings_cache::ConfigsCache>()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
-    const userver::server::http::HttpRequest &request,
+    const userver::server::http::HttpRequest &,
     const userver::formats::json::Value &request_json,
-    userver::server::request::RequestContext & /*context*/) const {
+    userver::server::request::RequestContext &) const {
 
   const auto request_data = ParseRequest(request_json);
   const auto data = cache_.Get();
 
   userver::formats::json::ValueBuilder result =
       userver::formats::json::MakeObject();
+
+  std::optional<std::chrono::time_point<std::chrono::system_clock>> updated_at;
 
   if (!request_data.ids.empty()) {
     for (const auto &id : request_data.ids) {
@@ -55,6 +59,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
           (!request_data.update_since || request_data.update_since.value() <=
                                              val->updated_at.GetUnderlying())) {
         result[val->key.config_name] = val->config_value;
+        updated_at =
+            updated_at ? std::max(*updated_at, val->updated_at.GetUnderlying())
+                       : val->updated_at.GetUnderlying();
       }
     }
   } else {
@@ -64,6 +71,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
           (!request_data.update_since || request_data.update_since.value() <=
                                              val->updated_at.GetUnderlying())) {
         result[val->key.config_name] = val->config_value;
+        updated_at =
+            updated_at ? std::max(*updated_at, val->updated_at.GetUnderlying())
+                       : val->updated_at.GetUnderlying();
       }
     }
   }
@@ -71,7 +81,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   userver::formats::json::ValueBuilder builder =
       userver::formats::json::MakeObject();
   builder["configs"] = result.ExtractValue();
-  builder["updated_at"] = userver::utils::datetime::Now();
+  builder["updated_at"] = updated_at.value_or(userver::utils::datetime::Now());
   return builder.ExtractValue();
 }
 
