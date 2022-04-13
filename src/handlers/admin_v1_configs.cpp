@@ -21,9 +21,7 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
   if (request["configs"].IsObject()) {
     result.configs = request["configs"];
   }
-  if (request["service"].IsString()) {
-    result.service = request["service"].As<std::string>();
-  }
+  result.service = request["service"].As<std::string>({});
   return result;
 }
 

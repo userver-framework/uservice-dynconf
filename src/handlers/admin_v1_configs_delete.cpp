@@ -17,19 +17,14 @@ struct RequestData {
 
 RequestData ParseRequest(const userver::formats::json::Value &request) {
   RequestData result;
-  if (request["ids"].IsArray()) {
-    result.ids = request["ids"].As<std::vector<std::string>>();
-  }
-  if (request["service"].IsString()) {
-    result.service = request["service"].As<std::string>();
-  }
+  result.ids = request["ids"].As<std::vector<std::string>>({});
+  result.service = request["service"].As<std::string>({});
   return result;
 }
 
 userver::formats::json::Value MakeError(std::string_view code,
                                         std::string_view message) {
-  userver::formats::json::ValueBuilder builder =
-      userver::formats::json::MakeObject();
+  userver::formats::json::ValueBuilder builder;
   builder["code"] = code;
   builder["message"] = message;
   return builder.ExtractValue();
