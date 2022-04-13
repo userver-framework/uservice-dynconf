@@ -15,9 +15,7 @@ struct RequestData {
 
 RequestData ParseRequest(const userver::formats::json::Value &request) {
   RequestData result;
-  if (request["ids"].IsArray()) {
-    result.ids = request["ids"].As<std::vector<std::string>>();
-  }
+  result.ids = request["ids"].As<std::vector<std::string>>({});
   result.service = request["service"].As<std::string>({});
   if (auto str_time = request["updated_since"].As<std::string>({}); !str_time.empty()) {
       result.update_since = {userver::utils::datetime::Stringtime(
