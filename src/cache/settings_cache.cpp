@@ -18,7 +18,7 @@ const userver::storages::postgres::Query &ConfigCachePolicy::kQuery =
 void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
   auto config_ptr = std::make_shared<const Config>(std::move(config));
   configs_to_key_.insert_or_assign(key, config_ptr);
-  configs_by_service_[key.service].push_back(config_ptr);
+  configs_by_service_[key.service].push_back(std::move(config_ptr));
 }
 
 std::vector<ConfigCacheContainer::ConfigPtr>
