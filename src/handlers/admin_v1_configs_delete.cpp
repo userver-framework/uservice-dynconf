@@ -28,8 +28,7 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
 
 userver::formats::json::Value MakeError(std::string_view code,
                                         std::string_view message) {
-  userver::formats::json::ValueBuilder builder =
-      userver::formats::json::MakeObject();
+  userver::formats::json::ValueBuilder builder;
   builder["code"] = code;
   builder["message"] = message;
   return builder.ExtractValue();
