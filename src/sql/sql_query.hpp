@@ -2,11 +2,11 @@
 
 namespace service_dynamic_configs::sql {
 
-constexpr static const char *kCreateSchema = R"~(
+inline constexpr std::string_view kCreateSchema = R"~(
 CREATE SCHEMA IF NOT EXISTS service_dynamic_configs;
 )~";
 
-constexpr static const char *kCreateTable = R"~(
+inline constexpr std::string_view kCreateTable = R"~(
 CREATE TABLE IF NOT EXISTS service_dynamic_configs.configs (
     service TEXT NOT NULL DEFAULT '__default__',
     config_name TEXT NOT NULL,
@@ -18,22 +18,22 @@ CREATE TABLE IF NOT EXISTS service_dynamic_configs.configs (
 );
 )~";
 
-constexpr static const char *kCreateIndexCreated = R"~(
+inline constexpr std::string_view kCreateIndexCreated = R"~(
 CREATE INDEX IF NOT EXISTS idx__created_at__configs
 ON service_dynamic_configs.configs USING btree (created_at);
 )~";
 
-constexpr static const char *kCreateIndexUpdate = R"~(
+inline constexpr std::string_view kCreateIndexUpdate = R"~(
 CREATE INDEX IF NOT EXISTS idx__updated_at__configs
 ON service_dynamic_configs.configs USING btree (updated_at);
 )~";
 
-constexpr static const char *kCreateIndexPair = R"~(
+inline constexpr std::string_view kCreateIndexPair = R"~(
 CREATE UNIQUE INDEX IF NOT EXISTS idx__pair_service_and_connfig
 ON service_dynamic_configs.configs USING btree (service, config_name);
 )~";
 
-constexpr static const char *kInsertDefaultConfigs = R"~(
+inline constexpr std::string_view kInsertDefaultConfigs = R"~(
 INSERT INTO service_dynamic_configs.configs (config_name, config_value)
 VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "http-limit": 6000,
@@ -126,12 +126,12 @@ ON CONFLICT (service, config_name)
 DO NOTHING;
 )~";
 
-constexpr static const char *kSelectSettingsForCache = R"~(
+inline constexpr std::string_view kSelectSettingsForCache = R"~(
 SELECT (service, config_name), config_value, updated_at
 FROM service_dynamic_configs.configs
 )~";
 
-constexpr static const char *kInsertConfigValue = R"~(
+inline constexpr std::string_view kInsertConfigValue = R"~(
 INSERT INTO service_dynamic_configs.configs
 (service, config_name, config_value)
 VALUES ($1, $2, $3)
@@ -141,7 +141,7 @@ config_value = EXCLUDED.config_value,
 updated_at = NOW();
 )~";
 
-constexpr static const char *kDeleteConfigValues = R"~(
+inline constexpr std::string_view kDeleteConfigValues = R"~(
 DELETE FROM service_dynamic_configs.configs
 WHERE service = $1 and config_name IN (SELECT unnest($2));
 )~";

@@ -57,7 +57,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                    service_dynamic_configs::sql::kDeleteConfigValues,
+                    service_dynamic_configs::sql::kDeleteConfigValues.data(),
                     request_data.service, request_data.ids);
 
   http_response.SetStatus(userver::server::http::HttpStatus::kNoContent);

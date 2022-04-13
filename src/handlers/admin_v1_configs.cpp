@@ -63,7 +63,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   for (const auto &[k, v] :
        userver::formats::json::Items(request_data.configs)) {
-    trx.Execute(service_dynamic_configs::sql::kInsertConfigValue,
+    trx.Execute(service_dynamic_configs::sql::kInsertConfigValue.data(),
                 request_data.service, k, v);
   }
   trx.Commit();

@@ -13,7 +13,7 @@ constexpr static const char *kDefaultService = "__default__";
 
 const userver::storages::postgres::Query &ConfigCachePolicy::kQuery =
     userver::storages::postgres::Query(
-        service_dynamic_configs::sql::kSelectSettingsForCache);
+        service_dynamic_configs::sql::kSelectSettingsForCache.data());
 
 void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
   auto config_ptr = std::make_shared<const Config>(std::move(config));
