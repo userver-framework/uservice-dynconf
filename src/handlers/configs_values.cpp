@@ -44,7 +44,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   userver::formats::json::ValueBuilder result;
 
-  std::optional<std::chrono::time_point<std::chrono::system_clock>> updated_at;
+  std::chrono::time_point<std::chrono::system_clock> updated_at{};
 
   if (!request_data.ids.empty()) {
     for (const auto &id : request_data.ids) {
