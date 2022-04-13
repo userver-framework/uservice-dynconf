@@ -32,20 +32,6 @@ USERVER_RPS_CCONTROL_ENABLED_2 = True
 CUSTOM_CONFIG = {'config': False}
 
 
-async def invalidate_caches(client, mocked_time):
-    response = await client.post(
-        '/tests/control',
-        json={
-            'mock_now': utils.timestring(mocked_time.now()),
-            'invalidate_caches': {
-                'update_type': 'full',
-                'names': ['configs-cache'],
-            },
-        },
-    )
-    assert response.status_code == 200
-
-
 @pytest.mark.parametrize(
     'ids, service, expected',
     [
@@ -176,8 +162,9 @@ async def invalidate_caches(client, mocked_time):
 )
 async def test_configs_values(
         service_dynamic_configs_client, mocked_time, ids, service, expected,
+        invalidate_caches
 ):
-    await invalidate_caches(service_dynamic_configs_client, mocked_time)
+    await invalidate_caches()
     response = await service_dynamic_configs_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )

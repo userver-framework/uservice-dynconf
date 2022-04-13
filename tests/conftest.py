@@ -3,6 +3,7 @@ import pathlib
 import pytest
 
 from testsuite.daemons import service_client
+from testsuite import utils
 
 from testsuite.databases.pgsql import discover
 
@@ -104,3 +105,21 @@ def pgsql_local(example_root, pgsql_local_create):
 @pytest.fixture
 def client_deps(pgsql):
     pass
+
+
+@pytest.fixture
+async def invalidate_caches(service_dynamic_configs_client, mocked_time):
+    async def do_invalidate_caches():
+        response = await service_dynamic_configs_client.post(
+            '/tests/control',
+            json={
+                'mock_now': utils.timestring(mocked_time.now()),
+                'invalidate_caches': {
+                    'update_type': 'full',
+                    'names': ['configs-cache'],
+                },
+            },
+        )
+        assert response.status_code == 200
+    return do_invalidate_caches
+
