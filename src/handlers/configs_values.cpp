@@ -77,8 +77,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     }
   }
 
-  userver::formats::json::ValueBuilder builder =
-      userver::formats::json::MakeObject();
+  userver::formats::json::ValueBuilder builder;
   builder["configs"] = result.ExtractValue();
   builder["updated_at"] = updated_at.value_or(userver::utils::datetime::Now());
   return builder.ExtractValue();
