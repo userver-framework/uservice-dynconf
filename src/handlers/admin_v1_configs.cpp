@@ -36,7 +36,7 @@ userver::formats::json::Value MakeError(std::string_view code,
   return builder.ExtractValue();
 }
 
-}; // namespace
+} // namespace
 
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)

@@ -31,7 +31,7 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
   }
   return result;
 }
-}; // namespace
+} // namespace
 
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
