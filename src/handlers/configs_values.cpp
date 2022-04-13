@@ -18,16 +18,11 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
   if (request["ids"].IsArray()) {
     result.ids = request["ids"].As<std::vector<std::string>>();
   }
-  if (request["service"].IsString()) {
-    result.service = request["service"].As<std::string>();
-  }
-  if (request["updated_since"].IsString()) {
-    if (auto str_time = request["updated_since"].As<std::string>();
-        !str_time.empty()) {
+  result.service = request["service"].As<std::string>({});
+  if (auto str_time = request["updated_since"].As<std::string>({}); !str_time.empty()) {
       result.update_since = {userver::utils::datetime::Stringtime(
           str_time, userver::utils::datetime::kDefaultTimezone,
           userver::utils::datetime::kRfc3339Format)};
-    }
   }
   return result;
 }
