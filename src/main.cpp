@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::TestsuiteSupport>()
           .Append<
-              service_synamic_configs::cache::settings_cache::ConfigsCache>()
+              service_dynamic_configs::cache::settings_cache::ConfigsCache>()
           .Append<service_dynamic_configs::handlers::configs_values::post::
                       Handler>()
           .Append<service_dynamic_configs::handlers::admin_v1_configs::post::

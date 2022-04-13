@@ -43,4 +43,4 @@ ConfigCacheContainer::FindConfig(const ConfigCacheContainer::Key &key) const {
       ConfigCacheContainer::Key{{kDefaultService}, key.config_name}, nullptr);
 }
 
-} // namespace service_synamic_configs::cache::settings_cache
+} // namespace service_dynamic_configs::cache::settings_cache

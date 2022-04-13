@@ -38,4 +38,4 @@ struct ConfigCachePolicy {
 };
 
 using ConfigsCache = ::userver::components::PostgreCache<ConfigCachePolicy>;
-} // namespace service_synamic_configs::cache::settings_cache
+} // namespace service_dynamic_configs::cache::settings_cache

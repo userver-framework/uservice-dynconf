@@ -13,4 +13,4 @@ userver::formats::json::Value MakeError(std::string_view code,
   return builder.ExtractValue();
 }
 
-} // namespace service_synamic_configs::utils
+} // namespace service_dynamic_configs::utils

@@ -5,8 +5,8 @@
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 
-#include "utils/make_error.hpp"
 #include "sql/sql_query.hpp"
+#include "utils/make_error.hpp"
 #include <vector>
 
 namespace service_dynamic_configs::handlers::admin_v1_configs::post {
@@ -44,7 +44,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto request_data = ParseRequest(request_json);
   if (request_data.configs.IsEmpty() || request_data.service.empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
-    return service_dynamic_configs::utils::MakeError("400", "Fields configs and service requred");
+    return service_dynamic_configs::utils::MakeError(
+        "400", "Fields configs and service requred");
   }
 
   auto trx = cluster_->Begin(

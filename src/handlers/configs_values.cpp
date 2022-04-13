@@ -1,7 +1,10 @@
 #include "configs_values.hpp"
+#include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
+#include "userver/formats/json/value_builder.hpp"
 #include "userver/utils/datetime.hpp"
 #include <chrono>
+#include <ctime>
 
 namespace service_dynamic_configs::handlers::configs_values::post {
 
@@ -31,7 +34,7 @@ Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
     : HttpHandlerJsonBase(config, context),
       cache_(context.FindComponent<
-             service_synamic_configs::cache::settings_cache::ConfigsCache>()) {}
+             service_dynamic_configs::cache::settings_cache::ConfigsCache>()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &,
@@ -41,19 +44,21 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto request_data = ParseRequest(request_json);
   const auto data = cache_.Get();
 
-  userver::formats::json::ValueBuilder result;
+  userver::formats::json::ValueBuilder result =
+      userver::formats::json::MakeObject();
 
-  std::chrono::time_point<std::chrono::system_clock> updated_at{};
+  std::chrono::time_point<std::chrono::system_clock> min_time(
+      std::chrono::milliseconds(0));
+  std::chrono::time_point<std::chrono::system_clock> updated_at(
+      std::chrono::milliseconds(0));
 
   if (!request_data.ids.empty()) {
     for (const auto &id : request_data.ids) {
       const auto val = data->FindConfig({request_data.service, id});
-      if (val && request_data.update_since.value_or(0) <=
+      if (val && request_data.update_since.value_or(min_time) <=
                      val->updated_at.GetUnderlying()) {
         result[val->key.config_name] = val->config_value;
-        updated_at =
-            updated_at ? std::max(*updated_at, val->updated_at.GetUnderlying())
-                       : val->updated_at.GetUnderlying();
+        updated_at = std::max(updated_at, val->updated_at.GetUnderlying());
       }
     }
   } else {
@@ -63,16 +68,15 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
           (!request_data.update_since || request_data.update_since.value() <=
                                              val->updated_at.GetUnderlying())) {
         result[val->key.config_name] = val->config_value;
-        updated_at =
-            updated_at ? std::max(*updated_at, val->updated_at.GetUnderlying())
-                       : val->updated_at.GetUnderlying();
+        updated_at = std::max(updated_at, val->updated_at.GetUnderlying());
       }
     }
   }
 
   userver::formats::json::ValueBuilder builder;
   builder["configs"] = result.ExtractValue();
-  builder["updated_at"] = updated_at.value_or(userver::utils::datetime::Now());
+  builder["updated_at"] =
+      updated_at == min_time ? userver::utils::datetime::Now() : updated_at;
   return builder.ExtractValue();
 }
 

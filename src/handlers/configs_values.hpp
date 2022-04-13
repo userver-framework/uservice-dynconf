@@ -23,7 +23,7 @@ public:
       userver::server::request::RequestContext &context) const override final;
 
 private:
-  const service_synamic_configs::cache::settings_cache::ConfigsCache &cache_;
+  const service_dynamic_configs::cache::settings_cache::ConfigsCache &cache_;
 };
 
 } // namespace service_dynamic_configs::handlers::configs_values::post
