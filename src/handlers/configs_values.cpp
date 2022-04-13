@@ -17,10 +17,11 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
   RequestData result;
   result.ids = request["ids"].As<std::vector<std::string>>({});
   result.service = request["service"].As<std::string>({});
-  if (auto str_time = request["updated_since"].As<std::string>({}); !str_time.empty()) {
-      result.update_since = {userver::utils::datetime::Stringtime(
-          str_time, userver::utils::datetime::kDefaultTimezone,
-          userver::utils::datetime::kRfc3339Format)};
+  if (auto str_time = request["updated_since"].As<std::string>({});
+      !str_time.empty()) {
+    result.update_since = {userver::utils::datetime::Stringtime(
+        str_time, userver::utils::datetime::kDefaultTimezone,
+        userver::utils::datetime::kRfc3339Format)};
   }
   return result;
 }
@@ -47,9 +48,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (!request_data.ids.empty()) {
     for (const auto &id : request_data.ids) {
       const auto val = data->FindConfig({request_data.service, id});
-      if (val &&
-          request_data.update_since.value_or(0) <=
-                                             val->updated_at.GetUnderlying()) {
+      if (val && request_data.update_since.value_or(0) <=
+                     val->updated_at.GetUnderlying()) {
         result[val->key.config_name] = val->config_value;
         updated_at =
             updated_at ? std::max(*updated_at, val->updated_at.GetUnderlying())

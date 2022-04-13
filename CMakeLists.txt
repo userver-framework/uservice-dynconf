@@ -8,6 +8,8 @@ add_subdirectory(third_party/userver)
 
 add_executable(${PROJECT_NAME}
 	src/models/config.hpp
+	src/utils/make_error.hpp
+	src/utils/make_error.cpp
 	src/cache/settings_cache.hpp
 	src/cache/settings_cache.cpp
 	src/handlers/admin_v1_configs.hpp

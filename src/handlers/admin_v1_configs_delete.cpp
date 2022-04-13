@@ -5,6 +5,7 @@
 #include "userver/storages/postgres/component.hpp"
 
 #include "sql/sql_query.hpp"
+#include "utils/make_error.hpp"
 
 namespace service_dynamic_configs::handlers::admin_v1_configs_delete::post {
 
@@ -22,14 +23,6 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
   return result;
 }
 
-userver::formats::json::Value MakeError(std::string_view code,
-                                        std::string_view message) {
-  userver::formats::json::ValueBuilder builder;
-  builder["code"] = code;
-  builder["message"] = message;
-  return builder.ExtractValue();
-}
-
 } // namespace
 
 Handler::Handler(const userver::components::ComponentConfig &config,
@@ -43,12 +36,13 @@ Handler::Handler(const userver::components::ComponentConfig &config,
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &request,
     const userver::formats::json::Value &request_json,
-    userver::server::request::RequestContext & /*context*/) const {
+    userver::server::request::RequestContext &) const {
   const auto request_data = ParseRequest(request_json);
   auto &http_response = request.GetHttpResponse();
   if (request_data.ids.empty() || request_data.service.empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
-    return MakeError("400", "Fields ids and service requred");
+    return service_dynamic_configs::utils::MakeError(
+        "400", "Fields ids and service requred");
   }
 
   cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,

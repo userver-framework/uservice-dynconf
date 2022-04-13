@@ -5,7 +5,7 @@
 #include "sql/sql_query.hpp"
 #include "userver/utils/algo.hpp"
 
-namespace service_synamic_configs::cache::settings_cache {
+namespace service_dynamic_configs::cache::settings_cache {
 
 namespace {
 constexpr static const char *kDefaultService = "__default__";
@@ -23,8 +23,9 @@ void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
 
 std::vector<ConfigCacheContainer::ConfigPtr>
 ConfigCacheContainer::FindConfigsByService(std::string_view service) const {
-  if (configs_by_service_.count(service.data()) > 0) {
-    return configs_by_service_.at(service.data());
+  if (auto it = configs_by_service_.find(service.data());
+      it != configs_by_service_.end()) {
+    return it->second;
   }
   return {};
 }

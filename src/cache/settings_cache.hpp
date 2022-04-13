@@ -7,7 +7,7 @@
 
 #include "models/config.hpp"
 
-namespace service_synamic_configs::cache::settings_cache {
+namespace service_dynamic_configs::cache::settings_cache {
 
 class ConfigCacheContainer {
 public:

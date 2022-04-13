@@ -5,6 +5,7 @@
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 
+#include "utils/make_error.hpp"
 #include "sql/sql_query.hpp"
 #include <vector>
 
@@ -25,15 +26,6 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
   return result;
 }
 
-userver::formats::json::Value MakeError(std::string_view code,
-                                        std::string_view message) {
-  userver::formats::json::ValueBuilder builder =
-      userver::formats::json::MakeObject();
-  builder["code"] = code;
-  builder["message"] = message;
-  return builder.ExtractValue();
-}
-
 } // namespace
 
 Handler::Handler(const userver::components::ComponentConfig &config,
@@ -47,12 +39,12 @@ Handler::Handler(const userver::components::ComponentConfig &config,
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &request,
     const userver::formats::json::Value &request_json,
-    userver::server::request::RequestContext & /*context*/) const {
+    userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
   const auto request_data = ParseRequest(request_json);
   if (request_data.configs.IsEmpty() || request_data.service.empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
-    return MakeError("400", "Fields configs and service requred");
+    return service_dynamic_configs::utils::MakeError("400", "Fields configs and service requred");
   }
 
   auto trx = cluster_->Begin(
