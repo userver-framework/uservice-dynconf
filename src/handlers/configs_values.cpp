@@ -47,8 +47,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto request_data = ParseRequest(request_json);
   const auto data = cache_.Get();
 
-  userver::formats::json::ValueBuilder result =
-      userver::formats::json::MakeObject();
+  userver::formats::json::ValueBuilder result;
 
   std::optional<std::chrono::time_point<std::chrono::system_clock>> updated_at;
 
