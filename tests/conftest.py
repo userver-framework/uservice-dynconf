@@ -122,4 +122,3 @@ async def invalidate_caches(service_dynamic_configs_client, mocked_time):
         )
         assert response.status_code == 200
     return do_invalidate_caches
-
