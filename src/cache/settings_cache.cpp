@@ -4,6 +4,7 @@
 
 #include "sql/sql_query.hpp"
 #include "userver/utils/algo.hpp"
+#include <string_view>
 
 namespace service_dynamic_configs::cache::settings_cache {
 
@@ -41,6 +42,28 @@ ConfigCacheContainer::FindConfig(const ConfigCacheContainer::Key &key) const {
   return userver::utils::FindOrDefault(
       configs_to_key_,
       ConfigCacheContainer::Key{{kDefaultService}, key.config_name}, nullptr);
+}
+
+std::vector<ConfigCacheContainer::ConfigPtr>
+ConfigCacheContainer::FindConfigs(std::string_view service,
+                                  const std::vector<std::string> &ids) const {
+  std::vector<ConfigCacheContainer::ConfigPtr> result{};
+  result.reserve(ids.size());
+  for (const auto &id : ids) {
+    if (auto c_ptr = userver::utils::FindOrDefault(
+            configs_to_key_, Key{service.data(), id}, nullptr);
+        c_ptr) {
+      result.emplace_back(c_ptr);
+      continue;
+    }
+    if (auto c_ptr = userver::utils::FindOrDefault(
+            configs_to_key_, ConfigCacheContainer::Key{{kDefaultService}, id},
+            nullptr);
+        c_ptr) {
+      result.emplace_back(c_ptr);
+    }
+  }
+  return result;
 }
 
 } // namespace service_dynamic_configs::cache::settings_cache

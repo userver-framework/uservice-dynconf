@@ -20,6 +20,8 @@ public:
 
   ConfigPtr FindConfig(const Key &key) const;
   std::vector<ConfigPtr> FindConfigsByService(std::string_view service) const;
+  std::vector<ConfigPtr> FindConfigs(std::string_view service,
+                                     const std::vector<std::string> &ids) const;
 
 private:
   std::unordered_map<Key, ConfigPtr> configs_to_key_;

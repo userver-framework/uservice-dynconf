@@ -1,4 +1,5 @@
 #include "configs_values.hpp"
+#include "cache/settings_cache.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/json/value_builder.hpp"
@@ -52,24 +53,16 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   std::chrono::time_point<std::chrono::system_clock> updated_at(
       std::chrono::milliseconds(0));
 
-  if (!request_data.ids.empty()) {
-    for (const auto &id : request_data.ids) {
-      const auto val = data->FindConfig({request_data.service, id});
-      if (val && request_data.update_since.value_or(kMinTime) <=
-                     val->updated_at.GetUnderlying()) {
-        result[val->key.config_name] = val->config_value;
-        updated_at = std::max(updated_at, val->updated_at.GetUnderlying());
-      }
-    }
-  } else {
-    auto confs = data->FindConfigsByService(request_data.service);
-    for (const auto &val : confs) {
-      if (val &&
-          (!request_data.update_since || request_data.update_since.value() <=
-                                             val->updated_at.GetUnderlying())) {
-        result[val->key.config_name] = val->config_value;
-        updated_at = std::max(updated_at, val->updated_at.GetUnderlying());
-      }
+  const auto configs =
+      request_data.ids.empty()
+          ? data->FindConfigsByService(request_data.service)
+          : data->FindConfigs(request_data.service, request_data.ids);
+
+  for (const auto &config : configs) {
+    if (config && request_data.update_since.value_or(kMinTime) <=
+                      config->updated_at.GetUnderlying()) {
+      result[config->key.config_name] = config->config_value;
+      updated_at = std::max(updated_at, config->updated_at.GetUnderlying());
     }
   }
 
