@@ -106,5 +106,5 @@ async def test_remove_configs_400(
     assert response.status_code == 400
     assert response.json() == {
         'code': '400',
-        'message': 'Fields ids and service requred',
+        'message': 'Fields \'ids\' and \'service\' are required',
     }

@@ -119,5 +119,5 @@ async def test_add_configs_400(
     assert response.status_code == 400
     assert response.json() == {
         'code': '400',
-        'message': 'Fields configs and service requred',
+        'message': 'Fields \'configs\' and \'service\' are required',
     }
