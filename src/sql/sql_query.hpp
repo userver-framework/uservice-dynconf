@@ -134,9 +134,10 @@ FROM service_dynamic_configs.configs
 inline constexpr std::string_view kInsertConfigValue = R"~(
 INSERT INTO service_dynamic_configs.configs
 (service, config_name, config_value)
-VALUES ($1, $2, $3)
+SELECT $1, d.key, d.value::jsonb
+FROM jsonb_each_text($2) as d
 ON CONFLICT (service, config_name)
-DO UPDATE SET 
+DO UPDATE SET
 config_value = EXCLUDED.config_value,
 updated_at = NOW();
 )~";

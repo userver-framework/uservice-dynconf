@@ -48,16 +48,10 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         "400", "Fields 'configs' and 'service' are required");
   }
 
-  auto trx = cluster_->Begin(
-      "add_and_update_configs",
-      userver::storages::postgres::ClusterHostType::kMaster, {});
+  cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
+                    service_dynamic_configs::sql::kInsertConfigValue.data(),
+                    request_data.service, request_data.configs);
 
-  for (const auto &[k, v] :
-       userver::formats::json::Items(request_data.configs)) {
-    trx.Execute(service_dynamic_configs::sql::kInsertConfigValue.data(),
-                request_data.service, k, v);
-  }
-  trx.Commit();
   http_response.SetStatus(userver::server::http::HttpStatus::kNoContent);
 
   return {};
