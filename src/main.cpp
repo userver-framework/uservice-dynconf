@@ -13,6 +13,7 @@
 #include <userver/storages/postgres/component.hpp>
 
 int main(int argc, char *argv[]) {
+  namespace service_handlers = service_dynamic_configs::handlers;
   auto component_list =
       userver::components::MinimalServerComponentList()
           .Append<userver::server::handlers::Ping>()
@@ -21,12 +22,9 @@ int main(int argc, char *argv[]) {
           .Append<userver::components::TestsuiteSupport>()
           .Append<
               service_dynamic_configs::cache::settings_cache::ConfigsCache>()
-          .Append<service_dynamic_configs::handlers::configs_values::post::
-                      Handler>()
-          .Append<service_dynamic_configs::handlers::admin_v1_configs::post::
-                      Handler>()
-          .Append<service_dynamic_configs::handlers::admin_v1_configs_delete::
-                      post::Handler>()
+          .Append<service_handlers::configs_values::post::Handler>()
+          .Append<service_handlers::admin_v1_configs::post::Handler>()
+          .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
           .Append<userver::server::handlers::TestsControl>();
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

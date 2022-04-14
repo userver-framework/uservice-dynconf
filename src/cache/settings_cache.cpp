@@ -11,7 +11,7 @@ namespace {
 constexpr static const char *kDefaultService = "__default__";
 }
 
-const userver::storages::postgres::Query &ConfigCachePolicy::kQuery =
+userver::storages::postgres::Query ConfigCachePolicy::kQuery =
     userver::storages::postgres::Query(
         service_dynamic_configs::sql::kSelectSettingsForCache.data());
 

@@ -45,7 +45,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (request_data.configs.IsEmpty() || request_data.service.empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return service_dynamic_configs::utils::MakeError(
-        "400", "Fields configs and service requred");
+        "400", "Fields 'configs' and 'service' are required");
   }
 
   auto trx = cluster_->Begin(

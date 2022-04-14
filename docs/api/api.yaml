@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-    description: Open source service dynamic configs by Userver
-    title: Userver service_dynamic_configs Service
+    description: Open source service dynamic configs by userver
+    title: userver service_dynamic_configs service
     version: '1.0'
 
 servers:
@@ -108,10 +108,10 @@ paths:
                             additionalProperties: false
                             type: object
                             required:
-                              - configs
+                              - ids
                               - service
                             properties:
-                                configs:
+                                ids:
                                     type: array
                                     description: |
                                         list of config ids to delete

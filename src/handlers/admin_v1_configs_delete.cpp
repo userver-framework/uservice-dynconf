@@ -42,7 +42,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (request_data.ids.empty() || request_data.service.empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return service_dynamic_configs::utils::MakeError(
-        "400", "Fields ids and service requred");
+        "400", "Fields 'ids' and 'service' are required");
   }
 
   cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,

@@ -32,7 +32,7 @@ struct ConfigCachePolicy {
   using CacheContainer = ConfigCacheContainer;
   static constexpr auto kKeyMember =
       &service_dynamic_configs::models::Config::key;
-  static const userver::storages::postgres::Query &kQuery;
+  static userver::storages::postgres::Query kQuery;
   static constexpr auto kUpdatedField = "updated_at";
   using UpdatedFieldType = userver::storages::postgres::TimePointTz;
 };

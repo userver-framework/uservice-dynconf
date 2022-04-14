@@ -47,7 +47,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   userver::formats::json::ValueBuilder result =
       userver::formats::json::MakeObject();
 
-  std::chrono::time_point<std::chrono::system_clock> min_time(
+  constexpr std::chrono::time_point<std::chrono::system_clock> kMinTime(
       std::chrono::milliseconds(0));
   std::chrono::time_point<std::chrono::system_clock> updated_at(
       std::chrono::milliseconds(0));
@@ -55,7 +55,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (!request_data.ids.empty()) {
     for (const auto &id : request_data.ids) {
       const auto val = data->FindConfig({request_data.service, id});
-      if (val && request_data.update_since.value_or(min_time) <=
+      if (val && request_data.update_since.value_or(kMinTime) <=
                      val->updated_at.GetUnderlying()) {
         result[val->key.config_name] = val->config_value;
         updated_at = std::max(updated_at, val->updated_at.GetUnderlying());
@@ -76,7 +76,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   userver::formats::json::ValueBuilder builder;
   builder["configs"] = result.ExtractValue();
   builder["updated_at"] =
-      updated_at == min_time ? userver::utils::datetime::Now() : updated_at;
+      updated_at == kMinTime ? userver::utils::datetime::Now() : updated_at;
   return builder.ExtractValue();
 }
 

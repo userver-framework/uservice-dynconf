@@ -1,5 +1,5 @@
 CMAKE_COMMON_FLAGS ?= -DUSERVER_OPEN_SOURCE_BUILD=1 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-CMAKE_DEBUG_FLAGS ?= #-DSANITIZE='addr ub'
+CMAKE_DEBUG_FLAGS ?= -DSANITIZE='addr ub'
 CMAKE_RELESEAZE_FLAGS ?=
 CMAKE_OS_FLAGS ?= -DUSERVER_FEATURE_CRYPTOPP_BLAKE2=0 -DUSERVER_FEATURE_REDIS_HI_MALLOC=1
 NPROCS ?= $(shell nproc)
@@ -25,7 +25,7 @@ build-impl-%: build_%/Makefile
 
 # test
 test-impl-%: build-impl-%
-	@cd build_$* && ctest -R service_dynamic_configs-testsuite
+	@cd build_$* && ctest -V service_dynamic_configs-testsuite
 	@pep8 tests
 
 # clean
@@ -40,7 +40,7 @@ dist-clean:
 # format
 .PHONY: format
 format:
-	@find src -name '*pp' -type f | xargs clang-format-9 -i
+	@find src -name '*pp' -type f | xargs clang-format -i
 
 .PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release
 
