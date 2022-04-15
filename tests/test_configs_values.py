@@ -46,7 +46,8 @@ CUSTOM_CONFIG = {'config': False}
             },
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='add default configs',
@@ -61,7 +62,8 @@ CUSTOM_CONFIG = {'config': False}
             },
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='get config for custom service from default',
@@ -80,7 +82,8 @@ CUSTOM_CONFIG = {'config': False}
             },
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='get redefinition configs from default',
@@ -103,7 +106,8 @@ CUSTOM_CONFIG = {'config': False}
             },
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='redefinition and default configs merge',
@@ -114,7 +118,8 @@ CUSTOM_CONFIG = {'config': False}
             {'CUSTOM_CONFIG': CUSTOM_CONFIG},
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='get custom config for service',
@@ -125,7 +130,8 @@ CUSTOM_CONFIG = {'config': False}
             {},
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='custom config not find for default',
@@ -142,7 +148,8 @@ CUSTOM_CONFIG = {'config': False}
             },
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='get configs by service',
@@ -153,7 +160,8 @@ CUSTOM_CONFIG = {'config': False}
             {},
             marks=[
                 pytest.mark.pgsql(
-                    'service_dynamic_configs', files=['default_configs.sql'],
+                    'service_dynamic_configs',
+                    files=['default_configs.sql', 'custom_configs.sql'],
                 ),
             ],
             id='get empty configs by service',

@@ -67,7 +67,10 @@ async def test_configs_add_values(
     assert response.json()['configs'] == configs
 
 
-@pytest.mark.pgsql('service_dynamic_configs', files=['default_configs.sql'])
+@pytest.mark.pgsql(
+        'service_dynamic_configs',
+        files=['default_configs.sql', 'custom_configs.sql'],
+)
 async def test_redefinitions_configs(
         service_dynamic_configs_client, mocked_time,
 ):

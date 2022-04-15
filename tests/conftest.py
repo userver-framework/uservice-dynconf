@@ -1,4 +1,5 @@
 import pathlib
+import typing
 
 import pytest
 
@@ -97,9 +98,18 @@ def example_root():
 def pgsql_local(example_root, pgsql_local_create):
     databases = discover.find_schemas(
         'service_dynamic_configs',
-        [example_root.joinpath('schemas/postgresql')],
+        [example_root.joinpath('postgresql/schemas')],
     )
     return pgsql_local_create(list(databases.values()))
+
+
+@pytest.fixture(scope='session')
+def initial_data_path(
+        example_root,
+) -> typing.List[pathlib.Path]:
+    return [
+        example_root / 'postgresql/data',
+    ]
 
 
 @pytest.fixture

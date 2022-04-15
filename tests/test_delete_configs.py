@@ -54,7 +54,10 @@ from testsuite import utils
         ),
     ],
 )
-@pytest.mark.pgsql('service_dynamic_configs', files=['default_configs.sql'])
+@pytest.mark.pgsql(
+        'service_dynamic_configs',
+        files=['default_configs.sql', 'custom_configs.sql'],
+)
 async def test_configs_delete_values(
         service_dynamic_configs_client,
         mocked_time,
