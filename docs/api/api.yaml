@@ -1,0 +1,147 @@
+openapi: 3.0.0
+info:
+    description: Open source service dynamic configs by userver
+    title: userver service_dynamic_configs service
+    version: '1.0'
+
+servers:
+  - url: localhost:1083
+    description: local
+
+paths:
+    /configs/values:
+        post:
+            description: |
+                A handle for getting config values.
+            requestBody:
+                description: |
+                    Parameters for config values
+                content:
+                    application/json:
+                        schema:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                                ids:
+                                    type: array
+                                   description: list of config ids
+                                    items:
+                                        type: string
+                                        description: config id
+                                update_since:
+                                    type: string
+                                    description: the date from which to watch config updates
+                                service:
+                                    type: string
+                                    description: The name of the service to search for configs for
+                                    default: __default__
+            responses:
+                  200:
+                      description: OK
+                      content:
+                          application/json:
+                              schema:
+                                  type: object
+                                  additionalProperties: false
+                                  required:
+                                    - configs
+                                  properties:
+                                      configs:
+                                          type: object
+                                          additionalProperties: true
+                                          description: Map of received configs
+                                      updated_at:
+                                          type: string
+                                          description: Time of last update
+                                      not_found:
+                                          description: list of configs not found
+                                          type: array
+                                          items:
+                                              type: string
+                                              description: id конфига
+
+    /admin/v1/configs:
+        post:
+            description: |
+                Handle for adding (editing) configs
+            requestBody:
+                description: |
+                    Config parameters (you can add bulk)
+                content:
+                    application/json:
+                        schema:
+                            additionalProperties: false
+                            type: object
+                            required:
+                              - configs
+                            properties:
+                                configs:
+                                    type: object
+                                    additionalProperties: true
+                                    description: |
+                                        Map key-values, config name and its value,
+                                        you can have multiple configs at the same time
+                                service:
+                                    type: string
+                                    description: The name of the service to create/update for configs for
+                                    default: __default__
+            responses:
+                204:
+                    description: OK
+                400:
+                    description: Wrong answer
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    
+    /admin/v1/configs/delete:
+        post:
+            description: |
+                Handle for deleting configs
+            requestBody:
+                description: |
+                    Config parameters (you can delete bulk)
+                content:
+                    application/json:
+                        schema:
+                            additionalProperties: false
+                            type: object
+                            required:
+                              - ids
+                              - service
+                            properties:
+                                ids:
+                                    type: array
+                                    description: |
+                                        list of config ids to delete
+                                    items:
+                                        type: string
+                                        description: id конфига
+                                service:
+                                    type: string
+                                    description: The name of the service to delete for configs for
+                                    default: __default__
+            responses:
+                204:
+                    description: OK
+                400:
+                    description: Wrong answer
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+components:
+    schemas:
+        Error:
+            description: Error
+            type: object
+            additionalProperties: false
+            properties:
+               code:
+                  type: string
+                  description: code error
+               message:
+                  type: string
+                  description: message error
+ 

@@ -1,16 +1,21 @@
 import pathlib
+import typing
 
 import pytest
 
 from testsuite.daemons import service_client
+from testsuite import utils
 
-# install it using `pip3 install yandex-taxi-testsuite`
+from testsuite.databases.pgsql import discover
+
 pytest_plugins = [
     'testsuite.pytest_plugin',
+    'testsuite.databases.pgsql.pytest_plugin',
 ]
 
+# install it using `pip3 install yandex-taxi-testsuite`
 SERVICE_NAME = 'service_dynamic_configs'
-SERVICE_BASEURL = 'http://localhost:8080/'
+SERVICE_BASEURL = 'http://localhost:8083/'
 ROOT_PATH = pathlib.Path(__file__).parent.parent
 
 
@@ -29,6 +34,8 @@ async def service_dynamic_configs_client(
         service_client_options,
         ensure_daemon_started,
         mockserver,
+        pgsql,
+        pgsql_local,
 ):
     await ensure_daemon_started(service_dynamic_configs_daemon)
     return service_client.Client(SERVICE_BASEURL, **service_client_options)
@@ -41,9 +48,7 @@ def build_dir(request) -> pathlib.Path:
 
 @pytest.fixture(scope='session')
 async def service_dynamic_configs_daemon(
-        create_daemon_scope,
-        tmp_path_factory,
-        build_dir,
+        create_daemon_scope, tmp_path_factory, build_dir,
 ):
     configs_path = ROOT_PATH.joinpath('configs')
     temp_dir_name = tmp_path_factory.mktemp(SERVICE_NAME)
@@ -60,7 +65,7 @@ async def service_dynamic_configs_daemon(
                 '--config',
                 str(temp_dir_name.joinpath('static_config.yaml')),
             ],
-            check_url=SERVICE_BASEURL + 'ping',
+            ping_url=SERVICE_BASEURL + 'ping',
     ) as scope:
         yield scope
 
@@ -81,3 +86,49 @@ def _copy_service_configs(
         conf = conf.replace('/var/log/' + service_name, str(destination))
         conf = conf.replace('/var/run/' + service_name, str(destination))
         (destination / source_path.name).write_text(conf)
+
+
+@pytest.fixture(scope='session')
+def example_root():
+    """Path to example service root."""
+    return pathlib.Path(__file__).parent.parent
+
+
+@pytest.fixture(scope='session')
+def pgsql_local(example_root, pgsql_local_create):
+    databases = discover.find_schemas(
+        'service_dynamic_configs',
+        [example_root.joinpath('postgresql/schemas')],
+    )
+    return pgsql_local_create(list(databases.values()))
+
+
+@pytest.fixture(scope='session')
+def initial_data_path(
+        example_root,
+) -> typing.List[pathlib.Path]:
+    return [
+        example_root / 'postgresql/data',
+    ]
+
+
+@pytest.fixture
+def client_deps(pgsql):
+    pass
+
+
+@pytest.fixture
+async def invalidate_caches(service_dynamic_configs_client, mocked_time):
+    async def do_invalidate_caches():
+        response = await service_dynamic_configs_client.post(
+            '/tests/control',
+            json={
+                'mock_now': utils.timestring(mocked_time.now()),
+                'invalidate_caches': {
+                    'update_type': 'full',
+                    'names': ['configs-cache'],
+                },
+            },
+        )
+        assert response.status_code == 200
+    return do_invalidate_caches
