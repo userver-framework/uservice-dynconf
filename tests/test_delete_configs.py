@@ -1,7 +1,6 @@
 import pytest
 
 from testsuite.databases import pgsql
-from testsuite import utils
 
 
 @pytest.mark.parametrize(

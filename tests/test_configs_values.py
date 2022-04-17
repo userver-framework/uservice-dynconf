@@ -1,7 +1,6 @@
 import pytest
 
 from testsuite.databases import pgsql
-from testsuite import utils
 
 
 POSTGRES_DEFAULT_COMMAND_CONTROL = {
@@ -101,12 +100,7 @@ SETUP_DB_MARK = [
             ['CUSTOM_CONFIG'],
             'my-custom-service',
             {'CUSTOM_CONFIG': CUSTOM_CONFIG},
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='get custom config for service',
         ),
         pytest.param(
