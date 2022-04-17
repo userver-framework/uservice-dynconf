@@ -117,8 +117,8 @@ def client_deps(pgsql):
     pass
 
 
-@pytest.fixture
-async def invalidate_caches(service_dynamic_configs_client, mocked_time):
+@pytest.fixture(name='invalidate_caches')
+async def _invalidate_caches(service_dynamic_configs_client, mocked_time):
     async def do_invalidate_caches():
         response = await service_dynamic_configs_client.post(
             '/tests/control',
