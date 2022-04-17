@@ -1,6 +1,6 @@
 import pytest
 
-from testsuite.databases.pgsql import *
+from testsuite.databases import pgsql
 from testsuite import utils
 
 
@@ -25,11 +25,16 @@ POSTGRES_CONNECTION_POOL_SETTINGS_2 = {
     },
 }
 
-USERVER_RPS_CCONTROL_ENABLED = False
-
-USERVER_RPS_CCONTROL_ENABLED_2 = True
+USERVER_RPS_CCONTROL_DISABLED = True
 
 CUSTOM_CONFIG = {'config': False}
+
+SETUP_DB_MARK = [
+    pytest.mark.pgsql(
+        'service_dynamic_configs',
+        files=['default_configs.sql', 'custom_configs.sql'],
+    ),
+]
 
 
 @pytest.mark.parametrize(
@@ -44,12 +49,7 @@ CUSTOM_CONFIG = {'config': False}
                     POSTGRES_DEFAULT_COMMAND_CONTROL
                 ),
             },
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='add default configs',
         ),
         pytest.param(
@@ -60,12 +60,7 @@ CUSTOM_CONFIG = {'config': False}
                     POSTGRES_DEFAULT_COMMAND_CONTROL
                 ),
             },
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='get config for custom service from default',
         ),
         pytest.param(
@@ -75,17 +70,12 @@ CUSTOM_CONFIG = {'config': False}
             ],
             'my-custom-service',
             {
-                'USERVER_RPS_CCONTROL_ENABLED': USERVER_RPS_CCONTROL_ENABLED_2,
+                'USERVER_RPS_CCONTROL_ENABLED': USERVER_RPS_CCONTROL_DISABLED,
                 'POSTGRES_CONNECTION_POOL_SETTINGS': (
                     POSTGRES_CONNECTION_POOL_SETTINGS_2
                 ),
             },
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='get redefinition configs from default',
         ),
         pytest.param(
@@ -96,7 +86,7 @@ CUSTOM_CONFIG = {'config': False}
             ],
             'my-custom-service',
             {
-                'USERVER_RPS_CCONTROL_ENABLED': USERVER_RPS_CCONTROL_ENABLED_2,
+                'USERVER_RPS_CCONTROL_ENABLED': USERVER_RPS_CCONTROL_DISABLED,
                 'POSTGRES_CONNECTION_POOL_SETTINGS': (
                     POSTGRES_CONNECTION_POOL_SETTINGS_2
                 ),
@@ -104,12 +94,7 @@ CUSTOM_CONFIG = {'config': False}
                     POSTGRES_DEFAULT_COMMAND_CONTROL
                 ),
             },
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='redefinition and default configs merge',
         ),
         pytest.param(
@@ -128,42 +113,27 @@ CUSTOM_CONFIG = {'config': False}
             ['CUSTOM_CONFIG'],
             '__default__',
             {},
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='custom config not find for default',
         ),
         pytest.param(
             [],
             'my-custom-service',
             {
-                'USERVER_RPS_CCONTROL_ENABLED': USERVER_RPS_CCONTROL_ENABLED_2,
+                'USERVER_RPS_CCONTROL_ENABLED': USERVER_RPS_CCONTROL_DISABLED,
                 'POSTGRES_CONNECTION_POOL_SETTINGS': (
                     POSTGRES_CONNECTION_POOL_SETTINGS_2
                 ),
                 'CUSTOM_CONFIG': CUSTOM_CONFIG,
             },
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='get configs by service',
         ),
         pytest.param(
             [],
             'custom-service',
             {},
-            marks=[
-                pytest.mark.pgsql(
-                    'service_dynamic_configs',
-                    files=['default_configs.sql', 'custom_configs.sql'],
-                ),
-            ],
+            marks=SETUP_DB_MARK,
             id='get empty configs by service',
         ),
     ],

@@ -1,6 +1,6 @@
 import pytest
 
-from testsuite.databases.pgsql import *
+from testsuite.databases import pgsql
 from testsuite import utils
 
 
@@ -55,8 +55,8 @@ from testsuite import utils
     ],
 )
 @pytest.mark.pgsql(
-        'service_dynamic_configs',
-        files=['default_configs.sql', 'custom_configs.sql'],
+    'service_dynamic_configs',
+    files=['default_configs.sql', 'custom_configs.sql'],
 )
 async def test_configs_delete_values(
         service_dynamic_configs_client,

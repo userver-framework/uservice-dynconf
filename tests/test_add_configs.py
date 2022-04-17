@@ -1,35 +1,19 @@
 import pytest
 
-from testsuite.databases.pgsql import *
+from testsuite.databases import pgsql
 from testsuite import utils
 
 
-async def invalidate_caches(client, mocked_time):
-    response = await client.post(
-        '/tests/control',
-        json={
-            'mocknow': utils.timestring(mocked_time.now()),
-            'invalidate_caches': {
-                'update_type': 'full',
-                'names': ['configs-cache'],
-            },
-        },
-    )
-    assert response.status_code == 200
-
-
 @pytest.mark.parametrize(
-    'ids, service, configs,',
+    'ids, configs',
     [
         pytest.param(
             ['CUSTOM_CONFIG'],
-            'my-service',
             {'CUSTOM_CONFIG': {'config': 'value'}},
             id='add one config',
         ),
         pytest.param(
             ['CUSTOM_CONFIG', 'ADD_CONFIG', 'MORE_CONFIGS'],
-            'my-service',
             {
                 'CUSTOM_CONFIG': {'config': 'value'},
                 'ADD_CONFIG': 5000,
@@ -44,9 +28,10 @@ async def invalidate_caches(client, mocked_time):
     ],
 )
 async def test_configs_add_values(
-        service_dynamic_configs_client, mocked_time, ids, service, configs,
+        service_dynamic_configs_client, invalidate_caches, ids, configs,
 ):
-    await invalidate_caches(service_dynamic_configs_client, mocked_time)
+    service = 'my-service'
+    await invalidate_caches()
     response = await service_dynamic_configs_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
@@ -59,7 +44,7 @@ async def test_configs_add_values(
 
     response.status_code == 204
 
-    await invalidate_caches(service_dynamic_configs_client, mocked_time)
+    await invalidate_caches()
     response = await service_dynamic_configs_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
@@ -68,13 +53,13 @@ async def test_configs_add_values(
 
 
 @pytest.mark.pgsql(
-        'service_dynamic_configs',
-        files=['default_configs.sql', 'custom_configs.sql'],
+    'service_dynamic_configs',
+    files=['default_configs.sql', 'custom_configs.sql'],
 )
 async def test_redefinitions_configs(
-        service_dynamic_configs_client, mocked_time,
+        service_dynamic_configs_client, invalidate_caches,
 ):
-    await invalidate_caches(service_dynamic_configs_client, mocked_time)
+    await invalidate_caches()
     ids = ['CUSTOM_CONFIG', 'MORE_CONFIGS']
     service = 'my-custom-service'
     response = await service_dynamic_configs_client.post(
@@ -93,7 +78,7 @@ async def test_redefinitions_configs(
 
     response.status_code == 204
 
-    await invalidate_caches(service_dynamic_configs_client, mocked_time)
+    await invalidate_caches()
     response = await service_dynamic_configs_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
@@ -114,7 +99,7 @@ async def test_redefinitions_configs(
     ],
 )
 async def test_add_configs_400(
-        service_dynamic_configs_client, mocked_time, request_data,
+        service_dynamic_configs_client, request_data,
 ):
     response = await service_dynamic_configs_client.post(
         '/admin/v1/configs', json=request_data,
