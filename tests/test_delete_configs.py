@@ -58,29 +58,27 @@ from testsuite.databases import pgsql
     files=['default_configs.sql', 'custom_configs.sql'],
 )
 async def test_configs_delete_values(
-        service_dynamic_configs_client,
+        service_client,
         mocked_time,
         ids,
         service,
         configs,
         expected,
-        invalidate_caches,
 ):
-    await invalidate_caches()
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
     assert response.json()['configs'] == configs
 
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/admin/v1/configs/delete', json={'service': service, 'ids': ids},
     )
 
     response.status_code == 204
 
-    await invalidate_caches()
-    response = await service_dynamic_configs_client.post(
+    await service_client.invalidate_caches()
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
@@ -100,9 +98,9 @@ async def test_configs_delete_values(
     ],
 )
 async def test_remove_configs_400(
-        service_dynamic_configs_client, mocked_time, request_data,
+        service_client, mocked_time, request_data,
 ):
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/admin/v1/configs/delete', json=request_data,
     )
     assert response.status_code == 400

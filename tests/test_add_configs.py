@@ -27,24 +27,23 @@ from testsuite.databases import pgsql
     ],
 )
 async def test_configs_add_values(
-        service_dynamic_configs_client, invalidate_caches, ids, configs,
+        service_client, ids, configs,
 ):
     service = 'my-service'
-    await invalidate_caches()
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
     assert response.json()['configs'] == {}
 
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/admin/v1/configs', json={'service': service, 'configs': configs},
     )
 
     response.status_code == 204
 
-    await invalidate_caches()
-    response = await service_dynamic_configs_client.post(
+    await service_client.invalidate_caches()
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
@@ -56,12 +55,11 @@ async def test_configs_add_values(
     files=['default_configs.sql', 'custom_configs.sql'],
 )
 async def test_redefinitions_configs(
-        service_dynamic_configs_client, invalidate_caches,
+        service_client,
 ):
-    await invalidate_caches()
     ids = ['CUSTOM_CONFIG', 'MORE_CONFIGS']
     service = 'my-custom-service'
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
@@ -71,14 +69,14 @@ async def test_redefinitions_configs(
         'CUSTOM_CONFIG': {'config': True, 'data': {}, 'status': 99},
         'MORE_CONFIGS': {'__state__': 'norm', 'enabled': True, 'data': 22.22},
     }
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/admin/v1/configs', json={'service': service, 'configs': configs},
     )
 
     response.status_code == 204
 
-    await invalidate_caches()
-    response = await service_dynamic_configs_client.post(
+    await service_client.invalidate_caches()
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
@@ -98,9 +96,9 @@ async def test_redefinitions_configs(
     ],
 )
 async def test_add_configs_400(
-        service_dynamic_configs_client, request_data,
+        service_client, request_data,
 ):
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/admin/v1/configs', json=request_data,
     )
     assert response.status_code == 400

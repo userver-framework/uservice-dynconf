@@ -1,6 +1,6 @@
 # yaml
 
-config_vars: /etc/service_dynamic_configs/configs_vars.yaml
+config_vars: /etc/service_dynamic_configs/config_vars_testing.yaml
 
 components_manager:
     coro_pool:
@@ -12,9 +12,9 @@ components_manager:
             worker_threads: $worker-threads
             thread_name: main-worker
 
-        fs-task-processor: 
-            thread_name: fs-worker
+        fs-task-processor:
             worker_threads: $worker-threads
+            thread_name: fs-worker
 
     default_task_processor: main-task-processor
 
@@ -69,7 +69,8 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
-        testsuite-support: {}
+        testsuite-support:
+            load-enabled: $is_testing
 
         configs-cache:
             pgcomponent: settings-database
@@ -82,11 +83,14 @@ components_manager:
         settings-database:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor
-            handlers_cmd_ctl_task_data_path_key: http-handler-path      # required for POSTGRES_HANDLERS_COMMAND_CONTROL
-            handlers_cmd_ctl_task_data_method_key: http-request-method  # required for POSTGRES_HANDLERS_COMMAND_CONTROL
             dns_resolver: async
 
+        http-client:
+            load-enabled: $is_testing
+            fs-task-processor: fs-task-processor
+
         tests-control:
+            load-enabled: $is_testing
             path: /tests/control
             method: POST
             task_processor: main-task-processor

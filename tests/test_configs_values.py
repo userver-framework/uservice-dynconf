@@ -133,11 +133,9 @@ SETUP_DB_MARK = [
     ],
 )
 async def test_configs_values(
-        service_dynamic_configs_client, mocked_time, ids, service, expected,
-        invalidate_caches
+        service_client, mocked_time, ids, service, expected
 ):
-    await invalidate_caches()
-    response = await service_dynamic_configs_client.post(
+    response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
     assert response.status_code == 200
