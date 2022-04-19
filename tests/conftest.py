@@ -31,12 +31,6 @@ def initial_data_path(
 
 
 @pytest.fixture(scope='session')
-def root_dir():
-    """Path to root directory service."""
-    return pathlib.Path(__file__).parent.parent
-
-
-@pytest.fixture(scope='session')
 def pgsql_local(root_dir, pgsql_local_create):
     """Create schemas databases for tests"""
     databases = discover.find_schemas(
