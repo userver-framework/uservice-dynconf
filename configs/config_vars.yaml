@@ -1,6 +1,8 @@
 worker-threads: 4
 logger-level: debug
 
+is_testing: true
+
 server-port: 8083
 
 dbconnection: 'postgresql://testsuite@localhost:15433/service_dynamic_configs_service_dynamic_configs'
