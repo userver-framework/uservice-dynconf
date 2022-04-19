@@ -1,6 +1,6 @@
 # yaml
 
-config_vars: /etc/service_dynamic_configs/config_vars.yaml
+config_vars: /etc/service_dynamic_configs/config_vars_testing.yaml
 
 components_manager:
     coro_pool:
@@ -12,9 +12,9 @@ components_manager:
             worker_threads: $worker-threads
             thread_name: main-worker
 
-        fs-task-processor: 
-            thread_name: fs-worker
+        fs-task-processor:
             worker_threads: $worker-threads
+            thread_name: fs-worker
 
     default_task_processor: main-task-processor
 
