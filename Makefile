@@ -25,7 +25,7 @@ build-impl-%: build_%/Makefile
 
 # test
 test-impl-%: build-impl-%
-	@cd build_$* && ctest -V uservice_dynconf-testsuite
+	@cd build_$* && ctest -V testsuite
 	@pep8 tests
 
 # clean

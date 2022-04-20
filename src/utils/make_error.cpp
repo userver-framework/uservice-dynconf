@@ -3,6 +3,7 @@
 #include "userver/formats/json/value.hpp"
 #include <string_view>
 #include <userver/formats/json/value_builder.hpp>
+
 namespace uservice_dynconf::utils {
 
 userver::formats::json::Value MakeError(std::string_view code,
