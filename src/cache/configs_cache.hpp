@@ -7,12 +7,12 @@
 
 #include "models/config.hpp"
 
-namespace service_dynamic_configs::cache::settings_cache {
+namespace uservice_dynconf::cache::settings_cache {
 
 class ConfigCacheContainer {
 public:
-  using Key = service_dynamic_configs::models::Key;
-  using Config = service_dynamic_configs::models::Config;
+  using Key = uservice_dynconf::models::Key;
+  using Config = uservice_dynconf::models::Config;
   using ConfigPtr = std::shared_ptr<const Config>;
 
   void insert_or_assign(Key &&key, Config &&config);
@@ -30,14 +30,13 @@ private:
 
 struct ConfigCachePolicy {
   static constexpr auto kName = "configs-cache";
-  using ValueType = service_dynamic_configs::models::Config;
+  using ValueType = uservice_dynconf::models::Config;
   using CacheContainer = ConfigCacheContainer;
-  static constexpr auto kKeyMember =
-      &service_dynamic_configs::models::Config::key;
+  static constexpr auto kKeyMember = &uservice_dynconf::models::Config::key;
   static userver::storages::postgres::Query kQuery;
   static constexpr auto kUpdatedField = "updated_at";
   using UpdatedFieldType = userver::storages::postgres::TimePointTz;
 };
 
 using ConfigsCache = ::userver::components::PostgreCache<ConfigCachePolicy>;
-} // namespace service_dynamic_configs::cache::settings_cache
+} // namespace uservice_dynconf::cache::settings_cache

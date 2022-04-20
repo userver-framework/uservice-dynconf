@@ -3,7 +3,7 @@
 #include "userver/formats/json/value.hpp"
 #include <string_view>
 #include <userver/formats/json/value_builder.hpp>
-namespace service_dynamic_configs::utils {
+namespace uservice_dynconf::utils {
 
 userver::formats::json::Value MakeError(std::string_view code,
                                         std::string_view message) {
@@ -13,4 +13,4 @@ userver::formats::json::Value MakeError(std::string_view code,
   return builder.ExtractValue();
 }
 
-} // namespace service_dynamic_configs::utils
+} // namespace uservice_dynconf::utils

@@ -9,7 +9,7 @@
 #include "utils/make_error.hpp"
 #include <vector>
 
-namespace service_dynamic_configs::handlers::admin_v1_configs::post {
+namespace uservice_dynconf::handlers::admin_v1_configs::post {
 
 namespace {
 struct RequestData {
@@ -44,12 +44,12 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto request_data = ParseRequest(request_json);
   if (request_data.configs.IsEmpty() || request_data.service.empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
-    return service_dynamic_configs::utils::MakeError(
+    return uservice_dynconf::utils::MakeError(
         "400", "Fields 'configs' and 'service' are required");
   }
 
   cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                    service_dynamic_configs::sql::kInsertConfigValue.data(),
+                    uservice_dynconf::sql::kInsertConfigValue.data(),
                     request_data.service, request_data.configs);
 
   http_response.SetStatus(userver::server::http::HttpStatus::kNoContent);
@@ -57,4 +57,4 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   return {};
 }
 
-} // namespace service_dynamic_configs::handlers::admin_v1_configs::post
+} // namespace uservice_dynconf::handlers::admin_v1_configs::post

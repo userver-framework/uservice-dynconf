@@ -8,12 +8,12 @@ else()
 endif()
 
 userver_testsuite_add(
-  NAME service_dynamic_configs-testsuite
+  NAME ${PROJECT_NAME}-testsuite
   REQUIREMENTS ${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   PYTEST_ARGS
   --service-config=${CMAKE_SOURCE_DIR}/configs/static_config.yaml
-  --service-binary=${CMAKE_BINARY_DIR}/service_dynamic_configs
+  --service-binary=${CMAKE_BINARY_DIR}/${PROJECT_NAME}
   --config-fallback=${CMAKE_SOURCE_DIR}/configs/dynamic_config_fallback.json
   ${PYTEST_ARGS_CONFIG_VARS}
   )

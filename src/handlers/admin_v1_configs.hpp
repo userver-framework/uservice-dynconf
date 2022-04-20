@@ -8,7 +8,7 @@
 #include "userver/storages/postgres/postgres_fwd.hpp"
 #include <string_view>
 
-namespace service_dynamic_configs::handlers::admin_v1_configs::post {
+namespace uservice_dynconf::handlers::admin_v1_configs::post {
 
 class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
@@ -26,4 +26,4 @@ private:
   const userver::storages::postgres::ClusterPtr cluster_;
 };
 
-} // namespace service_dynamic_configs::handlers::admin_v1_configs::post
+} // namespace uservice_dynconf::handlers::admin_v1_configs::post

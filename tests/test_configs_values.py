@@ -30,7 +30,7 @@ CUSTOM_CONFIG = {'config': False}
 
 SETUP_DB_MARK = [
     pytest.mark.pgsql(
-        'service_dynamic_configs',
+        'uservice_dynconf',
         files=['default_configs.sql', 'custom_configs.sql'],
     ),
 ]

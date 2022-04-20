@@ -21,11 +21,11 @@ build_release/Makefile:
 
 # build using cmake
 build-impl-%: build_%/Makefile
-	@cmake --build build_$* -j$(NPROCS) --target service_dynamic_configs
+	@cmake --build build_$* -j$(NPROCS) --target uservice_dynconf
 
 # test
 test-impl-%: build-impl-%
-	@cd build_$* && ctest -V service_dynamic_configs-testsuite
+	@cd build_$* && ctest -V uservice_dynconf-testsuite
 	@pep8 tests
 
 # clean

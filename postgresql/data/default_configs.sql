@@ -1,4 +1,4 @@
-INSERT INTO service_dynamic_configs.configs (config_name, config_value)
+INSERT INTO uservice_dynconf.configs (config_name, config_value)
 VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "http-limit": 6000,
   "http-per-second": 1500,

@@ -1,5 +1,5 @@
 #include "configs_values.hpp"
-#include "cache/settings_cache.hpp"
+#include "cache/configs_cache.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/json/value_builder.hpp"
@@ -7,7 +7,7 @@
 #include <chrono>
 #include <ctime>
 
-namespace service_dynamic_configs::handlers::configs_values::post {
+namespace uservice_dynconf::handlers::configs_values::post {
 
 namespace {
 struct RequestData {
@@ -35,7 +35,7 @@ Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
     : HttpHandlerJsonBase(config, context),
       cache_(context.FindComponent<
-             service_dynamic_configs::cache::settings_cache::ConfigsCache>()) {}
+             uservice_dynconf::cache::settings_cache::ConfigsCache>()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &,
@@ -73,4 +73,4 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   return builder.ExtractValue();
 }
 
-} // namespace service_dynamic_configs::handlers::configs_values::post
+} // namespace uservice_dynconf::handlers::configs_values::post

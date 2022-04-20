@@ -8,7 +8,7 @@
 #include <chrono>
 #include <iterator>
 #include <string>
-namespace service_dynamic_configs::models {
+namespace uservice_dynconf::models {
 
 using ConfigId = userver::utils::StrongTypedef<
     class ConfigIdTag, int64_t,
@@ -29,12 +29,12 @@ struct Config {
   userver::formats::json::Value config_value;
   userver::storages::postgres::TimePointTz updated_at;
 };
-} // namespace service_dynamic_configs::models
+} // namespace uservice_dynconf::models
 
 namespace std {
 
-template <> struct hash<service_dynamic_configs::models::Key> {
-  size_t operator()(const service_dynamic_configs::models::Key &param) const {
+template <> struct hash<uservice_dynconf::models::Key> {
+  size_t operator()(const uservice_dynconf::models::Key &param) const {
     size_t seed = 0;
     boost::hash_combine(seed, param.service);
     boost::hash_combine(seed, param.config_name);

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(service_dynamic_configs CXX)
+project(uservice_dynconf CXX)
 
 include(third_party/userver/cmake/SetupEnvironment.cmake)
 
@@ -10,8 +10,8 @@ add_executable(${PROJECT_NAME}
 	src/models/config.hpp
 	src/utils/make_error.hpp
 	src/utils/make_error.cpp
-	src/cache/settings_cache.hpp
-	src/cache/settings_cache.cpp
+	src/cache/configs_cache.hpp
+	src/cache/configs_cache.cpp
 	src/handlers/admin_v1_configs.hpp
 	src/handlers/admin_v1_configs.cpp
 	src/handlers/configs_values.hpp
