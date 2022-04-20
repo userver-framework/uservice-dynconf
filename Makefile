@@ -25,7 +25,7 @@ build-impl-%: build_%/Makefile
 
 # test
 test-impl-%: build-impl-%
-	@cd build_$* && ctest -V testsuite
+	@cd build_$* && ctest -V
 	@pep8 tests
 
 # clean
