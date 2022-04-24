@@ -47,7 +47,7 @@ format:
 
 install: build-release
 	@cd build_release && \
-		cmake --install . -v
+		cmake --install . -v --component uservice-dynconf
 
 # Explicitly specifying the targets to help shell with completitions
 cmake-debug: build_debug/Makefile
