@@ -23,6 +23,10 @@ jobs:
                     make: test-release
                     info: g++-9 + test-release
 
+                  - os: ubuntu-20.04
+                    make: install
+                    info: g++-9 + install
+
         name: '${{matrix.os}}: ${{matrix.info}}'
         runs-on: ${{matrix.os}}
 
@@ -62,6 +66,7 @@ jobs:
           - name: Run ${{matrix.make}}
             run: |
                 make ${{matrix.make}}
+            if: matrix.make != install
 
           - name: Test install ${{matrix.make}}
             if: matrix.make == 'test-release'
