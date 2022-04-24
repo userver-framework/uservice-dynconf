@@ -69,12 +69,12 @@ jobs:
             if: matrix.make != 'install'
 
           - name: Test install ${{matrix.make}}
-            if: matrix.make == 'test-release'
+            if: matrix.make == 'install'
             run: |
                 make install PREFIX=~/local_installation/
 
           - name: Test run
-            if: matrix.make == 'test-release'
+            if: matrix.make == 'install'
             run: |
                 ~/local_installation/bin/uservice-dynconf --config=~/local_installation/etc/uservice-dynconf/static_config.yaml
 
