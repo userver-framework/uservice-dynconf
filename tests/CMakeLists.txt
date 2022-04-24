@@ -12,7 +12,7 @@ userver_testsuite_add(
   REQUIREMENTS ${CMAKE_CURRENT_SOURCE_DIR}/requirements.txt
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   PYTEST_ARGS
-  --service-config=${CMAKE_SOURCE_DIR}/configs/static_config.yaml
+  --service-config=${CMAKE_SOURCE_DIR}/configs/config.yaml
   --service-binary=${CMAKE_BINARY_DIR}/${PROJECT_NAME}
   --config-fallback=${CMAKE_SOURCE_DIR}/configs/dynamic_config_fallback.json
   ${PYTEST_ARGS_CONFIG_VARS}
