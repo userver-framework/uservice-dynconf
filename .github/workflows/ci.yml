@@ -66,7 +66,7 @@ jobs:
           - name: Run ${{matrix.make}}
             run: |
                 make ${{matrix.make}}
-            if: matrix.make != install
+            if: matrix.make != 'install'
 
           - name: Test install ${{matrix.make}}
             if: matrix.make == 'test-release'
