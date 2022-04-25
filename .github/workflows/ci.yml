@@ -71,12 +71,17 @@ jobs:
           - name: Settings postgresql
             if: matrix.make == 'install'
             run: |
-                sudo chmod 0666 /etc/postgresql/12/main/pg_hba.conf && sudo echo "host    all             all             ::1/128                 trust\nhost    all             all             127.0.0.1/32                 trust" > /etc/postgresql/12/main/pg_hba.conf
+                sudo chmod 0666 /etc/postgresql/12/main/pg_hba.conf && sudo echo "host    all             all             ::/0                 trust" > /etc/postgresql/12/main/pg_hba.conf && sudo echo "host    all             all             0.0.0.0/0                 trust" >> /etc/postgresql/12/main/pg_hba.conf
 
           - name: Restart postgresql
             if: matrix.make == 'install'
             run: |
                 sudo service postgresql restart
+
+          - name: Run migration
+            if: matrix.make == 'install'
+            run: |
+                psql 'postgresql://postgres@localhost:5432/postgres' -f ./postgresql/schemas/uservice_dynconf.sql
 
           - name: Test install ${{matrix.make}}
             if: matrix.make == 'install'
