@@ -69,8 +69,7 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
-        testsuite-support:
-            load-enabled: $is_testing
+        testsuite-support: {}
 
         configs-cache:
             pgcomponent: settings-database
