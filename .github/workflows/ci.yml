@@ -56,7 +56,7 @@ jobs:
 
           - name: Install packages
             run: |
-                sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
+                sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ') postgresql-contrib
 
           - name: Setup ccache
             run: |
