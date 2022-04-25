@@ -71,10 +71,16 @@ jobs:
           - name: Test install ${{matrix.make}}
             if: matrix.make == 'install'
             run: |
-                make install PREFIX=~/local_installation/
+                make install PREFIX=./local_installation/
 
           - name: Test run
             if: matrix.make == 'install'
             run: |
-                ~/local_installation/bin/uservice-dynconf --config=~/local_installation/etc/uservice-dynconf/static_config.yaml
+                ./local_installation/bin/uservice-dynconf --config=./local_installation/etc/uservice-dynconf/static_config.yaml &
+            run: |
+              ps aux | grep uservice-dynconf | grep config
+            run: |
+              curl http://localhost:8083/ping -v
+            run: |
+              killall uservice-dynconf
 
