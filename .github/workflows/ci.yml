@@ -68,15 +68,15 @@ jobs:
                 make ${{matrix.make}}
             if: matrix.make != 'install'
 
-          - name: Settings postgresql
+          - name: Stop postgresql
             if: matrix.make == 'install'
             run: |
-                sudo chmod 0666 /etc/postgresql/12/main/pg_hba.conf && sudo echo "host    all             all             ::/0                 trust" > /etc/postgresql/12/main/pg_hba.conf && sudo echo "host    all             all             0.0.0.0/0                 trust" >> /etc/postgresql/12/main/pg_hba.conf
+                sudo service postgresql stop
 
-          - name: Restart postgresql
+          - name: Start custom postgresql
             if: matrix.make == 'install'
             run: |
-                sudo service postgresql restart
+                POSTGRESQL_CONFIGS_DIR=`pwd`/tools/pg/configs/ POSTGRESQL_PORT=5432  POSTGRESQL_TMPDIR=/tmp `pwd`/tools/pg/service-postgresql start
 
           - name: Run migration
             if: matrix.make == 'install'
@@ -96,5 +96,9 @@ jobs:
           - name: Check work run service
             if: matrix.make == 'install'
             run: |
-              ps aux | grep uservice-dynconf | grep config && curl http://localhost:8083/ping -v && killall uservice-dynconf
+                ps aux | grep uservice-dynconf | grep config && curl http://localhost:8083/ping -v
 
+          - name: Stop all
+            if: matrix.make == 'install'
+            run: |
+                killall uservice-dynconf && POSTGRESQL_CONFIGS_DIR=`pwd`/tools/pg/configs/ POSTGRESQL_PORT=5432  POSTGRESQL_TMPDIR=/tmp `pwd`/tools/pg/service-postgresql stop
