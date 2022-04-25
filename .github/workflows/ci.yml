@@ -73,14 +73,13 @@ jobs:
             run: |
                 make install PREFIX=./local_installation/
 
-          - name: Test run
+          - name: Test run after install
             if: matrix.make == 'install'
             run: |
                 ./local_installation/bin/uservice-dynconf --config=./local_installation/etc/uservice-dynconf/static_config.yaml &
+
+          - name: Check run after install
+            if: matrix.make == 'install'
             run: |
-              ps aux | grep uservice-dynconf | grep config
-            run: |
-              curl http://localhost:8083/ping -v
-            run: |
-              killall uservice-dynconf
+              ps aux | grep uservice-dynconf | grep config && curl http://localhost:8083/ping -v && killall uservice-dynconf
 
