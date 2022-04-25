@@ -5,4 +5,4 @@ is_testing: false
 
 server-port: 8083
 
-dbconnection: 'postgresql://localhost:5432/postgres'
+dbconnection: 'postgresql://postgres@localhost:5432/postgres'
