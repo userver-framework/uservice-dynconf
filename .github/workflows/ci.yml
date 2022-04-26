@@ -57,6 +57,7 @@ jobs:
           - name: Install packages
             run: |
                 sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
+                sudo apt remove postgresql-14 postgresql-client-14
 
           - name: Setup ccache
             run: |
@@ -71,7 +72,7 @@ jobs:
           - name: Run postgresql
             if: matrix.make == 'install'
             run: |
-                sudo systemctl start postgresql.service
+                sudo service postgresql restart
                 pg_lsclusters
                 sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
                 sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
