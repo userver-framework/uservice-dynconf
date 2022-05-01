@@ -64,7 +64,8 @@ jobs:
           - name: Run postgresql
             if: matrix.make == 'test-release'
             run: |
-                sudo service postgresql restart
+                sudo service postgresql@14-main stop
+                sudo service postgresql@12-main start
                 pg_lsclusters
                 sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
                 sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
