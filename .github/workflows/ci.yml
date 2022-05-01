@@ -53,7 +53,7 @@ jobs:
           - name: Install packages
             run: |
                 sudo apt update
-                sudo apt remove postgresql-14 postgresql-client-14
+                sudo apt remove -y postgresql-14 postgresql-client-14
                 sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
 
           - name: Setup ccache
