@@ -80,7 +80,7 @@ jobs:
 
           - name: Run ${{matrix.make}}
             run: |
-                make ${{matrix.make}}
+                make ${{matrix.make}} PREFIX=`pwd`/local_installation/
 
           - name: Test install ${{matrix.make}}
             if: matrix.make == 'test-release'
