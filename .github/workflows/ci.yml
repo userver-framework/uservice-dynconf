@@ -80,13 +80,13 @@ jobs:
 
           - name: Run ${{matrix.make}}
             run: |
-                make ${{matrix.make}} PREFIX=`pwd`/local_installation/
+                make ${{matrix.make}}
 
           - name: Test install ${{matrix.make}}
             if: matrix.make == 'test-release'
             run: |
-                make clean-release
-                sudo make install PREFIX=`pwd`/local_installation/
+                make dist-clean
+                make install PREFIX=`pwd`/local_installation/
 
           - name: Test run after install
             if: matrix.make == 'test-release'
