@@ -64,16 +64,17 @@ jobs:
           - name: Run postgresql
             if: matrix.make == 'test-release'
             run: |
+                sudo service postgresql@14-main stop
+                sudo service postgresql@12-main stop
                 sudo sed -i 's/5433/5432/g' /etc/postgresql/12/main/postgresql.conf
                 sudo sed -i 's/5432/5433/g' /etc/postgresql/12/main/postgresql.conf
-                sudo service postgresql@14-main stop
                 sudo service postgresql@12-main start
                 pg_lsclusters
                 sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
                 sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
 
           - name: Run migrations
-            if: matrix.make == 'install'
+            if: matrix.make == 'test-release'
             run: |
                 PGPASSWORD=password psql 'postgresql://uservice_dynconf@localhost:5432/uservice_dynconf' -f ./postgresql/schemas/uservice_dynconf.sql
 
