@@ -86,7 +86,7 @@ jobs:
             if: matrix.make == 'test-release'
             run: |
                 make clean-release
-                make install PREFIX=`pwd`/local_installation/
+                sudo make install PREFIX=`pwd`/local_installation/
 
           - name: Test run after install
             if: matrix.make == 'test-release'
