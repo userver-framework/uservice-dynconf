@@ -23,10 +23,6 @@ jobs:
                     make: test-release
                     info: g++-9 + test-release
 
-                  - os: ubuntu-20.04
-                    make: install
-                    info: g++-9 + install
-
         name: '${{matrix.os}}: ${{matrix.info}}'
         runs-on: ${{matrix.os}}
 
@@ -64,13 +60,8 @@ jobs:
                 ccache -M 2.0GB
                 ccache -s
 
-          - name: Run ${{matrix.make}}
-            run: |
-                make ${{matrix.make}}
-            if: matrix.make != 'install'
-
-          - name: Run postgresql
-            if: matrix.make == 'install'
+         - name: Run postgresql
+            if: matrix.make == 'test-release'
             run: |
                 sudo service postgresql restart
                 pg_lsclusters
@@ -82,23 +73,29 @@ jobs:
             run: |
                 PGPASSWORD=password psql 'postgresql://uservice_dynconf@localhost:5432/uservice_dynconf' -f ./postgresql/schemas/uservice_dynconf.sql
 
+          - name: Run ${{matrix.make}}
+            run: |
+                make ${{matrix.make}}
+ 
           - name: Test install ${{matrix.make}}
-            if: matrix.make == 'install'
+            if: matrix.make == 'test-release'
+            run: |
+                make clean-release
             run: |
                 make install PREFIX=`pwd`/local_installation/
 
           - name: Test run after install
-            if: matrix.make == 'install'
+            if: matrix.make == 'test-release'
             run: |
                 ./local_installation/bin/uservice-dynconf --config=./local_installation/etc/uservice-dynconf/static_config.yaml &
 
           - name: Check work run service
-            if: matrix.make == 'install'
+            if: matrix.make == 'test-release'
             run: |
                 ps aux | grep uservice-dynconf | grep config && curl http://localhost:8083/ping -v
 
           - name: Stop all
-            if: matrix.make == 'install'
+            if: matrix.make == 'test-release'
             run: |
                 killall uservice-dynconf
                 sudo service postgresql stop
