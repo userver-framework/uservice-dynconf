@@ -1,6 +1,6 @@
 # yaml
 
-config_vars: /etc/service_dynamic_configs/config_vars_testing.yaml
+config_vars: @CONFIG_VAR_PATH@
 
 components_manager:
     coro_pool:
@@ -32,13 +32,13 @@ components_manager:
                     overflow_behavior: discard
 
         tracer:
-            service-name: service_dynamic_configs
+            service-name: uservice-dynconf
 
         taxi-config:
             fs-cache-path: ''
 
         taxi-config-fallbacks:
-            fallback-path: /etc/service_dynamic_configs/dynamic_config_fallback.json
+            fallback-path: @CONFIG_FALLBACK_PATH@
 
         manager-controller:
         statistics-storage:
@@ -69,8 +69,7 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
-        testsuite-support:
-            load-enabled: $is_testing
+        testsuite-support: {}
 
         configs-cache:
             pgcomponent: settings-database

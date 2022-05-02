@@ -1,5 +1,5 @@
 CMAKE_COMMON_FLAGS ?= -DUSERVER_OPEN_SOURCE_BUILD=1 -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-CMAKE_DEBUG_FLAGS ?= -DSANITIZE='addr ub'
+CMAKE_DEBUG_FLAGS ?= -DUSERVER_SANITIZE='addr ub'
 CMAKE_RELESEAZE_FLAGS ?=
 CMAKE_OS_FLAGS ?= -DUSERVER_FEATURE_CRYPTOPP_BLAKE2=0 -DUSERVER_FEATURE_REDIS_HI_MALLOC=1
 NPROCS ?= $(shell nproc)
@@ -21,7 +21,7 @@ build_release/Makefile:
 
 # build using cmake
 build-impl-%: build_%/Makefile
-	@cmake --build build_$* -j$(NPROCS) --target uservice_dynconf
+	@cmake --build build_$* -j$(NPROCS) --target uservice-dynconf
 
 # test
 test-impl-%: build-impl-%
@@ -43,7 +43,11 @@ format:
 	@find src -name '*pp' -type f | xargs clang-format -i
 	@find tests -name '*.py' -type f | xargs autopep8 -i
 
-.PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release
+.PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release install
+
+install: build-release
+	@cd build_release && \
+		cmake --install . -v --component uservice-dynconf
 
 # Explicitly specifying the targets to help shell with completitions
 cmake-debug: build_debug/Makefile

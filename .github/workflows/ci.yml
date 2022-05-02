@@ -52,6 +52,7 @@ jobs:
 
           - name: Install packages
             run: |
+                sudo apt update
                 sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
 
           - name: Setup ccache
@@ -59,6 +60,46 @@ jobs:
                 ccache -M 2.0GB
                 ccache -s
 
+          - name: Run postgresql
+            if: matrix.make == 'test-release'
+            run: |
+                sudo service postgresql@14-main stop
+                sudo service postgresql@12-main stop
+                sudo sed -i 's/5433/5432/g' /etc/postgresql/12/main/postgresql.conf
+                sudo sed -i 's/5432/5433/g' /etc/postgresql/14/main/postgresql.conf
+                sudo service postgresql stop
+                sudo service postgresql@12-main restart
+                pg_lsclusters
+                sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
+                sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
+
+          - name: Run migrations
+            if: matrix.make == 'test-release'
+            run: |
+                PGPASSWORD=password psql 'postgresql://uservice_dynconf@localhost:5432/uservice_dynconf' -f ./postgresql/schemas/uservice_dynconf.sql
+
           - name: Run ${{matrix.make}}
             run: |
                 make ${{matrix.make}}
+
+          - name: Test install ${{matrix.make}}
+            if: matrix.make == 'test-release'
+            run: |
+                make dist-clean
+                make install PREFIX=`pwd`/local_installation/
+
+          - name: Test run after install
+            if: matrix.make == 'test-release'
+            run: |
+                ./local_installation/bin/uservice-dynconf --config=./local_installation/etc/uservice-dynconf/static_config.yaml &
+
+          - name: Check work run service
+            if: matrix.make == 'test-release'
+            run: |
+                ps aux | grep uservice-dynconf | grep config && curl http://localhost:8083/ping -v
+
+          - name: Stop all
+            if: matrix.make == 'test-release'
+            run: |
+                killall uservice-dynconf
+                sudo service postgresql stop
