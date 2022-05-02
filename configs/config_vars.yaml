@@ -5,4 +5,4 @@ is_testing: false
 
 server-port: 8083
 
-dbconnection: 'postgresql://uservice_dynconf@localhost:5432/uservice_dynconf'
+dbconnection: 'postgresql://uservice_dynconf:password@localhost:5432/uservice_dynconf'
