@@ -1,26 +1,33 @@
 # uservice-dynconf
 The service to control [dynamic configs](https://userver-framework.github.io/dd/d2c/md_en_schemas_dynamic_configs.html) of the other userver-based services.
 
+Service using postgres db version 10+
+
 The service is ready to use. Web interface for configs administration would be added soon.
 
-## Run uservice-config
+## Run uservice-dynconf
 
-To create your own userver-based service follow the following steps:
+```sh
+# Clone the service
+git clone git@github.com:userver-framework/uservice-dynconf.git && cd uservice-dynconf && git submodule update --init
 
-1. Clone the service `git clone git@github.com:userver-framework/uservice-dynconf.git && cd uservice-dynconf && git submodule update --init`
-2. Run postgresql (support Postgres-10+)
-3. Create db and run sql file ./postgresql/schemas/uservice_dynconf.sql - this file create schemas and struct db for storage configs
-4. Run sql file ./postgresql/data/default_configs.sql - this file full your db default configs for service based userver framework
-5. Run `PREFIX=/usr/local make install`
-6. Setting db parameters in `/usr/local/etc/uservice-dynconf/config_vars.yaml`
-7. Run `/usr/local/bin/uservice-dynconf --config /usr/local/etc/uservice-dynconf/config_vars.yaml`
+# Create schemas and struct db for storage configs
+psql -f ./postgresql/schemas/uservice_dynconf.sql
+
+# Full db default value configs
+psql -f ./postgresql/data/default_configs.sql
+
+# Run build or install (optional Env PREFIX set install dir)
+make install
+
+# Run service
+uservice-dynconf --config /etc/uservice-dynconf/config_vars.yaml
+```
 
 ## Using this another userver microservices
 
-In `file static_configs.yaml` set:
+In [`file static_configs.yaml`](https://github.com/userver-framework/service_template/blob/develop/configs/static_config.yaml.in#L22) set:
 ```yaml
-components_manager:
-    components:
         taxi-configs-client:
             config-url: http://localhost:8083
             http-retries: 5
@@ -35,13 +42,13 @@ components_manager:
             update-interval: 5s
 ```
 
-## Http api
+## HTTP API
 
-Http api uservice-dynconf described in OpenAPI format in [file](https://github.com/userver-framework/uservice-dynconf/blob/develop/docs/api/api.yaml)
+HTTP REST API of the uservice-dynconf is described in OpenAPI format in [file](https://github.com/userver-framework/uservice-dynconf/blob/develop/docs/api/api.yaml)
 
 ## Makefile
 
-Makefile contains typicaly useful targets for development:
+Makefile contains useful targets for development:
 
 * `make build-debug` - debug build of the service with all the assertions and sanitizers enabled
 * `make build-release` - release build of the service with LTO
@@ -56,4 +63,4 @@ Edit `Makefile.local` to change the default configuration and build options.
 
 # License
 
-The original template is distributed under the [Apache-2.0 License](https://github.com/userver-framework/userver/blob/develop/LICENSE) and [CLA](https://github.com/userver-framework/userver/blob/develop/CONTRIBUTING.md). Services based on the template may change the license and CLA.
+Distributed under the [Apache-2.0 License](https://github.com/userver-framework/userver-dynconf/blob/develop/LICENSE) with the [CLA](https://github.com/userver-framework/userver-dynconf/blob/develop/CONTRIBUTING.md).
