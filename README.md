@@ -1,4 +1,6 @@
 # uservice-dynconf
+[![CI](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml/badge.svg)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml)
+
 The service to control [dynamic configs](https://userver-framework.github.io/dd/d2c/md_en_schemas_dynamic_configs.html) of the other userver-based services.
 
 Service using postgres db version 10+
