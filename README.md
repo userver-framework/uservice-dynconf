@@ -1,4 +1,6 @@
 # uservice-dynconf
+[![CI](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml/badge.svg)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml)
+
 The service to control [dynamic configs](https://userver-framework.github.io/dd/d2c/md_en_schemas_dynamic_configs.html) of the other userver-based services.
 
 Service using postgres db version 10+
@@ -9,7 +11,9 @@ The service is ready to use. Web interface for configs administration would be a
 
 ```sh
 # Clone the service
-git clone git@github.com:userver-framework/uservice-dynconf.git && cd uservice-dynconf && git submodule update --init
+git clone git@github.com:userver-framework/uservice-dynconf.git
+cd uservice-dynconf
+git submodule update --init
 
 # Create schemas and struct db for storage configs
 psql -f ./postgresql/schemas/uservice_dynconf.sql
@@ -29,10 +33,12 @@ uservice-dynconf --config /etc/uservice-dynconf/config_vars.yaml
 In [file `static_configs.yaml`](https://github.com/userver-framework/service_template/blob/develop/configs/static_config.yaml.in#L22) of the microservice add the following lines to connect and retrieve configurations from the `uservice-dynconf`:
 ```yaml
         taxi-configs-client:
-            config-url: http://localhost:8083  # uservice-dynconf address
+            # uservice-dynconf address
+            config-url: http://localhost:8083
+            # service name to send to uservice-dynconf
+            service-name: microservice-name
             http-retries: 5
             http-timeout: 20s
-            service-name: microservice-name
         taxi-config-client-updater:
             config-settings: false
             fallback-path: dynamic_config_fallback.json
