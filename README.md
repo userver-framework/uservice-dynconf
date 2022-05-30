@@ -24,7 +24,7 @@ make install
 uservice-dynconf --config /etc/uservice-dynconf/config_vars.yaml
 ```
 
-## Using this another userver microservices
+## HowTo configure other userver-based microservices to use uservice-dynconf
 
 In [`file static_configs.yaml`](https://github.com/userver-framework/service_template/blob/develop/configs/static_config.yaml.in#L22) set:
 ```yaml
