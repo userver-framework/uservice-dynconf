@@ -90,6 +90,9 @@ components_manager:
 
         tests-control:
             load-enabled: $is_testing
-            path: /tests/control
+            path: /tests/{action}
             method: POST
             task_processor: main-task-processor
+            testpoint-timeout: 10s
+            testpoint-url: mockserver/testpoint
+            throttling_enabled: false
