@@ -32,14 +32,14 @@ uservice-dynconf --config /etc/uservice-dynconf/config_vars.yaml
 
 In [file `static_configs.yaml`](https://github.com/userver-framework/service_template/blob/develop/configs/static_config.yaml.in#L22) of the microservice add the following lines to connect and retrieve configurations from the `uservice-dynconf`:
 ```yaml
-        taxi-configs-client:
+        dynamic-config-client:
             # uservice-dynconf address
             config-url: http://localhost:8083
             # service name to send to uservice-dynconf
             service-name: microservice-name
             http-retries: 5
             http-timeout: 20s
-        taxi-config-client-updater:
+        dynamic-config-client-updater:
             config-settings: false
             fallback-path: dynamic_config_fallback.json
             full-update-interval: 1m

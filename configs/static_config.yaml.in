@@ -34,10 +34,10 @@ components_manager:
         tracer:
             service-name: uservice-dynconf
 
-        taxi-config:
+        dynamic-config:
             fs-cache-path: ''
 
-        taxi-config-fallbacks:
+        dynamic-config-fallbacks:
             fallback-path: @CONFIG_FALLBACK_PATH@
 
         manager-controller:
