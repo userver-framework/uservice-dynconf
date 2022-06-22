@@ -40,10 +40,6 @@ components_manager:
         dynamic-config-fallbacks:
             fallback-path: @CONFIG_FALLBACK_PATH@
 
-        manager-controller:
-        statistics-storage:
-        auth-checker-settings:
-
         dns-client:
             fs-task-processor: fs-task-processor
 
