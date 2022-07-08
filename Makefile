@@ -47,7 +47,7 @@ format:
 
 install-debug: build-debug
 	@cd build_debug && \
-		cmake --install . -v --component service_template
+		cmake --install . -v --component uservice-dynconf
 
 install: build-release
 	@cd build_release && \
