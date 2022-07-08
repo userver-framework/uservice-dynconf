@@ -21,6 +21,7 @@ build_release/Makefile:
 
 # build using cmake
 build-impl-%: build_%/Makefile
+	@rm -f ./configs/static_config.yaml
 	@cmake --build build_$* -j$(NPROCS) --target uservice-dynconf
 
 # test
@@ -30,8 +31,7 @@ test-impl-%: build-impl-%
 
 # clean
 clean-impl-%:
-	@cd build_$* && $(MAKE) clean
-	@rm -f ./configs/static_config.yaml
+	cd build_$* && $(MAKE) clean
 
 # dist-clean
 .PHONY: dist-clean
