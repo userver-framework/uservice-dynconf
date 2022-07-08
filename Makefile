@@ -45,9 +45,27 @@ format:
 
 .PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release install
 
+install-debug: build-debug
+	@cd build_debug && \
+		cmake --install . -v --component service_template
+
 install: build-release
 	@cd build_release && \
 		cmake --install . -v --component uservice-dynconf
+
+# Hide target, use only in docker enviroment
+--debug-start-in-docker: install
+	@/home/user/.local/bin/uservice-dynconf \
+		--config /home/user/.local/etc/uservice-dynconf/static_config.yaml
+
+# Build and run service in docker enviroment
+docker-start-service:
+	@rm -f ./configs/static_config.yaml
+	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker
+
+# Start targets makefile in docker enviroment
+docker-%:
+	docker-compose run --rm uservice-dynconf make $*
 
 # Explicitly specifying the targets to help shell with completitions
 cmake-debug: build_debug/Makefile
