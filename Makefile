@@ -30,12 +30,14 @@ test-impl-%: build-impl-%
 
 # clean
 clean-impl-%:
-	cd build_$* && $(MAKE) clean
+	@cd build_$* && $(MAKE) clean
+	@rm -f ./configs/static_config.yaml
 
 # dist-clean
 .PHONY: dist-clean
 dist-clean:
 	@rm -rf build_*
+	@rm -f ./configs/static_config.yaml
 
 # format
 .PHONY: format
@@ -43,7 +45,7 @@ format:
 	@find src -name '*pp' -type f | xargs clang-format -i
 	@find tests -name '*.py' -type f | xargs autopep8 -i
 
-.PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release install
+.PHONY: cmake-debug build-debug test-debug clean-debug cmake-release build-release test-release clean-release install install-debug
 
 install-debug: build-debug
 	@cd build_debug && \
@@ -67,12 +69,14 @@ install: build-release
 	@/home/user/.local/bin/uservice-dynconf \
 		--config /home/user/.local/etc/uservice-dynconf/static_config.yaml
 
-# Build and run service in docker environment
+.PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install docker-install-debug docker-start-service-debug docker-start-service docker-clean-data 
+
+# Build and runs service in docker environment
 docker-start-service-debug:
 	@rm -f ./configs/static_config.yaml
 	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker-debug
 
-# Build and run service in docker environment
+# Build and runs service in docker environment
 docker-start-service:
 	@rm -f ./configs/static_config.yaml
 	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker
