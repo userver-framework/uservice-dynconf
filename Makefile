@@ -53,15 +53,34 @@ install: build-release
 	@cd build_release && \
 		cmake --install . -v --component uservice-dynconf
 
-# Hide target, use only in docker enviroment
+# Hide target, use only in docker environment
 --debug-start-in-docker: install
+	@sed -i 's/config_vars.yaml/config_vars.docker.yaml/g' /home/user/.local/etc/uservice-dynconf/static_config.yaml
+	@psql 'postgresql://uservice_dynconf:password@uservice-dynconf-postgres:5432/uservice_dynconf' -f ./postgresql/data/default_configs.sql
 	@/home/user/.local/bin/uservice-dynconf \
 		--config /home/user/.local/etc/uservice-dynconf/static_config.yaml
 
-# Build and run service in docker enviroment
+# Hide target, use only in docker environment
+--debug-start-in-docker-debug: install-debug
+	@sed -i 's/config_vars.yaml/config_vars.docker.yaml/g' /home/user/.local/etc/uservice-dynconf/static_config.yaml
+	@psql 'postgresql://uservice_dynconf:password@uservice-dynconf-postgres:5432/uservice_dynconf' -f ./postgresql/data/default_configs.sql
+	@/home/user/.local/bin/uservice-dynconf \
+		--config /home/user/.local/etc/uservice-dynconf/static_config.yaml
+
+# Build and run service in docker environment
+docker-start-service-debug:
+	@rm -f ./configs/static_config.yaml
+	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker-debug
+
+# Build and run service in docker environment
 docker-start-service:
 	@rm -f ./configs/static_config.yaml
 	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker
+
+# Stop docker container and remove PG data
+docker-clean-data:
+	@docker-compose down -v
+	@rm -rf ./.pgdata
 
 # Start targets makefile in docker enviroment
 docker-%:
