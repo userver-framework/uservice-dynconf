@@ -68,7 +68,7 @@ install: build-release
 	@/home/user/.local/bin/uservice-dynconf \
 		--config /home/user/.local/etc/uservice-dynconf/static_config.yaml
 
-.PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install docker-install-debug docker-start-service-debug docker-start-service docker-clean-data 
+.PHONY: docker-start-service-debug docker-start-service docker-clean-data 
 
 # Build and runs service in docker environment
 docker-start-service-debug:
