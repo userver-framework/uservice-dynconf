@@ -21,7 +21,6 @@ build_release/Makefile:
 
 # build using cmake
 build-impl-%: build_%/Makefile
-	@rm -f ./configs/static_config.yaml
 	@cmake --build build_$* -j$(NPROCS) --target uservice-dynconf
 
 # test
@@ -73,12 +72,10 @@ install: build-release
 
 # Build and runs service in docker environment
 docker-start-service-debug:
-	@rm -f ./configs/static_config.yaml
 	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker-debug
 
 # Build and runs service in docker environment
 docker-start-service:
-	@rm -f ./configs/static_config.yaml
 	@docker-compose run -p 8083:8083 --rm uservice-dynconf make -- --debug-start-in-docker
 
 # Stop docker container and remove PG data
