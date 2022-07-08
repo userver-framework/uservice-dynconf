@@ -68,7 +68,7 @@ install: build-release
 	@/home/user/.local/bin/uservice-dynconf \
 		--config /home/user/.local/etc/uservice-dynconf/static_config.yaml
 
-.PHONY: docker-start-service-debug docker-start-service docker-clean-data 
+.PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install docker-install-debug docker-start-service-debug docker-start-service docker-clean-data
 
 # Build and runs service in docker environment
 docker-start-service-debug:
@@ -84,7 +84,7 @@ docker-clean-data:
 	@rm -rf ./.pgdata
 
 # Start targets makefile in docker enviroment
-docker-%:
+docker-impl-%:
 	docker-compose run --rm uservice-dynconf make $*
 
 # Explicitly specifying the targets to help shell with completitions
@@ -99,3 +99,18 @@ test-release: test-impl-release
 
 clean-debug: clean-impl-debug
 clean-release: clean-impl-release
+
+docker-cmake-debug: docker-impl-cmake-debug
+docker-cmake-release: docker-impl-cmake-release
+
+docker-build-debug: docker-impl-build-debug
+docker-build-release: docker-impl-build-release
+
+docker-test-debug: docker-impl-test-debug
+docker-test-release: docker-impl-test-release
+
+docker-clean-debug: docker-impl-clean-debug
+docker-clean-release: docker-impl-clean-release
+
+docker-install: docker-impl-install
+docker-install-debug: docker-impl-install-debug
