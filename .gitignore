@@ -5,6 +5,7 @@ compile_commands.json
 .idea/
 .pgdata/
 .cores/
+.ccache/
 cmake-build-debug/
 Testing/
 !Makefile.local
