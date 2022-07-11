@@ -25,7 +25,7 @@ services:
           - POSTGRES_PASSWORD=password
           - PREFIX=${PREFIX:-~/.local}
           - CC
-          - CCACHE_DIR=/ccache
+          - CCACHE_DIR=/uservice-dynconf/.ccache
           - CCACHE_HASHDIR
           - CCACHE_NOHASHDIR
           - CCACHE_PREFIX
@@ -37,8 +37,6 @@ services:
         volumes:
           - .:/uservice-dynconf:rw
           - ./third_party/userver/tools/docker:/tools:ro
-          - ${CCACHE_DIR:-~/.ccache}:/ccache:rw
-          - ${TC_CORES_DIR:-./.cores}:/cores:rw
         ports:
           - 8083:8083
         working_dir: /uservice-dynconf
