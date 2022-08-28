@@ -54,6 +54,6 @@ def userver_config_update_service(pytestconfig, service_port):
     def _patch_config(config_yaml, config_vars):
         components = config_yaml['components_manager']['components']
         updater = components['dynamic-config-client-updater']
-        component['config-url'] = 'localhost:' + str(service_port)
+        updater['config-url'] = 'localhost:' + str(service_port)
 
     return _patch_config
