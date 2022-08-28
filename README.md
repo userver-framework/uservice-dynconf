@@ -13,7 +13,6 @@ The service is ready to use. Web interface for configs administration would be a
 # Clone the service
 git clone git@github.com:userver-framework/uservice-dynconf.git
 cd uservice-dynconf
-git submodule update --init
 
 # Create schemas and struct db for storage configs
 psql -f ./postgresql/schemas/uservice_dynconf.sql

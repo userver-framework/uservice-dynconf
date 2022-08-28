@@ -35,7 +35,20 @@ components_manager:
             service-name: uservice-dynconf
 
         dynamic-config:
-            fs-cache-path: ''
+            fs-cache-path: /var/cache/uservice-dynconf/dynamic-config.json
+            fs-task-processor: fs-task-processor
+        dynamic-config-client:
+            config-url: localhost
+            http-retries: 5
+            http-timeout: 20s
+            service-name: uservice-dynconf
+        dynamic-config-client-updater:
+            config-settings: false
+            fallback-path: @CONFIG_FALLBACK_PATH@
+            full-update-interval: 1m
+            load-only-my-values: true
+            store-enabled: true
+            update-interval: 5s
 
         dynamic-config-fallbacks:
             fallback-path: @CONFIG_FALLBACK_PATH@
