@@ -36,7 +36,7 @@ def pgsql_local(root_dir, pgsql_local_create):
     """Create schemas databases for tests"""
     databases = discover.find_schemas(
         'uservice_dynconf',
-        [root_dir.joinpath('postgresql/schemas'), root_dir],
+        [root_dir.joinpath('postgresql/schemas')],
     )
     return pgsql_local_create(list(databases.values()))
 
