@@ -27,6 +27,7 @@ def initial_data_path(
     """Path for find files with data"""
     return [
         root_dir / 'postgresql/data',
+        root_dir,
     ]
 
 
