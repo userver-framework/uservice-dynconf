@@ -16,7 +16,7 @@
     "__default__": {
       "max_pool_size": 15,
       "max_queue_size": 200,
-      "min_pool_size": 8
+      "min_pool_size": 4
     }
   },
   "POSTGRES_DEFAULT_COMMAND_CONTROL": {
