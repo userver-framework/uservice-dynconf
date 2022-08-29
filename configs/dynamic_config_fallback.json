@@ -40,9 +40,10 @@
     "default-service": {
       "default-task-processor": {
         "wait_queue_overload": {
-          "action": "ignore",
+          "action": "cancel",
           "length_limit": 5000,
-          "time_limit_us": 3000
+          "sensor_time_limit_us": 12000,
+          "time_limit_us": 0
         }
       }
     }
