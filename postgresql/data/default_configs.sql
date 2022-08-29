@@ -18,16 +18,7 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "statement_timeout_ms": 500
 }'),
 ('POSTGRES_HANDLERS_COMMAND_CONTROL', '{}'),
-('POSTGRES_QUERIES_COMMAND_CONTROL', '{
-  "cleanup_processed_data": {
-    "network_timeout_ms": 92000,
-    "statement_timeout_ms": 90000
-  },
-  "select_recent_users": {
-    "network_timeout_ms": 70,
-    "statement_timeout_ms": 30
-  }
-}'),
+('POSTGRES_QUERIES_COMMAND_CONTROL', '{}'),
 ('POSTGRES_CONNECTION_POOL_SETTINGS', '{
   "__default__": {
     "min_pool_size": 4,

@@ -7,7 +7,7 @@ async def test_default_values(pgsql, load_json):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
         'SELECT json_object_agg(config_name, config_value) '
-        'FROM uservice_dynconf.configs',
+        'FROM uservice_dynconf.configs WHERE service=\'__default__\'',
     )
     data = cursor.fetchall()
     assert len(data) == 1
