@@ -7,23 +7,18 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "per-host-limit": 3000,
   "per-host-per-second": 500
 }'),
-('HTTP_CLIENT_CONNECTION_POOL_SIZE',
-        '5000'),
-('HTTP_CLIENT_ENFORCE_TASK_DEADLINE',
-'{
+('HTTP_CLIENT_CONNECTION_POOL_SIZE', 5000),
+('HTTP_CLIENT_ENFORCE_TASK_DEADLINE', '{
   "cancel-request": false,
   "update-timeout": false
 }'),
-('MONGO_DEFAULT_MAX_TIME_MS', '200'),
-('POSTGRES_DEFAULT_COMMAND_CONTROL',
-'{
+('MONGO_DEFAULT_MAX_TIME_MS', 200),
+('POSTGRES_DEFAULT_COMMAND_CONTROL', '{
   "network_timeout_ms": 750,
   "statement_timeout_ms": 500
 }'),
-('POSTGRES_HANDLERS_COMMAND_CONTROL',
-'{}'),
-('POSTGRES_QUERIES_COMMAND_CONTROL', '
-{
+('POSTGRES_HANDLERS_COMMAND_CONTROL', '{}'),
+('POSTGRES_QUERIES_COMMAND_CONTROL', '{
   "cleanup_processed_data": {
     "network_timeout_ms": 92000,
     "statement_timeout_ms": 90000
@@ -33,15 +28,13 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
     "statement_timeout_ms": 30
   }
 }'),
-('POSTGRES_CONNECTION_POOL_SETTINGS', '
-{
+('POSTGRES_CONNECTION_POOL_SETTINGS', '{
   "__default__": {
     "min_pool_size": 4,
     "max_pool_size": 15,
     "max_queue_size": 200
   }
-}
-'),
+}'),
 ('POSTGRES_STATEMENT_METRICS_SETTINGS','{}'),
 ('USERVER_CACHES', '{}'),
 ('USERVER_CHECK_AUTH_IN_HANDLERS', 'false'),
@@ -74,8 +67,8 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
     "execution-slice-threshold-us": 2000
   }
 }'),
-  ('USERVER_TASK_PROCESSOR_QOS', '{
-   "default-service": {
+('USERVER_TASK_PROCESSOR_QOS', '{
+  "default-service": {
     "default-task-processor": {
       "wait_queue_overload": {
         "action": "cancel",
@@ -85,6 +78,6 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
       }
     }
   }
-   }')
+}')
 ON CONFLICT (service, config_name)
 DO NOTHING;

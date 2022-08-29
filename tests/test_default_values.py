@@ -19,4 +19,4 @@ async def test_default_values(pgsql, load_json):
     
     for key, value in service_defaults.items():
         assert key in db_defaults
-        assert db_defaults[key] == value
+        assert db_defaults[key] == value, 'At key: ' + key
