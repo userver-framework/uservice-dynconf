@@ -4,9 +4,10 @@ from testsuite.databases import pgsql
 
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
 async def test_default_values(pgsql, load_json):
-    cursor = pgsql['uservice_dynconf_default'].cursor()
+    cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
-        'SELECT json_object(config_name, config_value) FROM uservice_dynconf.configs',
+        'SELECT json_object(config_name, config_value) '
+        'FROM uservice_dynconf.configs',
     )
     data = cursor.fetchall()
     assert len(data) == 1
