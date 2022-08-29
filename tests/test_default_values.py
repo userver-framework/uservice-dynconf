@@ -6,9 +6,8 @@ from testsuite.databases import pgsql
 async def test_default_values(pgsql, load_json):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
-        'SELECT json_object('
-        '   array_agg(config_name), array_agg(config_value::text)'
-        ') FROM uservice_dynconf.configs',
+        'SELECT json_object_agg(config_name, config_value) '
+        'FROM uservice_dynconf.configs',
     )
     data = cursor.fetchall()
     assert len(data) == 1

@@ -7,12 +7,12 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "per-host-limit": 3000,
   "per-host-per-second": 500
 }'),
-('HTTP_CLIENT_CONNECTION_POOL_SIZE', 5000),
+('HTTP_CLIENT_CONNECTION_POOL_SIZE', '5000'),
 ('HTTP_CLIENT_ENFORCE_TASK_DEADLINE', '{
   "cancel-request": false,
   "update-timeout": false
 }'),
-('MONGO_DEFAULT_MAX_TIME_MS', 200),
+('MONGO_DEFAULT_MAX_TIME_MS', '200'),
 ('POSTGRES_DEFAULT_COMMAND_CONTROL', '{
   "network_timeout_ms": 750,
   "statement_timeout_ms": 500
