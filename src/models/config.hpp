@@ -3,7 +3,6 @@
 #include "userver/formats/json/value.hpp"
 #include "userver/storages/postgres/io/chrono.hpp"
 #include "userver/utils/strong_typedef.hpp"
-#include <boost/container_hash/hash.hpp>
 #include <boost/functional/hash.hpp>
 #include <chrono>
 #include <iterator>
