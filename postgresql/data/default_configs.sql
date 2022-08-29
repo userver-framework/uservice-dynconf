@@ -1,3 +1,6 @@
+# See https://userver.tech/dd/d2c/md_en_schemas_dynamic_configs.html
+# for description of dynamic configs.
+
 INSERT INTO uservice_dynconf.configs (config_name, config_value)
 VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "http-limit": 6000,
@@ -49,16 +52,7 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "up-rate-percent": 1
 }'),
 ('USERVER_RPS_CCONTROL_ENABLED', 'false'),
-('USERVER_TASK_PROCESSOR_PROFILER_DEBUG', '{
-  "fs-task-processor": {
-    "enabled": false,
-    "execution-slice-threshold-us": 1000000
-  },
-  "main-task-processor": {
-    "enabled": false,
-    "execution-slice-threshold-us": 2000
-  }
-}'),
+('USERVER_TASK_PROCESSOR_PROFILER_DEBUG', '{}'),
 ('USERVER_TASK_PROCESSOR_QOS', '{
   "default-service": {
     "default-task-processor": {
