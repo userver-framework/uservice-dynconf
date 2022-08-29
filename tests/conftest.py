@@ -13,10 +13,6 @@ pytest_plugins = [
     'testsuite.databases.pgsql.pytest_plugin',
 ]
 
-USERVER_CONFIG_HOOKS = [
-    'userver_config_update_service',
-]
-
 
 @pytest.fixture(scope='session')
 def root_dir():
@@ -47,13 +43,3 @@ def pgsql_local(root_dir, pgsql_local_create):
 @pytest.fixture
 def client_deps(pgsql):
     pass
-
-
-@pytest.fixture(scope='session')
-def userver_config_update_service(pytestconfig, service_port):
-    def _patch_config(config_yaml, config_vars):
-        components = config_yaml['components_manager']['components']
-        updater = components['dynamic-config-client-updater']
-        updater['config-url'] = 'localhost:' + str(service_port)
-
-    return _patch_config
