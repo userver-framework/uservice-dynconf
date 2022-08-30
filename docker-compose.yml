@@ -17,7 +17,7 @@ services:
           - postgres
 
     uservice-dynconf:
-        image: ghcr.io/userver-framework/docker-userver-build-base:v1
+        image: ghcr.io/userver-framework/docker-userver-build-base:v1a
         privileged: true
         environment:
           - POSTGRES_DB=uservice_dynconf
