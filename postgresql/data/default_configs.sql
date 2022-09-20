@@ -16,6 +16,7 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "update-timeout": false
 }'),
 ('MONGO_DEFAULT_MAX_TIME_MS', '200'),
+('POSTGRES_CONNECTION_SETTINGS', '{}'),
 ('POSTGRES_DEFAULT_COMMAND_CONTROL', '{
   "network_timeout_ms": 750,
   "statement_timeout_ms": 500

@@ -30,6 +30,10 @@ test-impl-%: build-impl-%
 	@cd build_$* && ctest -V
 	@pep8 tests
 
+# testsuite service runner
+service-impl-start-%: build-impl-%
+	@cd ./build_$* && $(MAKE) start-uservice-dynconf
+
 # clean
 clean-impl-%:
 	cd build_$* && $(MAKE) clean
@@ -98,6 +102,9 @@ build-release: build-impl-release
 
 test-debug: test-impl-debug
 test-release: test-impl-release
+
+service-start-debug: service-impl-start-debug
+service-start-release: service-impl-start-release
 
 clean-debug: clean-impl-debug
 clean-release: clean-impl-release
