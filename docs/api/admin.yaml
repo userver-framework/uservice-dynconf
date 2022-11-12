@@ -1,0 +1,359 @@
+openapi: 3.0.0
+info:
+    description: Open source service dynamic configs by userver
+    title: uservice-dynconf 1.0
+    version: '1.1'
+
+servers:
+  - url: localhost:1083
+    description: local
+
+paths:
+  /register:
+    post:
+      description: login to system via credentials
+      parameters:
+      - in: header
+        required: true
+        name: login
+        description: user's login
+        schema:
+          type: string
+      - in: header
+        required: true
+        name: password
+        description: user's password
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+        '400':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              
+  /login:
+    get:
+      description: login to system via credentials
+      parameters:
+      - in: header
+        required: true
+        name: login
+        description: user's login
+        schema:
+          type: string
+      - in: header
+        required: true
+        name: password
+        description: user's password
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /variables:
+    post:
+      description: Adding a new dynamic config variable for specific service.
+      requestBody:
+        description: Name and value of variable
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/variable_full'
+      responses:
+        200:
+          description: OK
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                              
+              
+        400:
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      description: Get configs with offset and limit (temporary variant)
+      parameters:
+      - in: query
+        name: offset
+        description: offset for items
+        schema:
+          type: integer
+          default: 0                  
+      - in: query
+        name: limit
+        description: max count of items returned in one request
+        schema:
+          type: integer
+          default: 50
+                
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref:  '#/components/schemas/variable_full'
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                                
+                                
+        '400':
+          description: ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /configs/new:
+    post:
+      description: create new config
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/raw_config'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  variable_uuid:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            
+  /configs:
+    get:
+      description: get all configs uuids
+      parameters:
+      - in: query
+        required: true
+        name: offset
+        schema:
+          type: integer
+      - in: query
+        required: true
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/config'
+                  count:
+                    type: integer
+                  total:
+                    type: integer
+                  
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            
+  /variables/{uuid}:
+    patch:
+      description: update variable with uuid
+      parameters:
+      - in: path
+        required: true
+        name: uuid
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                value:
+                  type: string
+      responses:
+        '200':
+          description: Ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+    delete:
+      description: delete variable from config
+      parameters:
+      - in: path
+        required: true
+        name: uuid
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      description: get value of variable
+      parameters:
+      - in: path
+        required: true
+        name: uuid
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: 
+                 $ref: '#/components/schemas/variable_full'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      description: Error
+      type: object
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+          description: code error
+        message:
+          type: string
+          description: message error
+    variable:
+      description: variable
+      properties:
+        uuid: 
+          type: string
+        name:
+          type: string
+        service:
+          description: uuid
+          type: string
+    variable_full:
+      description: variable
+      properties:
+        uuid: 
+          type: string
+        name:
+          type: string
+        service:
+          description: uuid
+          type: string
+        value:
+          type: string
+    raw_config:
+      description: confign in json format
+      properties:
+        config:
+          type: string
+    config:
+      description: config from list
+      properties:
+        uuid:
+          type: string
+        name:
+          type: string
+    user:
+      description: user info for /register
+      properties:
+        login:
+          type: string
+        password:
+          type: string
