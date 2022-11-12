@@ -75,11 +75,6 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
-        handler-config-post:
-            path: /config/new
-            method: POST
-            task_processor: main-task-processor
-
         handler-config-get:
             path: /config
             method: GET

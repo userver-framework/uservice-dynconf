@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::variables_patch::patch::Handler>()
           .Append<service_handlers::variables_delete::delete::Handler>()
           .Append<service_handlers::variables_post::post::Handler>()
-          .Append<service_handlers::config_post::post::Handler>()
           .Append<service_handlers::config_get::get::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
