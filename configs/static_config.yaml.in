@@ -56,17 +56,17 @@ components_manager:
             task_processor: main-task-processor
 
         handler-variables-get-uid:
-            path: /variables/{uid}
+            path: /variables/{uuid}
             method: GET
             task_processor: main-task-processor
 
         handler-variables-patch:
-            path: /variables/{uid}
+            path: /variables/{uuid}
             method: PATCH
             task_processor: main-task-processor
 
         handler-variables-delete:
-            path: /variables/{uid}
+            path: /variables/{uuid}
             method: DELETE
             task_processor: main-task-processor
 
@@ -80,7 +80,7 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
-        handler-config-post:
+        handler-config-get:
             path: /config
             method: GET
             task_processor: main-task-processor
