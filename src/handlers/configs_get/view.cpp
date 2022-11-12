@@ -1,5 +1,4 @@
 #include "../view.hpp"
-#include "../models/responce.hpp"
 #include "cache/configs_cache.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
@@ -8,7 +7,7 @@
 #include <chrono>
 #include <ctime>
 
-namespace uservice_dynconf::handlers::get_variables::get {
+namespace uservice_dynconf::handlers::get_configs::get {
     Handler::Handler(const userver::components::ComponentConfig &config,
                      const userver::components::ComponentContext &context)
             : HttpHandlerBase(config, context),
@@ -22,7 +21,7 @@ namespace uservice_dynconf::handlers::get_variables::get {
             userver::server::request::RequestContext &) const override {
         auto result = pg_cluster_->Execute(
                 userver::storages::postgres::ClusterHostType::kMaster,
-                kSelectAll
+                kSelectConfigs
         );
 
         userver::formats::json::ValueBuilder response;
@@ -30,7 +29,7 @@ namespace uservice_dynconf::handlers::get_variables::get {
         response["offset"] = result.Size();
         response["limit"] = kMaxReturnCount;
         std::int32_t i = 0;
-        for (auto row : result.AsSetOf<uservice_dynconf::models::TResponse>(userver::storages::postgres::kRowTag)) {
+        for (auto row : result.AsSetOf<std::string>(userver::storages::postgres::kRowTag)) {
             response["items"].PushBack(row);
             i++;
             if(i > kMaxReturnCount)

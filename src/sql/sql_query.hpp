@@ -12,6 +12,11 @@ SELECT uuid, service, config_name, updated_at
 FROM uservice_dynconf.configs
 )~";
 
+inline constexpr std::string_view kSelectConfigs = R"~(
+SELECT DISTINCT config_name
+FROM uservice_dynconf.configs
+)~";
+
 inline constexpr std::string_view kInsertConfigValue = R"~(
 INSERT INTO uservice_dynconf.configs
 (service, config_name, config_value)

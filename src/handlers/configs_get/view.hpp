@@ -8,11 +8,11 @@
 #include "userver/server/handlers/http_handler_json_base.hpp"
 #include <string_view>
 
-namespace uservice_dynconf::handlers::configs_values::post {
+namespace uservice_dynconf::handlers::get_configs::get {
 
     class Handler final : public userver::server::handlers::HttpHandlerBase {
     public:
-        static constexpr std::string_view kName = "handler-variables-get";
+        static constexpr std::string_view kName = "handler-configs-get";
         static constexpr std::int32_t kMaxReturnCount = 50;
 
         Handler(const userver::components::ComponentConfig &config,
