@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS uservice_dynconf.variables (
     "updated_at" timestamptz DEFAULT NOW(),
     CONSTRAINT fk_variables__config
 		FOREIGN KEY("config")
-			REFERENCES uservice_dynconf.configs(uuid)
+			REFERENCES uservice_dynconf.configs_(uuid)
 );
 
 CREATE INDEX IF NOT EXISTS idx__created_at__configs
