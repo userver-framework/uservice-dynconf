@@ -61,10 +61,10 @@ namespace uservice_dynconf::handlers::get_variables::get {
         std::int32_t count = 0;
         for (auto row = result.AsSetOf<uservice_dynconf::models::TResponse>(userver::storages::postgres::kRowTag).begin() + std::min(kOffset, (int32_t)result.Size());
              row < result.AsSetOf<uservice_dynconf::models::TResponse>(userver::storages::postgres::kRowTag).end(); ++row) {
-            response["items"].PushBack(*row);
-            count++;
             if(count >= kLimit)
                 break;
+            response["items"].PushBack(*row);
+            count++;
         }
         response["count"] = count;
         response["total"] = result.Size();

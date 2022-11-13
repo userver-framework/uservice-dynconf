@@ -60,10 +60,10 @@ namespace uservice_dynconf::handlers::get_configs::get {
         std::int32_t count = 0;
         for (auto row = result.AsSetOf<std::string>().begin() + std::min(kOffset, (int32_t)result.Size());
                 row < result.AsSetOf<std::string>().end(); ++row) {
-            response["items"].PushBack(*row);
-            count++;
             if(count >= kLimit)
                 break;
+            response["items"].PushBack(*row);
+            count++;
         }
         response["count"] = count;
         response["total"] = result.Size();
