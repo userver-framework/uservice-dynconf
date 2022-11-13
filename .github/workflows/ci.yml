@@ -60,7 +60,7 @@ jobs:
                 sudo service postgresql stop
                 sudo service postgresql@12-main restart
                 pg_lsclusters
-                sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
+                sudo -u postgres psql --command="CREATE USER uservice_dynconf WITH PASSWORD SUPERUSER 'password' " --command="\du"
                 sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
 
           - name: Run migrations
