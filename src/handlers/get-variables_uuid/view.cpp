@@ -29,7 +29,7 @@ std::string Handler::HandleRequestThrow(
     
     auto result = cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-            "SELECT uuid, service, config_name, config_value FROM uservice_dynconf.configs WHERE uuid=$1", uuid);
+            "SELECT uuid, service, config_name, config_value::TEXT FROM uservice_dynconf.configs WHERE uuid=$1", uuid);
     if (result.IsEmpty()) {
         response.SetStatus(userver::server::http::HttpStatus::kNotFound);
         response_body["code"] = 404;

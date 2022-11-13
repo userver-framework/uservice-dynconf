@@ -45,4 +45,4 @@ async def test_default_values(pgsql, load_json, service, config_value, config_na
     response = await service_client.get(
         '/admin/v1/variables/' + string(uuid),
     )
-    assert response.status_code == 404
+    assert response.status_code == 400
