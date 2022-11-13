@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
 	src/utils/make_error.cpp
 	src/cache/configs_cache.hpp
 	src/cache/configs_cache.cpp
+	src/handlers/auth/auth.cpp
 	src/handlers/admin_v1_configs.hpp
 	src/handlers/admin_v1_configs.cpp
 	src/handlers/configs_values.hpp
@@ -24,6 +25,9 @@ add_executable(${PROJECT_NAME}
 	src/models/configvariable.cpp
 	src/handlers/delete-variables_uuid/view.cpp
 	src/handlers/delete-variables_uuid/view.hpp
+	src/handlers/get-variables/view.cpp
+	src/handlers/get-configs/view.cpp
+	src/models/variablewithdate.cpp
 	src/sql/sql_query.hpp
     src/main.cpp
 		src/handlers/post-variables/view.cpp src/handlers/post-variables/view.hpp)
