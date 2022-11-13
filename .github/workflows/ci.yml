@@ -43,7 +43,7 @@ jobs:
           - name: Install packages
             run: |
                 sudo apt update
-                sudo apt install --allow-downgrades -y pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
+                sudo apt install --allow-downgrades -y python3-autopep8 pep8 $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
 
           - name: Setup ccache
             run: |
@@ -60,7 +60,7 @@ jobs:
                 sudo service postgresql stop
                 sudo service postgresql@12-main restart
                 pg_lsclusters
-                sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
+                sudo -u postgres psql --command="CREATE USER uservice_dynconf WITH SUPERUSER PASSWORD 'password' " --command="\du"
                 sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
 
           - name: Run migrations
