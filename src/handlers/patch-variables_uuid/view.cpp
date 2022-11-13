@@ -36,18 +36,23 @@ std::string Handler::HandleRequestThrow(
         return userver::formats::json::ToString(response_body.ExtractValue());
     }
 
-    try {
-        auto result = cluster_->Execute(
-            userver::storages::postgres::ClusterHostType::kMaster,
-                "UPDATE uservice_dynconf.configs SET config_value=$2::JSONB, updated_at = now() WHERE uuid=$1 RETURNING uuid", uuid, value.value());
-        if (result.IsEmpty()) {
-            response.SetStatus(userver::server::http::HttpStatus::kNotFound);
-            response_body["code"] = 404;
-            response_body["message"] = "Not Found";
-            return userver::formats::json::ToString(response_body.ExtractValue());
-        }
-    } catch (std::exception& e) {
-        std::cout << "\n\n" <<  e.what()  << "\n\n" << std::endl;
+    try{
+        auto val = userver::formats::json::FromString(value.value());
+    }catch(const userver::formats::json::ParseException& e){
+        response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+        response_body["code"] = 400;
+        response_body["message"] = "Bad Request";
+        return userver::formats::json::ToString(response_body.ExtractValue());
+    }
+
+    auto result = cluster_->Execute(
+        userver::storages::postgres::ClusterHostType::kMaster,
+            "UPDATE uservice_dynconf.configs SET config_value=$2::JSONB, updated_at = now() WHERE uuid=$1 RETURNING uuid", uuid, value.value());
+    if (result.IsEmpty()) {
+        response.SetStatus(userver::server::http::HttpStatus::kNotFound);
+        response_body["code"] = 404;
+        response_body["message"] = "Not Found";
+        return userver::formats::json::ToString(response_body.ExtractValue());
     }
 
     response_body["code"] = 200;
