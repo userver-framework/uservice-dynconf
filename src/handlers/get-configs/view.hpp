@@ -13,7 +13,6 @@ namespace uservice_dynconf::handlers::get_configs::get {
     class Handler final : public userver::server::handlers::HttpHandlerBase {
     public:
         static constexpr std::string_view kName = "handler-configs-get";
-        static constexpr std::int32_t kMaxReturnCount = 50;
 
         Handler(const userver::components::ComponentConfig &config,
                 const userver::components::ComponentContext &context);
@@ -24,6 +23,8 @@ namespace uservice_dynconf::handlers::get_configs::get {
 
     private:
         userver::storages::postgres::ClusterPtr pg_cluster_;
+        const std::string OFFSET = "OFFSET";
+        const std::string LIMIT = "LIMIT";
     };
 
 } // namespace uservice_dynconf::handlers::get-configs::get

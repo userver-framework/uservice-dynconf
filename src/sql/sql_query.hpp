@@ -13,7 +13,7 @@ FROM uservice_dynconf.configs
 )~";
 
 inline constexpr std::string_view kSelectConfigs = R"~(
-SELECT DISTINCT config_name
+SELECT DISTINCT service
 FROM uservice_dynconf.configs
 )~";
 

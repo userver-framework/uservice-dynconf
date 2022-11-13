@@ -21,8 +21,36 @@ namespace uservice_dynconf::handlers::get_variables::get {
                               .GetCluster()) {}
 
     std::string Handler::HandleRequestThrow(
-            const userver::server::http::HttpRequest &,
+            const userver::server::http::HttpRequest &request,
             userver::server::request::RequestContext &) const {
+        std::int32_t kLimit= 50;
+        std::int32_t kOffset = 0;
+        if (request.HasHeader(OFFSET)) {
+            try{
+                kOffset = stoi(request.GetHeader(OFFSET));
+            }
+            catch(...){
+                auto& response = request.GetHttpResponse();
+                response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+                return {};
+            }
+        }
+        if (request.HasHeader(LIMIT)) {
+            try{
+                kLimit = stoi(request.GetHeader(LIMIT));
+            }
+            catch(...){
+                auto& response = request.GetHttpResponse();
+                response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+                return {};
+            }
+        }
+        if(kOffset < 0 || kLimit < 0){
+            auto& response = request.GetHttpResponse();
+            response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+            return {};
+        }
+
         auto result = pg_cluster_->Execute(
                 userver::storages::postgres::ClusterHostType::kMaster,
                 uservice_dynconf::sql::kSelectAll.data()
@@ -30,15 +58,16 @@ namespace uservice_dynconf::handlers::get_variables::get {
 
         userver::formats::json::ValueBuilder response;
         response["items"].Resize(0);
-        response["offset"] = result.Size();
-        response["limit"] = kMaxReturnCount;
-        std::int32_t i = 0;
-        for (auto row : result.AsSetOf<uservice_dynconf::models::TResponse>(userver::storages::postgres::kRowTag)) {
-            response["items"].PushBack(row);
-            i++;
-            if(i > kMaxReturnCount)
+        std::int32_t count = 0;
+        for (auto row = result.AsSetOf<uservice_dynconf::models::TResponse>(userver::storages::postgres::kRowTag).begin() + std::min(kOffset, (int32_t)result.Size());
+             row < result.AsSetOf<uservice_dynconf::models::TResponse>(userver::storages::postgres::kRowTag).end(); ++row) {
+            response["items"].PushBack(*row);
+            count++;
+            if(count >= kLimit)
                 break;
         }
+        response["count"] = count;
+        response["total"] = result.Size();
 
         return userver::formats::json::ToString(response.ExtractValue());
     }
