@@ -12,10 +12,9 @@
 #include "userver/testsuite/testsuite_support.hpp"
 #include <userver/server/component.hpp>
 #include <userver/server/handlers/tests_control.hpp>
-
 #include "handlers/get-variables_uuid/view.hpp"
 #include "handlers/patch-variables_uuid/view.hpp"
-
+#include "handlers/post-variables/view.hpp"
 #include <userver/storages/postgres/component.hpp>
 
 int main(int argc, char *argv[]) {
@@ -35,5 +34,7 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::variables_uuid::del::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
+
+  service_handlers::variables::post::AppendVariableHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
