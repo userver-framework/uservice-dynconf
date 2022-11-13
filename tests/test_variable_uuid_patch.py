@@ -12,7 +12,7 @@ async def test_default_values(pgsql, load_json, service, config_value, config_na
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
         'INSERT INTO uservice_dynconf.configs (service, config_value, config_name) '
-        ' VALUES ($1, $2, $3) RETURNING uuid', (service, config_value, config_name)
+        ' VALUES (%s, %s, %s) RETURNING uuid', (service, config_value, config_name)
     )
     uuid = cursor.fetchone()
     response = await service_client.patch(
