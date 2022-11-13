@@ -9,10 +9,12 @@ from testsuite.databases import pgsql
     ],
 )
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
-async def test_default_values(service_client, pgsql, load_json, service, config_value, config_name, new_value):
+async def test_default_values(service_client, pgsql, load_json, service,
+                              config_value, config_name, new_value):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
-        'INSERT INTO uservice_dynconf.configs (service, config_value, config_name) '
+        'INSERT INTO uservice_dynconf.configs (service, config_value, '
+        'config_name) '
         ' VALUES (%s, %s, %s) RETURNING uuid', (service,
                                                 config_value, config_name)
     )
@@ -27,4 +29,4 @@ async def test_default_values(service_client, pgsql, load_json, service, config_
             uuid, )
     )
     value = cursor.fetchone()
-    assert value[0] == True #  new_value value
+    assert value[0] is True  # new_value value
