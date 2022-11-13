@@ -28,7 +28,6 @@ DELETE FROM uservice_dynconf.configs
 WHERE uuid=$1;
 )~";
 
-
 inline constexpr std::string_view kInsertConfigVariableValue = R"~(
 INSERT INTO uservice_dynconf.configs
 (service, config_name, config_value)

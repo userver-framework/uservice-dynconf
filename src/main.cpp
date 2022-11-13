@@ -7,14 +7,14 @@
 #include "handlers/admin_v1_configs_delete.hpp"
 #include "handlers/configs_values.hpp"
 #include "handlers/delete-variables_uuid/view.hpp"
+#include "handlers/get-variables_uuid/view.hpp"
+#include "handlers/patch-variables_uuid/view.hpp"
+#include "handlers/post-variables/view.hpp"
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"
 #include "userver/testsuite/testsuite_support.hpp"
 #include <userver/server/component.hpp>
 #include <userver/server/handlers/tests_control.hpp>
-#include "handlers/get-variables_uuid/view.hpp"
-#include "handlers/patch-variables_uuid/view.hpp"
-#include "handlers/post-variables/view.hpp"
 #include <userver/storages/postgres/component.hpp>
 
 int main(int argc, char *argv[]) {

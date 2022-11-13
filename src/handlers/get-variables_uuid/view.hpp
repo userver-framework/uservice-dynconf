@@ -17,7 +17,7 @@ public:
   Handler(const userver::components::ComponentConfig &config,
           const userver::components::ComponentContext &context);
 
-    std::string HandleRequestThrow(
+  std::string HandleRequestThrow(
       const userver::server::http::HttpRequest &request,
       userver::server::request::RequestContext &context) const override final;
 
@@ -25,4 +25,4 @@ private:
   userver::storages::postgres::ClusterPtr cluster_;
 };
 
-} // namespace uservice_dynconf::handlers::admin_v1_configs_delete::post
+} // namespace uservice_dynconf::handlers::variables_uuid::get
