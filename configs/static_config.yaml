@@ -1,6 +1,6 @@
 # yaml
 
-config_vars: @CONFIG_VAR_PATH@
+config_vars: /home/user/.local/etc/uservice-dynconf/config_vars.yaml
 
 components_manager:
     coro_pool:
@@ -38,7 +38,7 @@ components_manager:
             fs-cache-path: ''
 
         dynamic-config-fallbacks:
-            fallback-path: @CONFIG_FALLBACK_PATH@
+            fallback-path: /home/user/.local/etc/uservice-dynconf/dynamic_config_fallback.json
 
         dns-client:
             fs-task-processor: fs-task-processor

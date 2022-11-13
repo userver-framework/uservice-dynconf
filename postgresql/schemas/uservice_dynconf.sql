@@ -23,9 +23,10 @@ ON uservice_dynconf.configs USING btree (updated_at);
 CREATE UNIQUE INDEX IF NOT EXISTS idx__pair_service_and_connfig
 ON uservice_dynconf.configs USING btree (service, config_name);
 
-
 CREATE TABLE IF NOT EXISTS uservice_dynconf.users_x_configs (
     "user" TEXT NOT NULL,
     service TEXT NOT NULL,
+    -- can be:
+    -- read / write
     permission TEXT
 );

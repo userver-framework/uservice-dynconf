@@ -19,6 +19,9 @@ add_executable(${PROJECT_NAME}
 	src/handlers/configs_values.cpp
 	src/handlers/admin_v1_configs_delete.hpp
 	src/handlers/admin_v1_configs_delete.cpp
+	src/handlers/get-variables_uuid/view.cpp
+	src/handlers/patch-variables_uuid/view.cpp
+	src/models/configvariable.cpp
 	src/sql/sql_query.hpp
     src/main.cpp
 )
