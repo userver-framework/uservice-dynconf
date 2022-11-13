@@ -9,6 +9,8 @@ add_subdirectory(third_party/userver)
 
 add_executable(${PROJECT_NAME}
 	src/models/config.hpp
+	src/models/get_variables_responce.cpp
+	src/models/get_variables_responce.hpp
 	src/utils/make_error.hpp
 	src/utils/make_error.cpp
 	src/cache/configs_cache.hpp
@@ -19,6 +21,10 @@ add_executable(${PROJECT_NAME}
 	src/handlers/configs_values.cpp
 	src/handlers/admin_v1_configs_delete.hpp
 	src/handlers/admin_v1_configs_delete.cpp
+	src/handlers/get-configs/view.cpp
+	src/handlers/get-configs/view.hpp
+	src/handlers/get-variables/view.cpp
+	src/handlers/get-variables/view.hpp
 	src/sql/sql_query.hpp
     src/main.cpp
 )

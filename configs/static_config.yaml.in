@@ -1,3 +1,4 @@
+
 # yaml
 
 config_vars: @CONFIG_VAR_PATH@
@@ -51,32 +52,12 @@ components_manager:
             url_trailing_slash: strict-match
 
         handler-variables-get:
-            path: /variables
+            path: /admin/v1/variables
             method: GET
             task_processor: main-task-processor
 
-        handler-variables-get-uid:
-            path: /variables/{uuid}
-            method: GET
-            task_processor: main-task-processor
-
-        handler-variables-patch:
-            path: /variables/{uuid}
-            method: PATCH
-            task_processor: main-task-processor
-
-        handler-variables-delete:
-            path: /variables/{uuid}
-            method: DELETE
-            task_processor: main-task-processor
-
-        handler-variables-post:
-            path: /variables
-            method: POST
-            task_processor: main-task-processor
-
-        handler-config-get:
-            path: /config
+        handler-configs-get:
+            path: /admin/v1/configs
             method: GET
             task_processor: main-task-processor
 
