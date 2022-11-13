@@ -70,6 +70,16 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-variables-uuid-get:
+            path: /admin/v1/variables/{uuid}
+            method: GET
+            task_processor: main-task-processor
+
+        handler-variables-uuid-patch:
+            path: /admin/v1/variables/{uuid}
+            method: PATCH
+            task_processor: main-task-processor
+            
         handler-delete-variable:
             path: /api/v1/variables/{uuid}
             method: DELETE

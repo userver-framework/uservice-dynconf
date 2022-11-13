@@ -26,23 +26,23 @@ def db_setup(pgsql):
     'input, conf_name',
     [
         pytest.param({
-              "name": "CUSTOM_CONFIG",
-              "service": "my-service",
-              "value": '{"property1": 10,'
+            "name": "CUSTOM_CONFIG",
+            "service": "my-service",
+            "value": '{"property1": 10,'
                        '"property2": '
                        '{"info": "info"}}'
-          }, "CUSTOM_CONFIG", id='add json'),
+        }, "CUSTOM_CONFIG", id='add json'),
         pytest.param({
-              "name": "CUSTOM_CONFIG_2",
-              "service": "my-service",
-              "value": "true"
+            "name": "CUSTOM_CONFIG_2",
+            "service": "my-service",
+            "value": "true"
         }, "CUSTOM_CONFIG_2", id='add bool'),
         pytest.param({
             "name": "CUSTOM_CONFIG_3",
             "service": "my-service",
             "value": "1000"
         }, "CUSTOM_CONFIG_3", id='add int'),
-      ])
+    ])
 async def test_post_variable_positive(service_client,
                                       db_setup, input, conf_name):
     """Add new config variable"""
