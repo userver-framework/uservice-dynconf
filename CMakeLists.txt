@@ -23,7 +23,7 @@ add_executable(${PROJECT_NAME}
 	src/handlers/delete-variables_uuid/view.hpp
 	src/sql/sql_query.hpp
     src/main.cpp
-)
+		src/handlers/post-variables/view.cpp src/handlers/post-variables/view.hpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} userver-core userver-postgresql)

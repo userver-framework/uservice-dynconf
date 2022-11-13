@@ -28,4 +28,13 @@ DELETE FROM uservice_dynconf.configs
 WHERE uuid=$1;
 )~";
 
+inline constexpr std::string_view kInsertConfigVariableValue = R"~(
+INSERT INTO uservice_dynconf.configs
+(service, config_name, config_value)
+VALUES ($1, $2, $3::jsonb)
+ON CONFLICT (service, config_name)
+DO NOTHING
+RETURNING uservice_dynconf.configs.uuid;
+)~";
+
 } // namespace uservice_dynconf::sql
