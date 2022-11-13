@@ -73,6 +73,10 @@ components_manager:
         handler-variables-uuid-patch:
             path: /admin/v1/variables/{uuid}
             method: PATCH
+            
+        handler-delete-variable:
+            path: /api/v1/variables/{uuid}
+            method: DELETE
             task_processor: main-task-processor
 
         testsuite-support: {}

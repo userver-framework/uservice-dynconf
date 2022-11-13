@@ -22,6 +22,8 @@ add_executable(${PROJECT_NAME}
 	src/handlers/get-variables_uuid/view.cpp
 	src/handlers/patch-variables_uuid/view.cpp
 	src/models/configvariable.cpp
+	src/handlers/delete-variables_uuid/view.cpp
+	src/handlers/delete-variables_uuid/view.hpp
 	src/sql/sql_query.hpp
     src/main.cpp
 )
