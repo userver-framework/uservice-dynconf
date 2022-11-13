@@ -21,7 +21,7 @@ async def test_default_values(pgsql, load_json, service, config_value, config_na
     assert response.status_code == 200
 
     cursor.execute(
-        'SELECT config_value FROM uservice_dynconf.configs WHERE uuid=$1', uuid
+        'SELECT config_value FROM uservice_dynconf.configs WHERE uuid=$1', (uuid, )
     )
     value = cursor.fetchone()
     assert value == new_value
