@@ -23,4 +23,9 @@ DELETE FROM uservice_dynconf.configs
 WHERE service = $1 and config_name IN (SELECT unnest($2));
 )~";
 
+inline constexpr std::string_view kDeleteVariable = R"~(
+DELETE FROM uservice_dynconf.configs
+WHERE uuid=$1;
+)~";
+
 } // namespace uservice_dynconf::sql
