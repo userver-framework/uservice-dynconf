@@ -22,21 +22,19 @@ Handler::Handler(const userver::components::ComponentConfig &config,
 std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
-  auto &response = request.GetHttpResponse();
+  auto &http_response = request.GetHttpResponse();
   userver::formats::json::ValueBuilder response_body;
 
   const auto &uuid = request.GetPathArg("uuid");
 
-  auto result =
-      cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                        "SELECT uuid, service, config_name, config_value::TEXT "
-                        "FROM uservice_dynconf.configs WHERE uuid=$1",
-                        uuid);
+  auto result = cluster_->Execute(
+      userver::storages::postgres::ClusterHostType::kMaster,
+      uservice_dynconf::sql::kSelectVariableWithValue.data(), uuid);
+
   if (result.IsEmpty()) {
-    response.SetStatus(userver::server::http::HttpStatus::kNotFound);
-    response_body["code"] = 404;
-    response_body["message"] = "Not Found";
-    return userver::formats::json::ToString(response_body.ExtractValue());
+    http_response.SetStatus(userver::server::http::HttpStatus::kNotFound);
+    return userver::formats::json::ToString(
+        uservice_dynconf::utils::MakeError("404", "Not Found"));
   }
 
   auto variable = result.AsSingleRow<uservice_dynconf::models::ConfigVariable>(

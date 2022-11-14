@@ -6,7 +6,7 @@
 
 //     userver::clients::http::Headers headers = {{"X-Ya-User-Ticket", token}};
 
-//     suserver::clients::http::Client
+//     userver::clients::http::Client
 //     http_client_(context.FindComponent<userver::components::HttpClient>().GetHttpClient());
 
 //     auto response = http_client_.CreateRequest()

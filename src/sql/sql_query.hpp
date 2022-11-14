@@ -47,4 +47,12 @@ SELECT DISTINCT service
 FROM uservice_dynconf.configs
 )~";
 
+inline constexpr std::string_view kSelectVariableWithValue = R"~(
+SELECT uuid, service, config_name, config_value::TEXT 
+FROM uservice_dynconf.configs WHERE uuid=$1)~";
+
+inline constexpr std::string_view kUpdateVariable = R"~(
+UPDATE uservice_dynconf.configs SET config_value=$2::JSONB, updated_at 
+= now() WHERE uuid=$1 RETURNING uuid
+)~";
 } // namespace uservice_dynconf::sql
