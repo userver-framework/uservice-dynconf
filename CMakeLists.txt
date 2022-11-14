@@ -13,7 +13,7 @@ add_executable(${PROJECT_NAME}
 	src/utils/make_error.cpp
 	src/cache/configs_cache.hpp
 	src/cache/configs_cache.cpp
-	src/handlers/auth/auth.cpp
+	src/auth/auth.cpp
 	src/handlers/admin_v1_configs.hpp
 	src/handlers/admin_v1_configs.cpp
 	src/handlers/configs_values.hpp
