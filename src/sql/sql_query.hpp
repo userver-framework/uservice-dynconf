@@ -37,4 +37,14 @@ DO NOTHING
 RETURNING uservice_dynconf.configs.uuid;
 )~";
 
+inline constexpr std::string_view kSelectAll = R"~(
+SELECT uuid, service, config_name, updated_at
+FROM uservice_dynconf.configs
+)~";
+
+inline constexpr std::string_view kSelectConfigs = R"~(
+SELECT DISTINCT service
+FROM uservice_dynconf.configs
+)~";
+
 } // namespace uservice_dynconf::sql

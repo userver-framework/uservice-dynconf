@@ -6,10 +6,14 @@
 #include "handlers/admin_v1_configs.hpp"
 #include "handlers/admin_v1_configs_delete.hpp"
 #include "handlers/configs_values.hpp"
+
 #include "handlers/delete-variables_uuid/view.hpp"
 #include "handlers/get-variables_uuid/view.hpp"
 #include "handlers/patch-variables_uuid/view.hpp"
 #include "handlers/post-variables/view.hpp"
+#include "handlers/get-configs/view.hpp"
+#include "handlers/get-variables/view.hpp"
+
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"
 #include "userver/testsuite/testsuite_support.hpp"
@@ -31,6 +35,8 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
           .Append<uservice_dynconf::handlers::variables_uuid::get::Handler>()
           .Append<uservice_dynconf::handlers::variables_uuid::patch::Handler>()
+          .Append<uservice_dynconf::handlers::variables::get::Handler>()
+          .Append<uservice_dynconf::handlers::configs::get::Handler>()
           .Append<service_handlers::variables_uuid::del::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();

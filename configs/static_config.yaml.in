@@ -85,6 +85,16 @@ components_manager:
             method: DELETE
             task_processor: main-task-processor
 
+        handler-variables-get:
+            path: /admin/v1/variables
+            method: GET
+            task_processor: main-task-processor
+            
+        handler-configs-get:
+            path: /admin/v1/configs
+            method: GET
+            task_processor: main-task-processor
+
         testsuite-support: {}
 
         configs-cache:
