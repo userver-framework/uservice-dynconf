@@ -13,6 +13,7 @@ struct ConfigVariable {
   std::string config_value;
 };
 
-userver::formats::json::Value Serialize(const ConfigVariable &response,
+userver::formats::json::Value
+Serialize(const ConfigVariable &response,
           userver::formats::serialize::To<userver::formats::json::Value>);
-}
+} // namespace uservice_dynconf::models

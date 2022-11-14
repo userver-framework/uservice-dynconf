@@ -1,8 +1,8 @@
 #pragma once
 
 #include "userver/clients/http/client.hpp"
-#include "userver/formats/json/value.hpp"
 #include "userver/components/component_context.hpp"
+#include "userver/formats/json/value.hpp"
 
 #include <userver/clients/http/component.hpp>
 #include <userver/components/component.hpp>

@@ -8,11 +8,11 @@
 #include "handlers/configs_values.hpp"
 
 #include "handlers/delete-variables_uuid/view.hpp"
+#include "handlers/get-configs/view.hpp"
+#include "handlers/get-variables/view.hpp"
 #include "handlers/get-variables_uuid/view.hpp"
 #include "handlers/patch-variables_uuid/view.hpp"
 #include "handlers/post-variables/view.hpp"
-#include "handlers/get-configs/view.hpp"
-#include "handlers/get-variables/view.hpp"
 
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"

@@ -10,21 +10,21 @@
 
 namespace uservice_dynconf::handlers::configs::get {
 
-    class Handler final : public userver::server::handlers::HttpHandlerBase {
-    public:
-        static constexpr std::string_view kName = "handler-configs-get";
+class Handler final : public userver::server::handlers::HttpHandlerBase {
+public:
+  static constexpr std::string_view kName = "handler-configs-get";
 
-        Handler(const userver::components::ComponentConfig &config,
-                const userver::components::ComponentContext &context);
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &context);
 
-        std::string HandleRequestThrow(
-                const userver::server::http::HttpRequest &request,
-                userver::server::request::RequestContext &context) const override final;
+  std::string HandleRequestThrow(
+      const userver::server::http::HttpRequest &request,
+      userver::server::request::RequestContext &context) const override final;
 
-    private:
-        userver::storages::postgres::ClusterPtr pg_cluster_;
-        const std::string OFFSET = "OFFSET";
-        const std::string LIMIT = "LIMIT";
-    };
+private:
+  userver::storages::postgres::ClusterPtr pg_cluster_;
+  const std::string OFFSET = "OFFSET";
+  const std::string LIMIT = "LIMIT";
+};
 
-} // namespace uservice_dynconf::handlers::get-configs::get
+} // namespace uservice_dynconf::handlers::configs::get

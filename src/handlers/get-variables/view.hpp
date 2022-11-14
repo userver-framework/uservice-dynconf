@@ -10,21 +10,21 @@
 
 namespace uservice_dynconf::handlers::variables::get {
 
-    class Handler final : public userver::server::handlers::HttpHandlerBase {
-    public:
-        static constexpr std::string_view kName = "handler-variables-get";
-        static constexpr std::int32_t kMaxReturnCount = 50;
+class Handler final : public userver::server::handlers::HttpHandlerBase {
+public:
+  static constexpr std::string_view kName = "handler-variables-get";
+  static constexpr std::int32_t kMaxReturnCount = 50;
 
-        Handler(const userver::components::ComponentConfig &config,
-                const userver::components::ComponentContext &context);
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &context);
 
-        std::string HandleRequestThrow(
-                const userver::server::http::HttpRequest &request,
-                userver::server::request::RequestContext &context) const override final;
+  std::string HandleRequestThrow(
+      const userver::server::http::HttpRequest &request,
+      userver::server::request::RequestContext &context) const override final;
 
-    private:
-        userver::storages::postgres::ClusterPtr pg_cluster_;
-        const std::string OFFSET = "OFFSET";
-        const std::string LIMIT = "LIMIT";
-    };
-} // namespace uservice_dynconf::handlers::get-variables::get
+private:
+  userver::storages::postgres::ClusterPtr pg_cluster_;
+  const std::string OFFSET = "OFFSET";
+  const std::string LIMIT = "LIMIT";
+};
+} // namespace uservice_dynconf::handlers::variables::get

@@ -2,6 +2,7 @@ import pytest
 
 url = '/admin/v1/variables'
 
+
 @pytest.mark.parametrize('header',
                          [
                              ({'LIMIT': '-3'}),
@@ -16,7 +17,6 @@ url = '/admin/v1/variables'
 async def test_bad_head(service_client, header):
     response = await service_client.get(url, headers=header)
     assert response.status == 400
-
 
 
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
