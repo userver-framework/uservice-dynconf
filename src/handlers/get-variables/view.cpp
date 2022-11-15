@@ -28,9 +28,9 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   std::int32_t kLimit = 50;
   std::int32_t kOffset = 0;
-  if (request.HasHeader(OFFSET)) {
+  if (request.HasArg(OFFSET)) {
     try {
-      kOffset = stoi(request.GetHeader(OFFSET));
+      kOffset = stoi(request.GetArg(OFFSET));
     } catch (...) {
       http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
@@ -38,7 +38,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   }
   if (request.HasHeader(LIMIT)) {
     try {
-      kLimit = stoi(request.GetHeader(LIMIT));
+      kLimit = stoi(request.GetArg(LIMIT));
     } catch (...) {
       http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
