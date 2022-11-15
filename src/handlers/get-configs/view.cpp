@@ -22,14 +22,16 @@ Handler::Handler(const userver::components::ComponentConfig &config,
 std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
+  auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Access-Control-Allow-Origin", "*");
+  
   std::int32_t kLimit = 50;
   std::int32_t kOffset = 0;
   if (request.HasHeader(OFFSET)) {
     try {
       kOffset = stoi(request.GetHeader(OFFSET));
     } catch (...) {
-      auto &response = request.GetHttpResponse();
-      response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+      http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
   }
@@ -37,14 +39,12 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
     try {
       kLimit = stoi(request.GetHeader(LIMIT));
     } catch (...) {
-      auto &response = request.GetHttpResponse();
-      response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+      http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
   }
   if (kOffset < 0 || kLimit < 0) {
-    auto &response = request.GetHttpResponse();
-    response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+    http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return {};
   }
 

@@ -46,6 +46,8 @@ public:
       const userver::formats::json::Value &json,
       userver::server::request::RequestContext &) const override {
     auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Access-Control-Allow-Origin", "*");
+  
     const auto request_data = ParseRequest(json);
     try {
       auto val =
