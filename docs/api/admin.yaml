@@ -134,13 +134,13 @@ paths:
     get:
       description: Get configs with offset and limit (temporary variant)
       parameters:
-      - in: query
+      - in: header
         name: offset
         description: offset for items
         schema:
           type: integer
           default: 0                  
-      - in: query
+      - in: header
         name: limit
         description: max count of items returned in one request
         schema:
@@ -182,12 +182,12 @@ paths:
     get:
       description: get all configs uuids
       parameters:
-      - in: query
+      - in: header
         required: true
         name: offset
         schema:
           type: integer
-      - in: query
+      - in: header
         required: true
         name: limit
         schema:
