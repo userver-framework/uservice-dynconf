@@ -74,6 +74,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   response["count"] = count;
   response["total"] = result.Size();
 
+  response.SetHeader("Access-Control-Allow-Origin", "*");
   return userver::formats::json::ToString(response.ExtractValue());
 }
 
