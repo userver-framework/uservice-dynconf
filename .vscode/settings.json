@@ -69,6 +69,12 @@
         "typeinfo": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "string_view": "cpp",
+        "*.tcc": "cpp",
+        "condition_variable": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "utility": "cpp"
     }
 }
