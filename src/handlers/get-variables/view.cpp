@@ -24,6 +24,7 @@ std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
   std::int32_t kLimit = 50;
   std::int32_t kOffset = 0;
@@ -73,7 +74,6 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   response["count"] = count;
   response["total"] = result.Size();
 
-  http_response.SetHeader("Access-Control-Allow-Origin", "*");
   return userver::formats::json::ToString(response.ExtractValue());
 }
 

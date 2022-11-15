@@ -21,6 +21,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::formats::json::Value &,
     userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Access-Control-Allow-Origin", "*");
+  
   if (request.GetMethod() != userver::server::http::HttpMethod::kDelete) {
     http_response.SetStatus(
         userver::server::http::HttpStatus::kMethodNotAllowed);

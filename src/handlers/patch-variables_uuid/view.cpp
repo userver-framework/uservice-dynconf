@@ -24,6 +24,8 @@ std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Access-Control-Allow-Origin", "*");
+  
   userver::formats::json::ValueBuilder response_body;
 
   const auto &uuid = request.GetPathArg("uuid");
