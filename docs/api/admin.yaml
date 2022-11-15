@@ -45,8 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-              
+                $ref: '#/components/schemas/Error'  
   /login:
     get:
       description: login to system via credentials
@@ -78,7 +77,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Error'  
+  /check:
+    post:
+      description: check user's login uuid
+      parameters:
+      - in: header
+        required: true
+        name: Ticket
+        description: ticket
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+        '401':
+          description: Invalid login uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  
   /variables:
     post:
       description: Adding a new dynamic config variable for specific service.
