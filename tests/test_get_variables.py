@@ -7,10 +7,10 @@ url = '/admin/v1/variables'
                          [
                              ({'limit': '-3'}),
                              ({'offset': '-7'}),
-                             ({'limit': '-3', 'OFFSET': '-7'}),
+                             ({'limit': '-3', 'offset': '-7'}),
                              ({'limit': 'kek'}),
                              ({'offset': 'kek'}),
-                             ({'limit': 'kek', 'OFFSET': 'kek'})
+                             ({'limit': 'kek', 'offset': 'kek'})
                          ]
                          )
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])

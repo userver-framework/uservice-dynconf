@@ -36,7 +36,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
       return {};
     }
   }
-  if (request.HasHeader(LIMIT)) {
+  if (request.HasArg(LIMIT)) {
     try {
       kLimit = stoi(request.GetArg(LIMIT));
     } catch (...) {
