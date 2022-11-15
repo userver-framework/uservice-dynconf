@@ -3,19 +3,19 @@ import pytest
 url = '/admin/v1/variables'
 
 
-@pytest.mark.parametrize('header',
+@pytest.mark.parametrize('query_params',
                          [
-                             ({'LIMIT': '-3'}),
-                             ({'OFFSET': '-7'}),
-                             ({'LIMIT': '-3', 'OFFSET': '-7'}),
-                             ({'LIMIT': 'kek'}),
-                             ({'OFFSET': 'kek'}),
-                             ({'LIMIT': 'kek', 'OFFSET': 'kek'})
+                             ({'limit': '-3'}),
+                             ({'offset': '-7'}),
+                             ({'limit': '-3', 'offset': '-7'}),
+                             ({'limit': 'kek'}),
+                             ({'offset': 'kek'}),
+                             ({'limit': 'kek', 'offset': 'kek'})
                          ]
                          )
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
-async def test_bad_head(service_client, header):
-    response = await service_client.get(url, headers=header)
+async def test_bad_head(service_client, query_params):
+    response = await service_client.get(url, params=query_params)
     assert response.status == 400
 
 
@@ -29,18 +29,18 @@ async def test_get_ok(service_client):
 
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
 async def test_get_ok_with_params(service_client):
-    header1 = {'OFFSET': '19'}
-    response = await service_client.get(url, headers=header1)
+    query_params1 = {'offset': '19'}
+    response = await service_client.get(url, params=query_params1)
     assert response.status == 200
     assert response.json().get('count') == 5
     assert response.json().get('total') == 24
-    header2 = {'LIMIT': '15'}
-    response = await service_client.get(url, headers=header2)
+    query_params2 = {'limit': '15'}
+    response = await service_client.get(url, params=query_params2)
     assert response.status == 200
     assert response.json().get('count') == 15
     assert response.json().get('total') == 24
-    header3 = {'OFFSET': '22', 'LIMIT': '2'}
-    response = await service_client.get(url, headers=header3)
+    query_params3 = {'offset': '22', 'limit': '2'}
+    response = await service_client.get(url, params=query_params3)
     assert response.status == 200
     assert response.json().get('count') == 2
     assert response.json().get('total') == 24

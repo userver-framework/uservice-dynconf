@@ -5,6 +5,10 @@ compile_commands.json
 .idea/
 .pgdata/
 .cores/
+.vscode
+*.out
+*.local.*
+.DS_Store
 .ccache/
 cmake-build-debug/
 Testing/

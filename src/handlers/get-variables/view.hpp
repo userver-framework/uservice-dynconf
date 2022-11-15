@@ -24,7 +24,7 @@ public:
 
 private:
   userver::storages::postgres::ClusterPtr pg_cluster_;
-  const std::string OFFSET = "OFFSET";
-  const std::string LIMIT = "LIMIT";
+  const std::string OFFSET = "offset";
+  const std::string LIMIT = "limit";
 };
 } // namespace uservice_dynconf::handlers::variables::get
