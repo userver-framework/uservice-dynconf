@@ -5,11 +5,11 @@ info:
     version: '1.1'
 
 servers:
-  - url: localhost:1083
+  - url: localhost:8083
     description: local
 
 paths:
-  /variables:
+  /admins/v1/variables:
     post:
       description: Adding a new dynamic config variable for specific service.
       requestBody:
@@ -27,7 +27,9 @@ paths:
                   type: object
                   properties:
                     uuid:
-                      type: string   
+                      type: string
+                              
+              
         400:
           description: ERROR
           content:
@@ -81,7 +83,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
             
-  /configs:
+  /admins/v1/configs:
     get:
       description: get all configs uuids
       parameters:
@@ -123,8 +125,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
-  /configs/{uuid}/clone:
+  /admins/v1/configs/{uuid}/clone:
     post:
       description: Clone existed service and all its configs
       parameters:
@@ -170,7 +171,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /variables/{uuid}:
+  /admins/v1/variables/{uuid}:
     patch:
       description: update variable with uuid
       parameters:

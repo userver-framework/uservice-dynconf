@@ -11,10 +11,12 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 
+
 namespace uservice_dynconf::handlers::configs_uuid_clone::post {
+
 struct RequestData {
-  std::string config_name{};
-  std::string config_value{};
+  std::string config_name;
+  std::optional<std::string> config_value;
   };
 
   Handler::Handler(const userver::components::ComponentConfig& config,
@@ -33,9 +35,12 @@ struct RequestData {
     const auto& uuid = request.GetPathArg("uuid");
     const auto& new_service_name = json["service"].As<std::optional<std::string>>();
 
+    auto &http_response = request.GetHttpResponse();
+    http_response.SetHeader("Access-Control-Allow-Origin", "*");
+
     if (uuid.empty() || new_service_name.value_or("") == "")
     {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kBadRequest);
+      http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return uservice_dynconf::utils::MakeError("400", "Field 'uuid' or 'service' is empty");
     }
 
@@ -44,7 +49,7 @@ struct RequestData {
       uservice_dynconf::sql::kSelectCloneVariable.data(), uuid);
       
     if (result.IsEmpty()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kNotFound);
+      http_response.SetStatusNotFound();
       return uservice_dynconf::utils::MakeError("404", "Service not found");
     }
 
@@ -56,10 +61,11 @@ struct RequestData {
       new_service_name.value(), copied_service.config_name, copied_service.config_value);
 
     if (result.IsEmpty()) {
-      request.SetResponseStatus(userver::server::http::HttpStatus::kConflict);
+      http_response.SetStatus(userver::server::http::HttpStatus::kConflict);
       return uservice_dynconf::utils::MakeError("409", "Service with that name already exists");
     }
 
+    http_response.SetStatusOk();
     userver::formats::json::ValueBuilder response;
     response["uuid"] = result.AsSingleRow<std::string>();
     return response.ExtractValue();
