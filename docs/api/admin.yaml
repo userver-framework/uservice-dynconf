@@ -27,9 +27,7 @@ paths:
                   type: object
                   properties:
                     uuid:
-                      type: string
-                              
-              
+                      type: string   
         400:
           description: ERROR
           content:
@@ -125,7 +123,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-            
+
+  /configs/{uuid}/clone:
+    post:
+      description: Clone existed service and all its configs
+      parameters:
+      - in: path
+        required: true
+        name: uuid
+        schema:
+          type: string
+      requestBody:
+        description: Service name to assign to cloned service
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                service:
+                  type: string
+      responses:
+        200:
+          description: Ok
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+        400:
+          description: Field 'uuid' or 'service' is empty
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Service not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        409:
+          description: Service with that name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /variables/{uuid}:
     patch:
       description: update variable with uuid
