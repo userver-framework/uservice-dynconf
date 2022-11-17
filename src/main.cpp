@@ -12,8 +12,8 @@
 #include "handlers/get-variables/view.hpp"
 #include "handlers/get-variables_uuid/view.hpp"
 #include "handlers/patch-variables_uuid/view.hpp"
-#include "handlers/post-variables/view.hpp"
 #include "handlers/post-configs_uuid_clone/view.hpp"
+#include "handlers/post-variables/view.hpp"
 
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"
@@ -39,7 +39,8 @@ int main(int argc, char *argv[]) {
           .Append<uservice_dynconf::handlers::variables::get::Handler>()
           .Append<uservice_dynconf::handlers::configs::get::Handler>()
           .Append<service_handlers::variables_uuid::del::Handler>()
-          .Append<uservice_dynconf::handlers::configs_uuid_clone::post::Handler>()
+          .Append<
+              uservice_dynconf::handlers::configs_uuid_clone::post::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
 

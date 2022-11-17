@@ -8,23 +8,21 @@
 #include <string_view>
 #include <userver/components/component_list.hpp>
 
-
-
 namespace uservice_dynconf::handlers::configs_uuid_clone::post {
 
-    class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
-    public:
-        static constexpr std::string_view kName = "handler-configs_uuid_clone-post";
+class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
+public:
+  static constexpr std::string_view kName = "handler-configs_uuid_clone-post";
 
-        Handler(const userver::components::ComponentConfig& config,
-            const userver::components::ComponentContext& component_context);
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &component_context);
 
-        userver::formats::json::Value HandleRequestJsonThrow(
-            const userver::server::http::HttpRequest& request,
-            const userver::formats::json::Value& json,
-            userver::server::request::RequestContext&) const override final;
+  userver::formats::json::Value HandleRequestJsonThrow(
+      const userver::server::http::HttpRequest &request,
+      const userver::formats::json::Value &json,
+      userver::server::request::RequestContext &) const override final;
 
-    private:
-        const userver::storages::postgres::ClusterPtr cluster_;
-    };
-}
+private:
+  const userver::storages::postgres::ClusterPtr cluster_;
+};
+} // namespace uservice_dynconf::handlers::configs_uuid_clone::post
