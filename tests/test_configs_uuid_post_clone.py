@@ -8,7 +8,8 @@ from testsuite.databases import pgsql
         ("my_service", "my_config", "true"),
     ]
 )
-async def test_correct_clone(service_client, pgsql, service, config_name, config_value):
+async def test_correct_clone(service_client, pgsql, service,
+config_name, config_value):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
         'INSERT INTO uservice_dynconf.configs (service, config_name, config_value) '
