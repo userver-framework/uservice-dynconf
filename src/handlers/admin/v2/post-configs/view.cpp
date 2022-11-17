@@ -31,7 +31,7 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
 }
 class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
-  static constexpr std::string_view kName = "handler-variables-post";
+  static constexpr std::string_view kName = "handler-post-configs";
 
   Handler(const userver::components::ComponentConfig &config,
           const userver::components::ComponentContext &component_context)

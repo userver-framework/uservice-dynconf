@@ -42,7 +42,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   case 0: {
     http_response.SetStatus(userver::server::http::HttpStatus::kNotFound);
     return uservice_dynconf::utils::MakeError(
-        "404", "Config with this name not exists");
+        "404", "Config with this uuid not exists");
   }
   case 1: {
     return {};

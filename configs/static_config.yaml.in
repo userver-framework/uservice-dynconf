@@ -50,11 +50,6 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-variables-post:
-            path: /admin/v1/variables
-            method: POST
-            task_processor: main-task-processor
-
         handler-configs-values:
             path: /configs/values
             method: POST
@@ -70,34 +65,47 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
-        handler-variables-uuid-get:
-            path: /admin/v1/variables/{uuid}
+        handler-post-configs:
+            path: /admin/v2/configs
+            method: POST
+            task_processor: main-task-processor
+
+        handler-get-configs-uuid:
+            path: /admin/v2/configs/{uuid}
             method: GET
             task_processor: main-task-processor
 
-        handler-variables-uuid-patch:
-            path: /admin/v1/variables/{uuid}
+        handler-patch-configs-uuid:
+            path: /admin/v2/configs/{uuid}
             method: PATCH
             task_processor: main-task-processor
             
-        handler-delete-variable:
-            path: /api/v1/variables/{uuid}
+        handler-delete-configs-uuid:
+            path: /admin/v2/configs/{uuid}
             method: DELETE
             task_processor: main-task-processor
 
-        handler-variables-get:
-            path: /admin/v1/variables
+        handler-get-configs:
+            path: /admin/v2/configs
             method: GET
             task_processor: main-task-processor
             
-        handler-configs-get:
-            path: /admin/v1/configs
+        handler-get-services:
+            path: /admin/v2/services
             method: GET
             task_processor: main-task-processor
 
         testsuite-support: {}
 
         configs-cache:
+            pgcomponent: settings-database
+            update-interval: 10s
+            full-update-interval: 1m
+            update-correction: 2s
+            update-jitter: 1s
+            chunk-size: 100
+
+        services-cache:
             pgcomponent: settings-database
             update-interval: 10s
             full-update-interval: 1m

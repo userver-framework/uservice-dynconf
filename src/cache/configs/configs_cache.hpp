@@ -11,7 +11,7 @@ namespace uservice_dynconf::cache::settings_cache {
 
 class ConfigCacheContainer {
 public:
-  using Key = uservice_dynconf::models::Key;
+  using Key = std::string;
   using Config = uservice_dynconf::models::Config;
   using ConfigPtr = std::shared_ptr<const Config>;
 
@@ -19,8 +19,8 @@ public:
   size_t size() const;
 
   ConfigPtr FindConfig(const Key &key) const;
-  std::vector<ConfigPtr> FindConfigsByService(std::string_view service) const;
-  std::vector<ConfigPtr> FindConfigs(std::string_view service,
+  std::vector<ConfigPtr> FindConfigsByService(std::string_view service_uuid) const;
+  std::vector<ConfigPtr> FindConfigs(std::string_view service_uuid,
                                      const std::vector<std::string> &ids) const;
 
 private:
@@ -32,7 +32,7 @@ struct ConfigCachePolicy {
   static constexpr auto kName = "configs-cache";
   using ValueType = uservice_dynconf::models::Config;
   using CacheContainer = ConfigCacheContainer;
-  static constexpr auto kKeyMember = &uservice_dynconf::models::Config::key;
+  static constexpr auto kKeyMember = &std::string;
   static userver::storages::postgres::Query kQuery;
   static constexpr auto kUpdatedField = "updated_at";
   using UpdatedFieldType = userver::storages::postgres::TimePointTz;

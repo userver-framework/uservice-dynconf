@@ -1,4 +1,4 @@
-#include "configs_values.hpp"
+#include "view.hpp"
 #include "cache/configs_cache.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
@@ -43,7 +43,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext &) const {
 
   const auto request_data = ParseRequest(request_json);
-  const auto data = cache_.Get();
+  const auto configs_cache = configs_cache_.Get();
+  const auto services_cache = services_cache_.Get();
 
   userver::formats::json::ValueBuilder result =
       userver::formats::json::MakeObject();
@@ -52,11 +53,13 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       std::chrono::milliseconds(0));
   std::chrono::time_point<std::chrono::system_clock> updated_at(
       std::chrono::milliseconds(0));
-
+  
+  const auto service_uuid = services_cache->FindServiceByName(request_data.service);
+    
   const auto configs =
       request_data.ids.empty()
-          ? data->FindConfigsByService(request_data.service)
-          : data->FindConfigs(request_data.service, request_data.ids);
+          ? data->FindConfigsByService(service_uuid)
+          : data->FindConfigs(service_uuid, request_data.ids);
 
   for (const auto &config : configs) {
     if (config && request_data.update_since.value_or(kMinTime) <=

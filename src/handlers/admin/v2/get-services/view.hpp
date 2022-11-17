@@ -12,7 +12,7 @@ namespace uservice_dynconf::handlers::configs::get {
 
 class Handler final : public userver::server::handlers::HttpHandlerBase {
 public:
-  static constexpr std::string_view kName = "handler-configs-get";
+  static constexpr std::string_view kName = "handler-get-services";
 
   Handler(const userver::components::ComponentConfig &config,
           const userver::components::ComponentContext &context);
