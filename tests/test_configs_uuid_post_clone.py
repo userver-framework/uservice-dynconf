@@ -9,17 +9,18 @@ from testsuite.databases import pgsql
     ]
 )
 async def test_correct_clone(service_client, pgsql, service,
-config_name, config_value):
+                             config_name, config_value):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
-    'INSERT INTO uservice_dynconf.configs (service,config_name,config_value) '
-    'VALUES (%s, %s, %s) RETURNING uuid', (service,
+        'INSERT INTO uservice_dynconf.configs '
+        '(service,config_name,config_value) '
+        'VALUES (%s, %s, %s) RETURNING uuid', (service,
                                                config_name, config_value)
     )
     uuid = cursor.fetchone()[0]
 
     response = await service_client.post(
-        '/admin/v1/configs/' + str(uuid) + '/clone', 
+        '/admin/v1/configs/' + str(uuid) + '/clone',
         json={'service': 'amogus'},
     )
 
@@ -63,7 +64,7 @@ async def test_service_not_exists(service_client, uuid, service):
     ]
 )
 async def test_service_name_occupied(service_client, pgsql,
-service, config_name, config_value):
+                                     service, config_name, config_value):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
         'INSERT INTO uservice_dynconf.configs '
@@ -74,14 +75,14 @@ service, config_name, config_value):
     uuid = cursor.fetchone()[0]
 
     response = await service_client.post(
-        '/admin/v1/configs/' + str(uuid) + '/clone', 
+        '/admin/v1/configs/' + str(uuid) + '/clone',
         json={'service': 'amogus'},
     )
 
     assert response.status_code == 200
 
     response = await service_client.post(
-        '/admin/v1/configs/' + str(uuid) + '/clone', 
+        '/admin/v1/configs/' + str(uuid) + '/clone',
         json={'service': 'amogus'},
     )
 
@@ -94,7 +95,7 @@ service, config_name, config_value):
     ]
 )
 async def test_clone_empty_config_value(service_client,
-pgsql, service, config_name):
+                                        pgsql, service, config_name):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
         'INSERT INTO uservice_dynconf.configs (service, config_name) '
@@ -103,7 +104,7 @@ pgsql, service, config_name):
     uuid = cursor.fetchone()[0]
 
     response = await service_client.post(
-        '/admin/v1/configs/' + str(uuid) + '/clone', 
+        '/admin/v1/configs/' + str(uuid) + '/clone',
         json={'service': 'amogus'},
     )
 
