@@ -88,12 +88,10 @@ paths:
       description: get all configs uuids
       parameters:
       - in: header
-        required: true
         name: offset
         schema:
           type: integer
       - in: header
-        required: true
         name: limit
         schema:
           type: integer

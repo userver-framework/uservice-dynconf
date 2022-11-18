@@ -6,6 +6,8 @@ compile_commands.json
 .pgdata/
 .cores/
 .ccache/
+.devcontainer
+.vscode
 cmake-build-debug/
 Testing/
 !Makefile.local
