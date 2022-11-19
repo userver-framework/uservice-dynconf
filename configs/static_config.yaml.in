@@ -81,7 +81,7 @@ components_manager:
             task_processor: main-task-processor
             
         handler-delete-variable:
-            path: /api/v1/variables/{uuid}
+            path: /admin/v1/variables/{uuid}
             method: DELETE
             task_processor: main-task-processor
 
