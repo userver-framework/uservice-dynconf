@@ -17,7 +17,7 @@ struct RequestData {
   std::string uuid;
   std::string service;
   std::string config_name;
-  std::optional<std::string> value;
+  std::optional<std::string> config_value;
   std::chrono::system_clock::time_point updated_at;
 };
 
@@ -28,8 +28,8 @@ Serialize(const RequestData &response,
   item["uuid"] = response.uuid;
   item["service"] = response.service;
   item["config_name"] = response.config_name;
-  if (response.value.has_value())
-    item["value"] = response.value.value();
+  if (response.config_value.has_value())
+    item["config_value"] = response.config_value.value();
   else
     item["config_value"] = "null";
   item["updated_at"] = response.updated_at;
