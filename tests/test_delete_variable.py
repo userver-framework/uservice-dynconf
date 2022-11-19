@@ -15,7 +15,7 @@ async def test_delition(service_client, pgsql):
     cursor = pgsql["uservice_dynconf"].cursor()
     cursor.execute("SELECT uuid FROM uservice_dynconf.configs LIMIT 1;")
     uuid = cursor.fetchone()[0]
-    response = await service_client.delete(f"/api/v1/variables/{uuid}")
+    response = await service_client.delete(f"/admin/v1/variables/{uuid}")
     assert response.status_code == 200
     cursor.execute(
         "SELECT COUNT(*) FROM uservice_dynconf.configs WHERE uuid=%s;",
