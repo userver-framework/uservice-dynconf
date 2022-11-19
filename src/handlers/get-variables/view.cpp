@@ -31,7 +31,7 @@ Serialize(const RequestData &response,
   if (response.value.has_value())
     item["value"] = response.value.value();
   else
-    item["value"] = "null";
+    item["config_value"] = "null";
   item["updated_at"] = response.updated_at;
   return item.ExtractValue();
 }
