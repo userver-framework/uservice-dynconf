@@ -6,6 +6,7 @@
 #include "userver/utils/datetime.hpp"
 #include <chrono>
 #include <ctime>
+#include <iostream>
 
 namespace uservice_dynconf::handlers::configs_values::post {
 
@@ -53,9 +54,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       std::chrono::milliseconds(0));
   std::chrono::time_point<std::chrono::system_clock> updated_at(
       std::chrono::milliseconds(0));
-  
+
   const auto service = services_cache->FindServiceByName(request_data.service);
-    
+
   const auto configs =
       request_data.ids.empty()
           ? configs_cache->FindConfigsByService(service->key.uuid)

@@ -18,8 +18,8 @@ public:
   void insert_or_assign(Key &&key, Config &&config);
   size_t size() const;
   
-  std::vector<ConfigPtr> FindConfigsByService(std::string_view service_uuid) const;
-  std::vector<ConfigPtr> FindConfigs(const std::string_view service_uuid,
+  std::vector<ConfigPtr> FindConfigsByService(std::string string) const;
+  std::vector<ConfigPtr> FindConfigs(const std::string string,
                                      const std::vector<std::string> &ids) const;
 
 private:

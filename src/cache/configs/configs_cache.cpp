@@ -26,8 +26,8 @@ void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
 size_t ConfigCacheContainer::size() const { return configs_to_key_.size(); }
 
 std::vector<ConfigCacheContainer::ConfigPtr>
-ConfigCacheContainer::FindConfigsByService(std::string_view service_uuid) const {
-  if (auto it = configs_by_service_.find(service_uuid.data());
+ConfigCacheContainer::FindConfigsByService(std::string service_uuid) const {
+  if (auto it = configs_by_service_.find(service_uuid);
       it != configs_by_service_.end()) {
     return it->second;
   }
@@ -35,7 +35,7 @@ ConfigCacheContainer::FindConfigsByService(std::string_view service_uuid) const 
 }
 
 std::vector<ConfigCacheContainer::ConfigPtr>
-ConfigCacheContainer::FindConfigs(const std::string_view service_uuid,
+ConfigCacheContainer::FindConfigs(const std::string service_uuid,
                                   const std::vector<std::string> &ids) const {
   std::vector<ConfigCacheContainer::ConfigPtr> result{};
   result.reserve(ids.size());

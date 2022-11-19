@@ -35,3 +35,4 @@ CREATE TABLE IF NOT EXISTS uservice_dynconf.users_x_configs (
         FOREIGN KEY (service)
             REFERENCES uservice_dynconf.services(uuid)
 );
+
