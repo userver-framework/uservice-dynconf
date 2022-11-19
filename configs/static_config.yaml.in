@@ -79,9 +79,10 @@ components_manager:
             path: /admin/v2/configs/{uuid}
             method: PATCH
             task_processor: main-task-processor
-            
+
         handler-delete-configs-uuid:
             path: /admin/v2/configs/{uuid}
+
             method: DELETE
             task_processor: main-task-processor
 
@@ -89,7 +90,7 @@ components_manager:
             path: /admin/v2/configs
             method: GET
             task_processor: main-task-processor
-            
+
         handler-get-services:
             path: /admin/v2/services
             method: GET

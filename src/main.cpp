@@ -22,6 +22,7 @@
 #include <userver/server/component.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include "middleware/hello.hpp"
 
 int main(int argc, char *argv[]) {
   namespace service_handlers = uservice_dynconf::handlers;
