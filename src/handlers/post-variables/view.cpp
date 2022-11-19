@@ -75,16 +75,4 @@ namespace uservice_dynconf::handlers::variables::post {
     void AppendVariableHandler(userver::components::ComponentList& component_list){
         component_list.Append<Handler>();
     }
-    userver::formats::json::ValueBuilder response;
-    response["uuid"] = result.AsSingleRow<std::string>();
-    return response.ExtractValue();
-  }
-
-private:
-  const userver::storages::postgres::ClusterPtr cluster_;
-};
-} // namespace
-void AppendVariableHandler(userver::components::ComponentList &component_list) {
-  component_list.Append<Handler>();
-}
 } // namespace uservice_dynconf::handlers::variables::post

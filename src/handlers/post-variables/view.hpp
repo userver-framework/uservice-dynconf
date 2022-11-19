@@ -9,9 +9,7 @@
 #include <userver/components/component_list.hpp>
 
 namespace uservice_dynconf::handlers::variables::post {
-<<<<<<< HEAD
 void AppendVariableHandler(userver::components::ComponentList &component_list);
-=======
     class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
     public:
         static constexpr std::string_view kName = "handler-variables-post";
@@ -28,5 +26,4 @@ void AppendVariableHandler(userver::components::ComponentList &component_list);
         const userver::storages::postgres::ClusterPtr cluster_;
     };
     void AppendVariableHandler(userver::components::ComponentList& component_list);
->>>>>>> Null config value handling and tests
 }
