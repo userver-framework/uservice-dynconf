@@ -8,6 +8,6 @@
 #include <string_view>
 #include <userver/components/component_list.hpp>
 
-namespace uservice_dynconf::handlers::variables::post {
+namespace uservice_dynconf::handlers::configs::post {
 void AppendVariableHandler(userver::components::ComponentList &component_list);
 }

@@ -8,7 +8,7 @@
 #include "userver/storages/postgres/postgres_fwd.hpp"
 #include <string_view>
 
-namespace uservice_dynconf::handlers::variables_uuid::patch {
+namespace uservice_dynconf::handlers::configs_uuid::patch {
 
 class Handler final : public userver::server::handlers::HttpHandlerBase {
 public:

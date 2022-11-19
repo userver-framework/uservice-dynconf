@@ -11,7 +11,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 
-namespace uservice_dynconf::handlers::variables::post {
+namespace uservice_dynconf::handlers::configs::post {
 namespace {
 struct RequestData {
   std::string config_value{};
@@ -63,7 +63,7 @@ public:
     }
     auto result = cluster_->Execute(
         userver::storages::postgres::ClusterHostType::kMaster,
-        uservice_dynconf::sql::kInsertConfigVariableValue.data(),
+        uservice_dynconf::sql::kInsertConfig.data(),
         request_data.service_name, request_data.config_name,
         request_data.config_value);
     if (result.IsEmpty()) {

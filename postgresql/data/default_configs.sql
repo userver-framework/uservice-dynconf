@@ -66,5 +66,5 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
     }
   }
 }')
-ON CONFLICT (service, config_name)
+ON CONFLICT ON CONSTRAINT unique_in_configs
 DO NOTHING;

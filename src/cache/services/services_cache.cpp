@@ -25,20 +25,20 @@ void ServiceCacheContainer::insert_or_assign(Key &&key, Service &&service) {
 
 size_t ServiceCacheContainer::size() const { return service_by_uuid_.size(); }
 
-ServicePtr FindServiceByName(std::string_view service_name) const  {
-    if (auto c_ptr = userver::utils::FindOrDefault(service_by_name_, service_name, nullptr); c_ptr) {
+ServiceCacheContainer::ServicePtr ServiceCacheContainer::FindServiceByName(std::string_view service_name) const  {
+    if (auto c_ptr = userver::utils::FindOrDefault(service_by_name_, service_name.data(), nullptr); c_ptr) {
         return c_ptr;
     }
     return userver::utils::FindOrDefault(
         service_by_name_, kDefaultService, nullptr);
 }
 
-ServicePtr FindService(std::string_view service_uuid) const {
-    if (auto c_ptr = userver::utils::FindOrDefault(service_by_uuid_, service_uuid, nullptr);
+ServiceCacheContainer::ServicePtr ServiceCacheContainer::FindService(const Key key) const {
+    if (auto c_ptr = userver::utils::FindOrDefault(service_by_uuid_, key, nullptr);
         c_ptr) {
     return c_ptr;
     }
-    return userver::utils::FindOrDefault(service_by_uuid_, kDefaultServiceUuid, nullptr);
+    return userver::utils::FindOrDefault(service_by_uuid_, Key{kDefaultServiceUuid}, nullptr);
 }
 
 } // namespace uservice_dynconf::cache::settings_cache

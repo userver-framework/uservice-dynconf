@@ -47,7 +47,7 @@ async def test_post_variable_positive(service_client,
                                       db_setup, input, conf_name):
     """Add new config variable"""
     response = await service_client.post(
-        '/admin/v1/variables', json=input
+        '/admin/v2/configs', json=input
     )
     assert response.status_code == 200
     c_uuid = response.json()["uuid"]

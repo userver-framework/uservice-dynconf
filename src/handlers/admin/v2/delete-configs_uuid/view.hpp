@@ -7,7 +7,7 @@
 #include "userver/storages/postgres/postgres_fwd.hpp"
 #include <string_view>
 
-namespace uservice_dynconf::handlers::variables_uuid::del {
+namespace uservice_dynconf::handlers::configs_uuid::del {
 
 class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:

@@ -19,8 +19,11 @@ userver::storages::postgres::Query ConfigCachePolicy::kQuery =
 void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
   auto config_ptr = std::make_shared<const Config>(std::move(config));
   configs_to_key_.insert_or_assign(key, config_ptr);
+  configs_to_name_.insert_or_assign(config_ptr->config_name, config_ptr);
   configs_by_service_[config.service_uuid].push_back(std::move(config_ptr));
 }
+
+size_t ConfigCacheContainer::size() const { return configs_to_key_.size(); }
 
 std::vector<ConfigCacheContainer::ConfigPtr>
 ConfigCacheContainer::FindConfigsByService(std::string_view service_uuid) const {
@@ -31,36 +34,21 @@ ConfigCacheContainer::FindConfigsByService(std::string_view service_uuid) const 
   return {};
 }
 
-size_t ConfigCacheContainer::size() const { return configs_to_key_.size(); }
-
-ConfigCacheContainer::ConfigPtr
-ConfigCacheContainer::FindConfig(const ConfigCacheContainer::Key &key) const {
-  if (auto c_ptr = userver::utils::FindOrDefault(configs_to_key_, key, nullptr);
-      c_ptr) {
-    return c_ptr;
-  }
-  return userver::utils::FindOrDefault(
-      configs_to_key_,
-      ConfigCacheContainer::Key{{kDefaultService}, key.config_name}, nullptr);
-}
-
 std::vector<ConfigCacheContainer::ConfigPtr>
-ConfigCacheContainer::FindConfigs(std::string_view service_uuid,
+ConfigCacheContainer::FindConfigs(const std::string_view service_uuid,
                                   const std::vector<std::string> &ids) const {
   std::vector<ConfigCacheContainer::ConfigPtr> result{};
   result.reserve(ids.size());
+
   for (const auto &id : ids) {
-    if (auto c_ptr = userver::utils::FindOrDefault(
-            configs_to_key_, service_uuid.data(), nullptr);
-        c_ptr) {
-      result.emplace_back(c_ptr);
-      continue;
-    }
-    if (auto c_ptr = userver::utils::FindOrDefault(
-            configs_to_key_, kDefaultService,
-            nullptr);
-        c_ptr) {
-      result.emplace_back(c_ptr);
+    auto c_ptr = userver::utils::FindOrDefault(configs_to_name_, id, nullptr);
+    if (c_ptr) {
+      if (c_ptr->service_uuid == service_uuid) {
+        result.emplace_back(c_ptr);
+        continue;
+      } else if (c_ptr->service_uuid == kDefaultService) {
+        result.emplace_back(c_ptr);
+      }
     }
   }
   return result;

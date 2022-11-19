@@ -8,11 +8,14 @@ add_subdirectory(third_party/userver)
 
 
 add_executable(${PROJECT_NAME}
+	src/models/service.hpp
 	src/models/config.hpp
 	src/utils/make_error.hpp
 	src/utils/make_error.cpp
-	src/cache/configs_cache.hpp
-	src/cache/configs_cache.cpp
+	src/cache/configs/configs_cache.hpp
+	src/cache/configs/configs_cache.cpp
+	src/cache/services/services_cache.hpp
+	src/cache/services/services_cache.cpp
 	src/auth/auth.cpp
 	src/handlers/post-configs_values/view.hpp
 	src/handlers/post-configs_values/view.cpp
@@ -24,14 +27,14 @@ add_executable(${PROJECT_NAME}
 	src/handlers/admin/v2/get-configs_uuid/view.cpp
 	src/handlers/admin/v2/patch-configs_uuid/view.hpp
 	src/handlers/admin/v2/patch-configs_uuid/view.cpp
-	src/handlers/admin/v2/delete-variables_uuid/view.hpp
-	src/handlers/admin/v2/delete-variables_uuid/view.cpp
+	src/handlers/admin/v2/delete-configs_uuid/view.hpp
+	src/handlers/admin/v2/delete-configs_uuid/view.cpp
 	src/handlers/admin/v2/get-configs/view.hpp
 	src/handlers/admin/v2/get-configs/view.cpp
 	src/handlers/admin/v2/get-services/view.hpp
 	src/handlers/admin/v2/get-services/view.cpp
-	src/handlers/post-configs/view.hpp
-	src/handlers/post-configs/view.cpp
+	src/handlers/admin/v2/post-configs/view.hpp
+	src/handlers/admin/v2/post-configs/view.cpp
 	src/sql/sql_query.hpp
     src/main.cpp)
 

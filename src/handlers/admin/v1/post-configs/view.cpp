@@ -1,4 +1,4 @@
-#include "admin_v1_configs.hpp"
+#include "view.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/yaml/value_builder.hpp"

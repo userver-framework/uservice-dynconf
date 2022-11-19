@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cache/configs_cache.hpp"
+#include "userver/storages/postgres/io/chrono.hpp"
 #include "userver/components/component_config.hpp"
 #include "userver/components/component_context.hpp"
 #include "userver/formats/json/value.hpp"
@@ -8,7 +8,7 @@
 #include "userver/server/handlers/http_handler_json_base.hpp"
 #include <string_view>
 
-namespace uservice_dynconf::handlers::configs::get {
+namespace uservice_dynconf::handlers::services::get {
 
 class Handler final : public userver::server::handlers::HttpHandlerBase {
 public:

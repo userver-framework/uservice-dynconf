@@ -4,12 +4,12 @@ namespace uservice_dynconf::sql {
 
 // selects for cache
 inline constexpr std::string_view kSelectConfigForCache = R"~(
-SELECT uuid, service_uuid, config_name, config_value, updated_at
+SELECT (uuid), service_uuid, config_name, config_value, updated_at
 FROM uservice_dynconf.configs
 )~";
 
 inline constexpr std::string_view kSelectServiceForCache = R"~(
-SELECT uuid, service_name, updated_at
+SELECT (uuid), service_name, updated_at
 FROM uservice_dynconf.configs
 )~";
 
@@ -35,12 +35,12 @@ WHERE service_uuid=(SELECT uuid FROM uuid_service)::TEXT and config_name IN (SEL
 )~";
 
 // v2
-inline constexpr std::string_view kDeleteVariable = R"~(
+inline constexpr std::string_view kDeleteConfig = R"~(
 DELETE FROM uservice_dynconf.configs
 WHERE uuid=$1;
 )~";
 
-inline constexpr std::string_view kInsertConfigVariableValue = R"~(
+inline constexpr std::string_view kInsertConfig = R"~(
 WITH uuid_service AS (
     INSERT INTO uservice_dynconf.services (service_name) VALUES ($1)
     ON CONFLICT DO NOTHING
@@ -62,12 +62,12 @@ SELECT uuid, (
 FROM uservice_dynconf.configs
 )~";
 
-inline constexpr std::string_view kSelectConfigs = R"~(
+inline constexpr std::string_view kSelectServices = R"~(
 SELECT service_name 
 FROM uservice_dynconf.services
 )~";
 
-inline constexpr std::string_view kSelectVariableWithValue = R"~(
+inline constexpr std::string_view kSelectConfigWithValue = R"~(
 SELECT uuid, (
     SELECT service_name FROM uservice_dynconf.services 
     WHERE uservice_dynconf.servicesuuid=service_uuid
@@ -76,7 +76,7 @@ FROM uservice_dynconf.configs
 WHERE uuid=$1
 )~";
 
-inline constexpr std::string_view kUpdateVariable = R"~(
+inline constexpr std::string_view kUpdateConfig = R"~(
 UPDATE uservice_dynconf.configs SET config_value=$2::JSONB, updated_at = now()
 WHERE uuid=$1 
 RETURNING uuid

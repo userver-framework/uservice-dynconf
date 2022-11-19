@@ -1,4 +1,4 @@
-#include "admin_v1_configs_delete.hpp"
+#include "view.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/server/http/http_status.hpp"
 #include "userver/storages/postgres/cluster.hpp"

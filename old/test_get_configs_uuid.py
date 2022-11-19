@@ -20,7 +20,7 @@ async def test_default_values(service_client, pgsql, load_json, service,
     )
     uuid = cursor.fetchone()
     response = await service_client.get(
-        '/admin/v1/variables/' + str(uuid),
+        '/admin/v2/configs/' + str(uuid),
     )
     assert response.status_code == 200
     assert response.json()['name'] == config_name
@@ -38,6 +38,6 @@ async def test_default_values(service_client, pgsql, load_json, service,
                               config_value, config_name):
     uuid = str(uuid4())
     response = await service_client.get(
-        '/admin/v1/variables/' + str(uuid),
+        '/admin/v2/configs/' + str(uuid),
     )
     assert response.status_code == 404

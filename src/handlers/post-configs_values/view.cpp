@@ -1,5 +1,5 @@
 #include "view.hpp"
-#include "cache/configs_cache.hpp"
+#include "cache/configs/configs_cache.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/json/value_builder.hpp"
@@ -34,8 +34,8 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
     : HttpHandlerJsonBase(config, context),
-      cache_(context.FindComponent<
-             uservice_dynconf::cache::settings_cache::ConfigsCache>()) {}
+      configs_cache_(context.FindComponent<uservice_dynconf::cache::settings_cache::ConfigsCache>()),
+      services_cache_(context.FindComponent<uservice_dynconf::cache::settings_cache::ServicesCache>()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &,
@@ -54,17 +54,17 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   std::chrono::time_point<std::chrono::system_clock> updated_at(
       std::chrono::milliseconds(0));
   
-  const auto service_uuid = services_cache->FindServiceByName(request_data.service);
+  const auto service = services_cache->FindServiceByName(request_data.service);
     
   const auto configs =
       request_data.ids.empty()
-          ? data->FindConfigsByService(service_uuid)
-          : data->FindConfigs(service_uuid, request_data.ids);
+          ? configs_cache->FindConfigsByService(service->key.uuid)
+          : configs_cache->FindConfigs(service->key.uuid, request_data.ids);
 
   for (const auto &config : configs) {
     if (config && request_data.update_since.value_or(kMinTime) <=
                       config->updated_at.GetUnderlying()) {
-      result[config->key.config_name] = config->config_value;
+      result[config->key.uuid] = config->config_value;
       updated_at = std::max(updated_at, config->updated_at.GetUnderlying());
     }
   }

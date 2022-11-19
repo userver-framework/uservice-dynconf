@@ -5,11 +5,17 @@
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 
-#include "models/configvariable.hpp"
 #include "sql/sql_query.hpp"
 #include "utils/make_error.hpp"
 
-namespace uservice_dynconf::handlers::variables_uuid::get {
+namespace uservice_dynconf::handlers::configs_uuid::get {
+
+struct DBData {
+  std::string uuid;
+  std::string service;
+  std::string config_name;
+  std::string config_value;
+};
 
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
@@ -31,7 +37,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   auto result = cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectVariableWithValue.data(), uuid);
+      uservice_dynconf::sql::kSelectConfigWithValue.data(), uuid);
 
   if (result.IsEmpty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kNotFound);
@@ -39,13 +45,13 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
         uservice_dynconf::utils::MakeError("404", "Not Found"));
   }
 
-  auto variable = result.AsSingleRow<uservice_dynconf::models::ConfigVariable>(
+  auto config = result.AsSingleRow<DBData>(
       userver::storages::postgres::kRowTag);
-  response_body["uuid"] = variable.uuid;
-  response_body["service"] = variable.service;
-  response_body["config_name"] = variable.config_name;
-  response_body["config_value"] = variable.config_value;
+  response_body["uuid"] = config.uuid;
+  response_body["service"] = config.service;
+  response_body["config_name"] = config.config_name;
+  response_body["config_value"] = config.config_value;
   return userver::formats::json::ToString(response_body.ExtractValue());
 }
 
-} // namespace uservice_dynconf::handlers::variables_uuid::get
+} // namespace uservice_dynconf::handlers::configs_uuid::get

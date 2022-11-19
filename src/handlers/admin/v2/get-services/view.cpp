@@ -1,5 +1,5 @@
 #include "view.hpp"
-#include "cache/configs_cache.hpp"
+#include "userver/storages/postgres/io/chrono.hpp"
 #include "sql/sql_query.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
@@ -10,7 +10,7 @@
 #include <chrono>
 #include <ctime>
 
-namespace uservice_dynconf::handlers::configs::get {
+namespace uservice_dynconf::handlers::services::get {
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
     : HttpHandlerBase(config, context),
@@ -50,7 +50,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectConfigs.data());
+      uservice_dynconf::sql::kSelectServices.data());
 
   userver::formats::json::ValueBuilder response;
   response["items"].Resize(0);

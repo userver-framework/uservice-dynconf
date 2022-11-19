@@ -5,13 +5,13 @@
 #include <userver/cache/base_postgres_cache.hpp>
 #include <userver/storages/postgres/io/chrono.hpp>
 
-#include "models/service/service.hpp"
+#include "models/service.hpp"
 
 namespace uservice_dynconf::cache::settings_cache {
 
 class ServiceCacheContainer {
 public:
-  using Key = std::string;
+  using Key = uservice_dynconf::models::KeyService;
   using Service = uservice_dynconf::models::Service;
   using ServicePtr = std::shared_ptr<const Service>;
 
@@ -19,7 +19,7 @@ public:
   size_t size() const;
   
   ServicePtr FindServiceByName(std::string_view service_name) const;
-  ServicePtr FindService(std::string_view service_uuid) const;
+  ServicePtr FindService(const Key key) const;
 
 private:
   std::unordered_map<Key, ServicePtr> service_by_uuid_;
@@ -30,7 +30,7 @@ struct ServiceCachePolicy {
   static constexpr auto kName = "services-cache";
   using ValueType = uservice_dynconf::models::Service;
   using CacheContainer = ServiceCacheContainer;
-  static constexpr auto kKeyMember = &std::string;
+  static constexpr auto kKeyMember = &uservice_dynconf::models::Service::key;
   static userver::storages::postgres::Query kQuery;
   static constexpr auto kUpdatedField = "updated_at";
   using UpdatedFieldType = userver::storages::postgres::TimePointTz;

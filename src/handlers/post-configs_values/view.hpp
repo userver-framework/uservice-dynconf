@@ -1,6 +1,7 @@
 #pragma once
 
-#include "cache/configs_cache.hpp"
+#include "cache/configs/configs_cache.hpp"
+#include "cache/services/services_cache.hpp"
 #include "userver/components/component_config.hpp"
 #include "userver/components/component_context.hpp"
 #include "userver/formats/json/value.hpp"

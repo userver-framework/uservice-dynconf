@@ -6,7 +6,7 @@
 #include "sql/sql_query.hpp"
 #include "utils/make_error.hpp"
 
-namespace uservice_dynconf::handlers::variables_uuid::del {
+namespace uservice_dynconf::handlers::configs_uuid::del {
 
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
@@ -37,7 +37,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   auto query_result = cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kDeleteVariable.data(), request_uuid);
+      uservice_dynconf::sql::kDeleteConfig.data(), request_uuid);
   switch (query_result.RowsAffected()) {
   case 0: {
     http_response.SetStatus(userver::server::http::HttpStatus::kNotFound);
