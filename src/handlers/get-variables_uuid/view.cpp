@@ -38,7 +38,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
     return userver::formats::json::ToString(
         uservice_dynconf::utils::MakeError("404", "Not Found"));
   }
-
+  http_response.SetHeader("Content-Type", "aplication/json");
   auto variable = result.AsSingleRow<uservice_dynconf::models::ConfigVariable>(
       userver::storages::postgres::kRowTag);
   response_body["uuid"] = variable.uuid;
