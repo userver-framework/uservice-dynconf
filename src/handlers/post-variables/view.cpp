@@ -25,6 +25,9 @@ namespace uservice_dynconf::handlers::variables::post {
         RequestData ParseRequest(const userver::formats::json::Value &request) {
             RequestData result;
             result.config_value = request["value"].As<std::optional<std::string>>();
+            if (result.config_value.has_value() && result.config_value.value() == "null"){
+                result.config_value.reset();
+            }
             result.config_name = request["name"].As<std::string>({});
             result.service_name = request["service"].As<std::string>("__default__");
             return result;
@@ -46,6 +49,7 @@ namespace uservice_dynconf::handlers::variables::post {
         auto &http_response = request.GetHttpResponse();
         const auto request_data = ParseRequest(json);
         http_response.SetHeader("Access-Control-Allow-Origin", "*");
+        http_response.SetHeader("Content-Type", "application/json");
         if (!request_data.isValid()){
             http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
             return uservice_dynconf::utils::MakeError(
