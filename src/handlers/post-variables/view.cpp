@@ -22,16 +22,33 @@ namespace uservice_dynconf::handlers::variables::post {
             }
         };
 
-        RequestData ParseRequest(const userver::formats::json::Value &request) {
-            RequestData result;
-            result.config_value = request["value"].As<std::optional<std::string>>();
-            if (result.config_value.has_value() && result.config_value.value() == "null"){
-                result.config_value.reset();
-            }
-            result.config_name = request["name"].As<std::string>({});
-            result.service_name = request["service"].As<std::string>("__default__");
-            return result;
-        }
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &component_context)
+      : HttpHandlerJsonBase(config, component_context),
+        cluster_(component_context
+                     .FindComponent<userver::components::Postgres>(
+                         "settings-database")
+                     .GetCluster()) {}
+
+  userver::formats::json::Value HandleRequestJsonThrow(
+      const userver::server::http::HttpRequest &request,
+      const userver::formats::json::Value &json,
+      userver::server::request::RequestContext &) const override {
+    auto &http_response = request.GetHttpResponse();
+    http_response.SetHeader("Access-Control-Allow-Origin", "*");
+
+    const auto request_data = ParseRequest(json);
+    try {
+      auto val =
+          userver::formats::json::FromString(json["value"].As<std::string>({}));
+    } catch (const userver::formats::json::ParseException &e) {
+      http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+      return uservice_dynconf::utils::MakeError("400", e.what());
+    }
+    if (!request_data.isValid()) {
+      http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+      return uservice_dynconf::utils::MakeError(
+          "400", "Fields 'name' , 'value' and 'service' are required");
     }
     Handler::Handler(const userver::components::ComponentConfig& config,
             const userver::components::ComponentContext& component_context)

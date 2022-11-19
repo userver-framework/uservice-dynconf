@@ -10,24 +10,20 @@
 
 namespace uservice_dynconf::handlers::variables::get {
 
+class Handler final : public userver::server::handlers::HttpHandlerBase {
+public:
+  static constexpr std::string_view kName = "handler-variables-get";
 
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &context);
 
-  class Handler final : public userver::server::handlers::HttpHandlerBase {
-  public:
-    static constexpr std::string_view kName = "handler-variables-get";
+  std::string HandleRequestThrow(
+      const userver::server::http::HttpRequest &request,
+      userver::server::request::RequestContext &context) const override final;
 
-    Handler(const userver::components::ComponentConfig& config,
-      const userver::components::ComponentContext& context);
-
-    std::string HandleRequestThrow(
-      const userver::server::http::HttpRequest& request,
-      userver::server::request::RequestContext& context) const override final;
-
-  private:
-
-
-    userver::storages::postgres::ClusterPtr pg_cluster_;
-    const std::string LIMIT = "limit";
-    const std::string PAGE = "page";
-  };
+private:
+  userver::storages::postgres::ClusterPtr pg_cluster_;
+  const std::string LIMIT = "limit";
+  const std::string PAGE = "page";
+};
 } // namespace uservice_dynconf::handlers::variables::get
