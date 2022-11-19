@@ -38,8 +38,9 @@ RETURNING uservice_dynconf.configs.uuid;
 )~";
 
 inline constexpr std::string_view kSelectAll = R"~(
-SELECT uuid, service, config_name, updated_at
+SELECT uuid, service, config_name, config_value::TEXT, updated_at
 FROM uservice_dynconf.configs
+WHERE config_name LIKE CONCAT('%', CONCAT($1, '%'))
 )~";
 
 inline constexpr std::string_view kSelectConfigs = R"~(
