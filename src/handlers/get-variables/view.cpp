@@ -4,7 +4,7 @@
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/json/value_builder.hpp"
-#include "userver/formats/serialize/common_containers.hpp"
+//#include "userver/formats/serialize/common_containers.hpp"
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 #include "userver/utils/datetime.hpp"
@@ -52,6 +52,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   std::int32_t limit = 50;
   std::int32_t page = 1;
+  std::string s;
   if (request.HasArg(PAGE)) {
     try {
       page = stoi(request.GetArg(PAGE));
@@ -68,6 +69,10 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
       return {};
     }
   }
+  if (request.HasArg(S)) {
+    s = request.GetArg(S);
+  }
+  
   if (page <= 0 || limit <= 0) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return {};
@@ -75,7 +80,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectAll.data());
+      uservice_dynconf::sql::kSelectAll.data(), s);
 
   userver::formats::json::ValueBuilder response;
   response["items"].Resize(0);
@@ -85,7 +90,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
            std::min((page - 1) * limit, (int32_t)result.Size());
        row < result.AsSetOf<RequestData>(userver::storages::postgres::kRowTag)
                      .begin() +
-                 std::min((page)*limit, (int32_t)result.Size());
+                 std::min((page) * limit, (int32_t)result.Size());
        ++row) {
     response["items"].PushBack(*row);
   }
