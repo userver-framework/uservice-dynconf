@@ -3,7 +3,7 @@ from testsuite.databases import pgsql
 
 
 async def test_delition_no_uuid(service_client):
-    response = await service_client.delete("/api/v1/variables/")
+    response = await service_client.delete("/admin/v1/variables/")
     assert response.status_code == 400
 
 
@@ -31,9 +31,9 @@ async def test_delition_double_delete(service_client, pgsql):
     cur = pgsql["uservice_dynconf"].cursor()
     cur.execute("SELECT uuid FROM uservice_dynconf.configs LIMIT 1;")
     record = cur.fetchone()[0]
-    response = await service_client.delete(f"/api/v1/variables/{record}")
+    response = await service_client.delete(f"/admin/v1/variables/{record}")
     assert response.status_code == 200
-    response = await service_client.delete(f"/api/v1/variables/{record}")
+    response = await service_client.delete(f"/admin/v1/variables/{record}")
     assert response.status_code == 404
     cur.execute(
         "SELECT COUNT(*) FROM uservice_dynconf.configs WHERE uuid=%s;",
