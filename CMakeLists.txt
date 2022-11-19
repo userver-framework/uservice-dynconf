@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
 	src/utils/make_error.cpp
 	src/cache/configs_cache.hpp
 	src/cache/configs_cache.cpp
+	src/auth/auth.hpp
 	src/auth/auth.cpp
 	src/handlers/admin_v1_configs.hpp
 	src/handlers/admin_v1_configs.cpp
@@ -29,8 +30,11 @@ add_executable(${PROJECT_NAME}
 	src/handlers/get-configs/view.cpp
 	src/models/variablewithdate.cpp
 	src/sql/sql_query.hpp
-    src/main.cpp
-		src/handlers/post-variables/view.cpp src/handlers/post-variables/view.hpp)
+	src/handlers/post-variables/view.cpp
+	src/handlers/post-variables/view.hpp
+	src/handlers/post-configs_uuid_clone/view.hpp
+	src/handlers/post-configs_uuid_clone/view.cpp
+    src/main.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(${PROJECT_NAME} userver-core userver-postgresql)

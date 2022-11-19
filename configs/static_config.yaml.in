@@ -94,6 +94,11 @@ components_manager:
             path: /admin/v1/configs
             method: GET
             task_processor: main-task-processor
+        
+        handler-configs_uuid_clone-post:
+            path: /admin/v1/configs/{uuid}/clone
+            method: POST
+            task_processor: main-task-processor
 
         testsuite-support: {}
 

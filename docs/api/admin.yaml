@@ -5,11 +5,11 @@ info:
     version: '1.1'
 
 servers:
-  - url: localhost:1083
+  - url: localhost:8083
     description: local
 
 paths:
-  /variables:
+  /admins/v1/variables:
     post:
       description: Adding a new dynamic config variable for specific service.
       requestBody:
@@ -83,17 +83,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
             
-  /configs:
+  /admins/v1/configs:
     get:
       description: get all configs uuids
       parameters:
       - in: header
-        required: true
         name: offset
         schema:
           type: integer
       - in: header
-        required: true
         name: limit
         schema:
           type: integer
@@ -125,8 +123,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-            
-  /variables/{uuid}:
+  /admins/v1/configs/{uuid}/clone:
+    post:
+      description: Clone existed service and all its configs
+      parameters:
+      - in: path
+        required: true
+        name: uuid
+        schema:
+          type: string
+      requestBody:
+        description: Service name to assign to cloned service
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                service:
+                  type: string
+      responses:
+        200:
+          description: Ok
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+        400:
+          description: Field 'uuid' or 'service' is empty
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Service not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        409:
+          description: Service with that name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /admins/v1/variables/{uuid}:
     patch:
       description: update variable with uuid
       parameters:
@@ -136,6 +179,7 @@ paths:
         schema:
           type: string
       requestBody:
+        required: true
         content:
           application/json:
             schema:

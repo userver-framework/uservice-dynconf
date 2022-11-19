@@ -55,4 +55,20 @@ inline constexpr std::string_view kUpdateVariable = R"~(
 UPDATE uservice_dynconf.configs SET config_value=$2::JSONB, updated_at 
 = now() WHERE uuid=$1 RETURNING uuid
 )~";
+
+inline constexpr std::string_view kSelectCloneVariable = R"~(
+SELECT config_name, config_value::TEXT 
+FROM uservice_dynconf.configs 
+WHERE uuid=$1 
+)~";
+
+inline constexpr std::string_view kInsertClonedVariable = R"~(
+INSERT INTO uservice_dynconf.configs 
+(service, config_name, config_value)
+VALUES ($1, $2, $3::jsonb)
+ON CONFLICT (service, config_name)
+DO NOTHING
+RETURNING uservice_dynconf.configs.uuid;
+)~";
+
 } // namespace uservice_dynconf::sql
