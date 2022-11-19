@@ -10,20 +10,20 @@
 
 namespace uservice_dynconf::handlers::variables::post {
 void AppendVariableHandler(userver::components::ComponentList &component_list);
-    class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
-    public:
-        static constexpr std::string_view kName = "handler-variables-post";
+class Handler final : public userver::server::handlers::HttpHandlerJsonBase {
+public:
+  static constexpr std::string_view kName = "handler-variables-post";
 
-        Handler(const userver::components::ComponentConfig &config,
-                const userver::components::ComponentContext &context);
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &context);
 
-        userver::formats::json::Value HandleRequestJsonThrow(
-                const userver::server::http::HttpRequest &request,
-                const userver::formats::json::Value &request_json,
-                userver::server::request::RequestContext &context) const override final;
+  userver::formats::json::Value HandleRequestJsonThrow(
+      const userver::server::http::HttpRequest &request,
+      const userver::formats::json::Value &request_json,
+      userver::server::request::RequestContext &context) const override final;
 
-    private:
-        const userver::storages::postgres::ClusterPtr cluster_;
-    };
-    void AppendVariableHandler(userver::components::ComponentList& component_list);
-}
+private:
+  const userver::storages::postgres::ClusterPtr cluster_;
+};
+void AppendVariableHandler(userver::components::ComponentList &component_list);
+} // namespace uservice_dynconf::handlers::variables::post

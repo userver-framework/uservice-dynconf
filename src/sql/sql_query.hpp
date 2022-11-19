@@ -45,6 +45,7 @@ FROM uservice_dynconf.configs
 inline constexpr std::string_view kSelectConfigs = R"~(
 SELECT DISTINCT service
 FROM uservice_dynconf.configs
+WHERE LOWER(service) LIKE LOWER(CONCAT('%', CONCAT($1, '%')))
 )~";
 
 inline constexpr std::string_view kSelectVariableWithValue = R"~(
