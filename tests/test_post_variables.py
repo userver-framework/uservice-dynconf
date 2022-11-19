@@ -1,6 +1,8 @@
 import pytest
 from testsuite.databases import pgsql
 
+POST_URL = '/admin/v1/variables'
+
 
 class PostgresqlClient:
     def __init__(self, connection):
@@ -57,7 +59,7 @@ async def test_post_variable_positive(service_client,
                                       db_setup, input, conf_name):
     """Add new config variable"""
     response = await service_client.post(
-        '/admin/v1/variables', json=input
+        POST_URL, json=input
     )
     assert response.status_code == 200
     c_uuid = response.json()["uuid"]
@@ -75,7 +77,7 @@ async def test_post_variable_no_name(service_client,
                                      input, conf_name):
     """Request without config name"""
     response = await service_client.post(
-        '/admin/v1/variables', json=input
+        POST_URL, json=input
     )
     assert response.status_code == 400
     assert response.json()["message"] == "Config name is required"
@@ -95,7 +97,7 @@ async def test_post_variable_no_service(service_client,
                                         input, conf_name):
     """Request without service name"""
     response = await service_client.post(
-        '/admin/v1/variables', json=input
+        POST_URL, json=input
     )
     assert response.status_code == 200
     assert response.json()["uuid"]
@@ -112,7 +114,32 @@ async def test_post_variable_no_value(service_client,
                                       input, conf_name):
     """Request without config value"""
     response = await service_client.post(
-        '/admin/v1/variables', json=input
+        POST_URL, json=input
     )
     assert response.status_code == 200
     assert response.json()["uuid"]
+
+
+@pytest.mark.parametrize(
+    'input, conf_name',
+    [
+        pytest.param({
+            "name": "CUSTOM_CONFIG",
+            "service": "my-service",
+            "value": '{"property1": 10,'
+                     '"property2": '
+                     '{"info": "info"}}',
+        }, "CUSTOM_CONFIG", id='variable exists'),
+    ])
+async def test_post_variable_exists(service_client,
+                                    input, conf_name):
+    """Request without config value"""
+    response = await service_client.post(
+        POST_URL, json=input
+    )
+    response = await service_client.post(
+        POST_URL, json=input
+    )
+    assert response.status_code == 409
+    error_str = "Config variable already exists for that service"
+    assert response.json()["message"] == error_str
