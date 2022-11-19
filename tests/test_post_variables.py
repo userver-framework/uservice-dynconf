@@ -54,7 +54,7 @@ def db_setup(pgsql):
             "service": "my-service",
             "value": "null"
         }, "CUSTOM_CONFIG_5", id='add null'),
-      ])
+    ])
 async def test_post_variable_positive(service_client,
                                       db_setup, input, conf_name):
     """Add new config variable"""

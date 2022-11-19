@@ -72,7 +72,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   if (request.HasArg(S)) {
     s = request.GetArg(S);
   }
-  
+
   if (page <= 0 || limit <= 0) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return {};
@@ -90,7 +90,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
            std::min((page - 1) * limit, (int32_t)result.Size());
        row < result.AsSetOf<RequestData>(userver::storages::postgres::kRowTag)
                      .begin() +
-                 std::min((page) * limit, (int32_t)result.Size());
+                 std::min((page)*limit, (int32_t)result.Size());
        ++row) {
     response["items"].PushBack(*row);
   }
