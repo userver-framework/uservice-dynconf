@@ -52,3 +52,25 @@ async def test_post_variable_positive(service_client,
     assert response.status_code == 200
     c_uuid = response.json()["uuid"]
     assert db_setup.variable_is_present(c_uuid, 'my-service', conf_name)
+
+
+@pytest.mark.parametrize(
+    'input, conf_name',
+    [
+        pytest.param({
+            "value": "true",
+            "service": "my-service",
+        }, "CUSTOM_CONFIG_2", id='add bool'),
+        pytest.param({
+            "name": "CUSTOM_CONFIG_3",
+            "service": "my-service",
+        }, "CUSTOM_CONFIG_3", id='add int'),
+    ])
+async def test_post_variable_bad_request(service_client,
+                                         db_setup, input, conf_name):
+    """Add new config variable"""
+    response = await service_client.post(
+        '/admin/v1/variables', json=input
+    )
+    assert response.status_code == 400
+    assert response.json()["message"] == "Fields 'name', 'value' are required"
