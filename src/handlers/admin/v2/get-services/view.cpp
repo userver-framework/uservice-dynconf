@@ -23,6 +23,7 @@ std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
   std::int32_t kLimit = 50;

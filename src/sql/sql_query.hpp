@@ -41,10 +41,14 @@ WHERE uuid=$1
 )~";
 
 inline constexpr std::string_view kInsertConfig = R"~(
-WITH uuid_service AS (
+WITH insert_service AS (
     INSERT INTO uservice_dynconf.services (service_name) VALUES ($1)
     ON CONFLICT DO NOTHING
     RETURNING uuid
+), uuid_service AS (
+    SELECT uuid FROM uservice_dynconf.services WHERE service_name=$1
+    UNION ALL
+    SELECT uuid FROM insert_service
 )
 INSERT INTO uservice_dynconf.configs
 (service_uuid, config_name, config_value)

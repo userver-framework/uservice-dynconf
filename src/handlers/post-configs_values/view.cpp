@@ -56,7 +56,6 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       std::chrono::milliseconds(0));
 
   const auto service = services_cache->FindServiceByName(request_data.service);
-
   const auto configs =
       request_data.ids.empty()
           ? configs_cache->FindConfigsByService(service->key.uuid)

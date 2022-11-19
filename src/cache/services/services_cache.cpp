@@ -19,7 +19,6 @@ userver::storages::postgres::Query ServiceCachePolicy::kQuery =
         uservice_dynconf::sql::kSelectServiceForCache.data());
 
 void ServiceCacheContainer::insert_or_assign(Key &&key, Service &&service) {
-    std::cout << "insert: " << key.uuid << "  " << service.service_name << "\n\n\n" << std::endl;
     auto service_ptr = std::make_shared<const Service>(std::move(service));
     service_by_uuid_.insert_or_assign(key, service_ptr);
     service_by_name_.insert_or_assign(service.service_name, service_ptr);
@@ -27,11 +26,7 @@ void ServiceCacheContainer::insert_or_assign(Key &&key, Service &&service) {
 
 size_t ServiceCacheContainer::size() const { return service_by_uuid_.size(); }
 
-ServiceCacheContainer::ServicePtr ServiceCacheContainer::FindServiceByName(std::string service_name) const  {
-    std::cout << "\n\n" << service_name  << "\n\n" << std::endl;
-    for (auto it = service_by_name_.begin(); it != service_by_name_.end(); it++)
-        std::cout << it->first << " " << it->second << std::endl;
-
+ServiceCacheContainer::ServicePtr ServiceCacheContainer::FindServiceByName(std::string service_name) const {
     if (auto c_ptr = userver::utils::FindOrDefault(service_by_name_, service_name, nullptr); c_ptr) {
         return c_ptr;
     }

@@ -17,6 +17,7 @@ userver::storages::postgres::Query ConfigCachePolicy::kQuery =
         uservice_dynconf::sql::kSelectConfigForCache.data());
 
 void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
+  std::cout << "ConfigCacheContainer" << std::endl;
   auto config_ptr = std::make_shared<const Config>(std::move(config));
   configs_to_key_.insert_or_assign(key, config_ptr);
   configs_to_name_.insert_or_assign(config_ptr->config_name, config_ptr);
