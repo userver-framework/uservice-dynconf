@@ -19,3 +19,4 @@ Testing/
 !third_party/
 !third_party/userver/
 configs/static_config.yaml
+.vscode/settings.json
