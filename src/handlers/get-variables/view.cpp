@@ -4,7 +4,7 @@
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/json/value_builder.hpp"
-//#include "userver/formats/serialize/common_containers.hpp"
+#include "userver/formats/serialize/common_containers.hpp"
 #include "userver/storages/postgres/cluster.hpp"
 #include "userver/storages/postgres/component.hpp"
 #include "userver/utils/datetime.hpp"
