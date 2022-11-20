@@ -1,6 +1,8 @@
 -- See https://userver.tech/dd/d2c/md_en_schemas_dynamic_configs.html
 -- for description of dynamic configs.
 
+INSERT INTO uservice_dynconf.services (uuid, service_name) VALUES ('__default_uuid__', '__default__');
+
 INSERT INTO uservice_dynconf.configs (config_name, config_value)
 VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
   "http-limit": 6000,

@@ -13,9 +13,14 @@ async def test_default_values(service_client, pgsql, load_json, service,
                               config_value, config_name, new_value):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
-        'INSERT INTO uservice_dynconf.configs (service, config_value, '
+        'INSERT INTO uservice_dynconf.services (service_name) '
+        ' VALUES (%s) RETURNING uuid', (service,)
+    )
+    service_uuid = cursor.fetchone()
+    cursor.execute(
+        'INSERT INTO uservice_dynconf.configs (service_uuid, config_value, '
         'config_name) '
-        ' VALUES (%s, %s, %s) RETURNING uuid', (service,
+        ' VALUES (%s, %s, %s) RETURNING uuid', (service_uuid,
                                                 config_value, config_name)
     )
     uuid = cursor.fetchone()[0]
