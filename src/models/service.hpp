@@ -13,29 +13,9 @@ using ConfigId = userver::utils::StrongTypedef<
   class ConfigIdTag, int64_t,
   userver::utils::StrongTypedefOps::kCompareTransparent>;
 
-struct KeyService {
-  std::string uuid;
-
-  bool operator==(const KeyService &other) const {
-    return std::tie(uuid) ==
-           std::tie(other.uuid);
-  }
-};
-
 struct Service {
-  KeyService key;
+  std::string key;
   std::string service_name;
   userver::storages::postgres::TimePointTz updated_at;
 };
 } // namespace uservice_dynconf::models
-
-namespace std {
-
-template <> struct hash<uservice_dynconf::models::KeyService> {
-  size_t operator()(const uservice_dynconf::models::KeyService &param) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, param.uuid);
-    return seed;
-  }
-};
-} // namespace std

@@ -11,7 +11,7 @@ namespace uservice_dynconf::cache::settings_cache {
 
 class ConfigCacheContainer {
 public:
-  using Key = uservice_dynconf::models::KeyConfig;
+  using Key = std::string;
   using Config = uservice_dynconf::models::Config;
   using ConfigPtr = std::shared_ptr<const Config>;
 

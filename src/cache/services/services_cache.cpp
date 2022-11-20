@@ -21,7 +21,7 @@ userver::storages::postgres::Query ServiceCachePolicy::kQuery =
 void ServiceCacheContainer::insert_or_assign(Key &&key, Service &&service) {
     auto service_ptr = std::make_shared<const Service>(std::move(service));
     service_by_uuid_.insert_or_assign(key, service_ptr);
-    service_by_name_.insert_or_assign(service.service_name, service_ptr);
+    service_by_name_.insert_or_assign(service_ptr->service_name, service_ptr);
 }
 
 size_t ServiceCacheContainer::size() const { return service_by_uuid_.size(); }

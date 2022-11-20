@@ -39,9 +39,10 @@ Handler::Handler(const userver::components::ComponentConfig &config,
       services_cache_(context.FindComponent<uservice_dynconf::cache::settings_cache::ServicesCache>()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
-    const userver::server::http::HttpRequest &,
+    const userver::server::http::HttpRequest &request,
     const userver::formats::json::Value &request_json,
     userver::server::request::RequestContext &) const {
+  auto &http_response = request.GetHttpResponse();
 
   const auto request_data = ParseRequest(request_json);
   const auto configs_cache = configs_cache_.Get();
@@ -56,15 +57,20 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       std::chrono::milliseconds(0));
 
   const auto service = services_cache->FindServiceByName(request_data.service);
+  if (service == nullptr) {
+    http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+    return {};
+  }
+
   const auto configs =
       request_data.ids.empty()
-          ? configs_cache->FindConfigsByService(service->key.uuid)
-          : configs_cache->FindConfigs(service->key.uuid, request_data.ids);
+          ? configs_cache->FindConfigsByService(service->key)
+          : configs_cache->FindConfigs(service->key, request_data.ids);
 
   for (const auto &config : configs) {
     if (config && request_data.update_since.value_or(kMinTime) <=
                       config->updated_at.GetUnderlying()) {
-      result[config->key.uuid] = config->config_value;
+      result[config->config_name] = config->config_value;
       updated_at = std::max(updated_at, config->updated_at.GetUnderlying());
     }
   }

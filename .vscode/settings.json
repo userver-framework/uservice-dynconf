@@ -92,6 +92,9 @@
         "ranges": "cpp",
         "stop_token": "cpp",
         "cfenv": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "__string": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }
