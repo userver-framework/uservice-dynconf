@@ -17,10 +17,16 @@ FROM uservice_dynconf.services
 inline constexpr std::string_view kInsertConfigValue = R"~(
 WITH new_service AS (
     INSERT INTO uservice_dynconf.services (service_name) 
-    VALUES ($1) RETURNING uuid
+    VALUES ($1)
+    ON CONFLICT DO NOTHING
+    RETURNING uuid
+), uuid_service AS (
+    SELECT uuid FROM uservice_dynconf.services WHERE service_name=$1
+    UNION ALL
+    SELECT uuid FROM new_service
 )
 INSERT INTO uservice_dynconf.configs (service_uuid, config_name, config_value) 
-SELECT (SELECT uuid FROM new_service)::TEXT, d.key, d.value::jsonb
+SELECT (SELECT uuid FROM uuid_service)::TEXT, d.key, d.value::jsonb
 FROM jsonb_each_text($2) as d
 ON CONFLICT ON CONSTRAINT unique_in_configs
 DO UPDATE SET config_value = EXCLUDED.config_value, updated_at = NOW()

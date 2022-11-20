@@ -52,7 +52,7 @@ async def test_configs_add_values(
 
 @pytest.mark.pgsql(
     'uservice_dynconf',
-    files=['default_configs.sql'],
+    files=['default_configs.sql', 'custom_configs.sql'],
 )
 async def test_redefinitions_configs(
         service_client,

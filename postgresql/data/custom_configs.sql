@@ -1,7 +1,16 @@
--- See https://userver.tech/dd/d2c/md_en_schemas_dynamic_configs.html
--- for description of dynamic configs.
-
-INSERT INTO uservice_dynconf.configs (config_name, config_value, service_uuid)
-VALUES ('HTTP_CLIENT_EXCUDE_EXTRA_HEADER', 'true', (SELECT uuid FROM new_service))
-ON CONFLICT ON CONSTRAINT unique_in_configs
-DO NOTHING;
+WITH new_service AS (
+  INSERT INTO uservice_dynconf.services (uuid, service_name) VALUES ('__custom_uuid__', 'my-custom-service') RETURNING uuid
+)
+INSERT INTO uservice_dynconf.configs (service_uuid, config_name, config_value)
+VALUES 
+('__custom_uuid__', 'USERVER_RPS_CCONTROL_ENABLED', 'true'),
+('__custom_uuid__', 'POSTGRES_CONNECTION_POOL_SETTINGS', 
+'{
+  "__default__": {
+    "min_pool_size": 10,
+    "max_pool_size": 30,
+    "max_queue_size": 100
+  }
+}'
+),
+('__custom_uuid__', 'CUSTOM_CONFIG', '{"config": false}');
