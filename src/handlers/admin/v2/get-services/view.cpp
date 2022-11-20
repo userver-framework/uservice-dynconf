@@ -1,5 +1,5 @@
 #include "view.hpp"
-#include "userver/storages/postgres/io/chrono.hpp"
+#include "cache/configs/configs_cache.hpp"
 #include "sql/sql_query.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
@@ -23,14 +23,14 @@ std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
-  http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
-  std::int32_t kLimit = 50;
-  std::int32_t kOffset = 0;
-  if (request.HasArg(OFFSET)) {
+  std::int32_t limit = 50;
+  std::int32_t page = 1;
+  std::string s;
+  if (request.HasArg(PAGE)) {
     try {
-      kOffset = stoi(request.GetArg(OFFSET));
+      page = stoi(request.GetArg(PAGE));
     } catch (...) {
       http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
@@ -38,36 +38,37 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   }
   if (request.HasArg(LIMIT)) {
     try {
-      kLimit = stoi(request.GetArg(LIMIT));
+      limit = stoi(request.GetArg(LIMIT));
     } catch (...) {
       http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
   }
-  if (kOffset < 0 || kLimit < 0) {
+  if (request.HasArg(S)) {
+    s = request.GetArg(S);
+  }
+
+  if (page <= 0 || limit <= 0) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return {};
   }
 
   auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectServices.data());
+      uservice_dynconf::sql::kSelectAllServices.data(), s);
 
   userver::formats::json::ValueBuilder response;
   response["items"].Resize(0);
-  std::int32_t count = 0;
   for (auto row = result.AsSetOf<std::string>().begin() +
-                  std::min(kOffset, (int32_t)result.Size());
-       row < result.AsSetOf<std::string>().end(); ++row) {
-    if (count >= kLimit)
-      break;
+                  std::min((page - 1) * limit, (int32_t)result.Size());
+       row < result.AsSetOf<std::string>().begin() +
+                 std::min((page)*limit, (int32_t)result.Size());
+       ++row) {
     response["items"].PushBack(*row);
-    count++;
   }
-  response["count"] = count;
   response["total"] = result.Size();
-
+  http_response.SetHeader("Content-Type", "application/json");
   return userver::formats::json::ToString(response.ExtractValue());
 }
 
-} // namespace uservice_dynconf::handlers::configs::get
+} // namespace uservice_dynconf::handlers::services::get

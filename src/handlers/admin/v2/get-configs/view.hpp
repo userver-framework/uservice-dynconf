@@ -1,7 +1,7 @@
 #pragma once
 
-#include "userver/storages/postgres/io/chrono.hpp"
-#include "userver/components/component_config.hpp"
+#include "cache/configs/configs_cache.hpp"
+#include "userver/storages/postgres/query.hpp"
 #include "userver/components/component_context.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/server/handlers/http_handler_base.hpp"
@@ -13,7 +13,6 @@ namespace uservice_dynconf::handlers::configs::get {
 class Handler final : public userver::server::handlers::HttpHandlerBase {
 public:
   static constexpr std::string_view kName = "handler-get-configs";
-  static constexpr std::int32_t kMaxReturnCount = 50;
 
   Handler(const userver::components::ComponentConfig &config,
           const userver::components::ComponentContext &context);
@@ -24,7 +23,8 @@ public:
 
 private:
   userver::storages::postgres::ClusterPtr pg_cluster_;
-  const std::string OFFSET = "offset";
   const std::string LIMIT = "limit";
+  const std::string PAGE = "page";
+  const std::string S = "s";
 };
 } // namespace uservice_dynconf::handlers::variables::get

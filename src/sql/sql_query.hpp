@@ -64,12 +64,19 @@ DO NOTHING
 RETURNING uservice_dynconf.configs.uuid
 )~";
 
-inline constexpr std::string_view kSelectAll = R"~(
+inline constexpr std::string_view kSelectConfigs = R"~(
 SELECT uuid, (
     SELECT service_name FROM uservice_dynconf.services 
     WHERE uservice_dynconf.services.uuid=service_uuid
-), config_name, updated_at
+), config_name, config_value::TEXT, updated_at
 FROM uservice_dynconf.configs
+WHERE LOWER(config_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%')))
+)~";
+
+inline constexpr std::string_view kSelectAllServices = R"~(
+SELECT DISTINCT service_name
+FROM uservice_dynconf.services
+WHERE LOWER(service_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%')))
 )~";
 
 inline constexpr std::string_view kSelectServices = R"~(
