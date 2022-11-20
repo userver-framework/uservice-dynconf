@@ -26,5 +26,6 @@ private:
   const std::string LIMIT = "limit";
   const std::string PAGE = "page";
   const std::string S = "s";
+  const std::string S_SERVICES = "s_services";
 };
 } // namespace uservice_dynconf::handlers::variables::get

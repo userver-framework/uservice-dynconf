@@ -15,6 +15,8 @@
 #include "handlers/admin/v2/get-configs_uuid/view.hpp"
 #include "handlers/admin/v2/delete-configs_uuid/view.hpp"
 #include "handlers/admin/v2/patch-configs_uuid/view.hpp"
+#include "handlers/admin/v2/post-configs_uuid_clone/view.hpp"
+#include "handlers/admin/v2/post-services_uuid_clone/view.hpp"
 
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"
@@ -42,6 +44,8 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::services::get::Handler>()
           .Append<service_handlers::configs_uuid::del::Handler>()
           .Append<service_handlers::configs::post::Handler>()
+          .Append<service_handlers::configs_uuid_clone::post::Handler>()
+          .Append<service_handlers::services_uuid_clone::post::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
 

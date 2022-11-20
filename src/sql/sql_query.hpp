@@ -70,7 +70,11 @@ SELECT uuid, (
     WHERE uservice_dynconf.services.uuid=service_uuid
 ), config_name, config_value::TEXT, updated_at
 FROM uservice_dynconf.configs
-WHERE LOWER(config_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%')))
+WHERE LOWER(config_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%'))) AND 
+    LOWER((
+        SELECT service_name FROM uservice_dynconf.services 
+        WHERE uservice_dynconf.services.uuid=service_uuid
+    )::TEXT) LIKE LOWER(CONCAT('%', CONCAT($2, '%')))
 )~";
 
 inline constexpr std::string_view kSelectAllServices = R"~(
@@ -98,4 +102,41 @@ UPDATE uservice_dynconf.configs SET config_value=$2::JSONB, updated_at = now()
 WHERE uuid=$1 
 RETURNING uuid
 )~";
+
+// clone 
+
+inline constexpr std::string_view kSelectServiceToClone = R"~(
+SELECT config_name, config_value::TEXT 
+FROM uservice_dynconf.configs 
+WHERE uuid=$1 
+)~";
+
+inline constexpr std::string_view kInsertClonedService = R"~(
+INSERT INTO uservice_dynconf.services (service_name) VALUES ($1)
+ON CONFLICT DO NOTHING
+RETURNING uuid
+)~";
+
+inline constexpr std::string_view kInsertClonedConfigs = R"~(
+INSERT INTO uservice_dynconf.configs
+(service_uuid, config_name, config_value)
+VALUES ($1, $2, $3::jsonb)
+ON CONFLICT DO NOTHING
+RETURNING uservice_dynconf.configs.uuid
+)~";
+
+inline constexpr std::string_view kSelectService = R"~(
+SELECT uuid 
+FROM uservice_dynconf.services
+WHERE service_name = $1
+)~";
+
+inline constexpr std::string_view kInsertClonedConfig = R"~(
+INSERT INTO uservice_dynconf.configs
+(service_uuid, config_name, config_value)
+VALUES ($1, $2, $3::jsonb)
+ON CONFLICT ON CONSTRAINT unique_in_configs DO NOTHING
+RETURNING uservice_dynconf.configs.uuid
+)~";
+
 } // namespace uservice_dynconf::sql

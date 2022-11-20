@@ -11,7 +11,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 
-namespace uservice_dynconf::handlers::service_uuid_clone::post {
+namespace uservice_dynconf::handlers::services_uuid_clone::post {
 
 struct RequestData {
   std::string config_name;
@@ -32,7 +32,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     userver::server::request::RequestContext &) const {
   const auto &uuid = request.GetPathArg("uuid");
   const auto &new_service_name =
-      json["service"].As<std::optional<std::string>>();
+      json["service_name"].As<std::optional<std::string>>();
 
   auto &http_response = request.GetHttpResponse();
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
@@ -67,11 +67,10 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 
   auto service_uuid = result.AsSingleRow<std::string>();
-  result =
-      cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                        uservice_dynconf::sql::kInsertClonedConfigs.data(),
-                        service_uuid, copied_service.config_name,
-                        copied_service.config_value);
+  result = cluster_->Execute(
+      userver::storages::postgres::ClusterHostType::kMaster,
+      uservice_dynconf::sql::kInsertClonedConfigs.data(), service_uuid,
+      copied_service.config_name, copied_service.config_value);
 
   if (result.IsEmpty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kConflict);
@@ -81,7 +80,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   http_response.SetStatusOk();
   userver::formats::json::ValueBuilder response;
-  response["uuid"] = result.AsSingleRow<std::string>();
+  response["config_uuid"] = result.AsSingleRow<std::string>();
   return response.ExtractValue();
 }
-} // namespace uservice_dynconf::handlers::configs_uuid_clone::post
+} // namespace uservice_dynconf::handlers::service_uuid_clone::post

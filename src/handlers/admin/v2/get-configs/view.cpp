@@ -52,6 +52,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   std::int32_t limit = 50;
   std::int32_t page = 1;
   std::string s;
+  std::string s_services;
   if (request.HasArg(PAGE)) {
     try {
       page = stoi(request.GetArg(PAGE));
@@ -71,6 +72,9 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   if (request.HasArg(S)) {
     s = request.GetArg(S);
   }
+  if (request.HasArg(S_SERVICES)) {
+    s_services = request.GetArg(S_SERVICES);
+  }
 
   if (page <= 0 || limit <= 0) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
@@ -79,7 +83,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectConfigs.data(), s);
+      uservice_dynconf::sql::kSelectConfigs.data(), s, s_services);
 
   userver::formats::json::ValueBuilder response;
   response["items"].Resize(0);

@@ -35,6 +35,10 @@ add_executable(${PROJECT_NAME}
 	src/handlers/admin/v2/get-services/view.cpp
 	src/handlers/admin/v2/post-configs/view.hpp
 	src/handlers/admin/v2/post-configs/view.cpp
+	src/handlers/admin/v2/post-configs_uuid_clone/view.hpp
+	src/handlers/admin/v2//post-configs_uuid_clone/view.cpp
+	src/handlers/admin/v2//post-services_uuid_clone/view.hpp
+	src/handlers/admin/v2/post-services_uuid_clone/view.cpp
 	src/sql/sql_query.hpp
     src/main.cpp)
 

@@ -39,19 +39,23 @@ paths:
     get:
       description: Get configs with offset and limit (temporary variant)
       parameters:
-      - in: header
-        name: offset
-        description: offset for items
+      - in: query
+        name: page
+        description: number of configs on one page
         schema:
           type: integer
           default: 0                  
-      - in: header
+      - in: query
         name: limit
-        description: max count of items returned in one request
+        description: max count of configs returned in one request
         schema:
           type: integer
           default: 50
-                
+      - in: query
+        name: s
+        description: searches for configs with the specified name
+        schema:
+          type: string                
       responses:
         '200':
           description: OK
@@ -87,16 +91,23 @@ paths:
     get:
       description: get all configs uuids
       parameters:
-      - in: header
-        required: true
-        name: offset
+      - in: query
+        name: page
+        description: number of configs on one page
         schema:
           type: integer
-      - in: header
-        required: true
+          default: 0                  
+      - in: query
         name: limit
+        description: max count of configs returned in one request
         schema:
           type: integer
+          default: 50
+      - in: query
+        name: s
+        description: searches for configs with the specified name
+        schema:
+          type: string 
       responses:
         '200':
           description: Ok
@@ -282,8 +293,6 @@ components:
     variable_full:
       description: variable
       properties:
-        uuid: 
-          type: string
         name:
           type: string
         service:
