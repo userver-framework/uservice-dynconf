@@ -29,7 +29,7 @@ from testsuite.databases import pgsql
 async def test_configs_add_values(
         service_client, ids, configs,
 ):
-    service = 'my-service'
+    service = 'my-custom-service'
     response = await service_client.post(
         '/configs/values', json={'ids': ids, 'service': service},
     )
@@ -52,7 +52,7 @@ async def test_configs_add_values(
 
 @pytest.mark.pgsql(
     'uservice_dynconf',
-    files=['default_configs.sql'],
+    files=['default_configs.sql', 'custom_config.sql'],
 )
 async def test_redefinitions_configs(
         service_client,
