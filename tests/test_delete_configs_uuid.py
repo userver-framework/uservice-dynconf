@@ -9,7 +9,7 @@ async def test_delition_no_uuid(service_client):
 
 @pytest.mark.pgsql(
     'uservice_dynconf',
-    files=['default_configs.sql', 'custom_configs.sql'],
+    files=['default_configs.sql'],
 )
 async def test_delition(service_client, pgsql):
     cursor = pgsql["uservice_dynconf"].cursor()
@@ -25,7 +25,7 @@ async def test_delition(service_client, pgsql):
 
 @pytest.mark.pgsql(
     'uservice_dynconf',
-    files=['default_configs.sql', 'custom_configs.sql'],
+    files=['default_configs.sql'],
 )
 async def test_delition_double_delete(service_client, pgsql):
     cur = pgsql["uservice_dynconf"].cursor()

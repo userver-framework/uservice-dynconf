@@ -1,10 +1,10 @@
 WITH new_service AS (
-  INSERT INTO uservice_dynconf.services (service_name) VALUES ('my-custom-service') RETURNING uuid
+  INSERT INTO uservice_dynconf.services (uuid, service_name) VALUES ('__default_uuid__', '__default__')
 )
 INSERT INTO uservice_dynconf.configs (service_uuid, config_name, config_value)
 VALUES 
-((SELECT uuid FROM new_service), 'USERVER_RPS_CCONTROL_ENABLED', 'true'),
-((SELECT uuid FROM new_service), 'POSTGRES_CONNECTION_POOL_SETTINGS', 
+('__default_uuid__', 'USERVER_RPS_CCONTROL_ENABLED', 'true'),
+('__default_uuid__', 'POSTGRES_CONNECTION_POOL_SETTINGS', 
 '{
   "__default__": {
     "min_pool_size": 10,
@@ -13,4 +13,4 @@ VALUES
   }
 }'
 ),
-((SELECT uuid FROM new_service), 'CUSTOM_CONFIG', '{"config": false}');
+('__default_uuid__', 'CUSTOM_CONFIG', '{"config": false}');
