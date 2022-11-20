@@ -37,6 +37,8 @@ services:
         volumes:
           - .:/uservice-dynconf:rw
           - ./third_party/userver/tools/docker:/tools:ro
+          - ./configs:/etc/static_service
+          - ./public:/var/www
         ports:
           - 8083:8083
         working_dir: /uservice-dynconf
