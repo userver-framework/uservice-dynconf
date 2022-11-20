@@ -41,9 +41,10 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::configs::get::Handler>()
           .Append<service_handlers::services::get::Handler>()
           .Append<service_handlers::configs_uuid::del::Handler>()
+          .Append<service_handlers::configs::post::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
 
-  service_handlers::configs::post::AppendVariableHandler(component_list);
+
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
