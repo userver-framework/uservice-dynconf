@@ -58,8 +58,9 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   const auto service = services_cache->FindServiceByName(request_data.service);
   if (service == nullptr) {
-    http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
-    return {};
+    userver::formats::json::ValueBuilder builder;
+    builder["configs"] = result.ExtractValue();
+    return builder.ExtractValue();
   }
 
   const auto configs =

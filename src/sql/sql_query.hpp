@@ -15,7 +15,7 @@ FROM uservice_dynconf.services
 
 // v1
 inline constexpr std::string_view kInsertConfigValue = R"~(
-WITH uuid_service AS (
+WITH new_service AS (
     INSERT INTO uservice_dynconf.services (service_name) 
     VALUES ($1) RETURNING uuid
 )

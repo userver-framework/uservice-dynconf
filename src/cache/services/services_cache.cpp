@@ -31,8 +31,7 @@ ServiceCacheContainer::ServicePtr ServiceCacheContainer::FindServiceByName(std::
         return c_ptr;
     }
 
-    return userver::utils::FindOrDefault(
-        service_by_name_, kDefaultService, nullptr);
+    return nullptr;
 }
 
 ServiceCacheContainer::ServicePtr ServiceCacheContainer::FindService(const Key key) const {

@@ -10,6 +10,7 @@ namespace uservice_dynconf::cache::settings_cache {
 
 namespace {
 constexpr static const char *kDefaultService = "__default__";
+constexpr static const char *kDefaultServiceUuid = "__default_uuid__";
 }
 
 userver::storages::postgres::Query ConfigCachePolicy::kQuery =
@@ -46,7 +47,7 @@ ConfigCacheContainer::FindConfigs(const std::string service_uuid,
       if (c_ptr->service_uuid == service_uuid) {
         result.emplace_back(c_ptr);
         continue;
-      } else if (c_ptr->service_uuid == kDefaultService) {
+      } else if (c_ptr->service_uuid == kDefaultServiceUuid) {
         result.emplace_back(c_ptr);
       }
     }
