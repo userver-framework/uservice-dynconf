@@ -43,6 +43,17 @@ components_manager:
         dns-client:
             fs-task-processor: fs-task-processor
 
+        fs-cache-main:
+            dir: /var/www           # Path to the directory with files
+            update-period: 10s        # update cache each N seconds
+            fs-task-processor: fs-task-processor  # Run it on blocking task processor
+
+        handler-static:             # Finally! Static handler.
+            fs-cache-component: fs-cache-main
+            path: /*                  # Registering handlers '/*' find files.
+            method: GET              # Handle only GET requests.
+            task_processor: main-task-processor  # Run it on CPU bound task processor
+
         handler-ping:
             path: /ping
             method: GET

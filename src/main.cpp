@@ -21,6 +21,8 @@
 #include <userver/server/component.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include <userver/components/fs_cache.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
 
 int main(int argc, char *argv[]) {
   namespace service_handlers = uservice_dynconf::handlers;
@@ -42,7 +44,9 @@ int main(int argc, char *argv[]) {
           .Append<
               uservice_dynconf::handlers::configs_uuid_clone::post::Handler>()
           .Append<userver::components::HttpClient>()
-          .Append<userver::server::handlers::TestsControl>();
+          .Append<userver::server::handlers::TestsControl>()
+          .Append<userver::components::FsCache>("fs-cache-main")
+          .Append<userver::server::handlers::HttpHandlerStatic>();
 
   service_handlers::variables::post::AppendVariableHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
