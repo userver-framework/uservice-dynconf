@@ -25,4 +25,4 @@ private:
   userver::storages::postgres::ClusterPtr cluster_;
 };
 
-} // namespace uservice_dynconf::handlers::variables_uuid::get
+} // namespace uservice_dynconf::handlers::configs_uuid::get

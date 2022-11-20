@@ -10,8 +10,8 @@
 
 namespace uservice_dynconf::models {
 using ConfigId = userver::utils::StrongTypedef<
-  class ConfigIdTag, int64_t,
-  userver::utils::StrongTypedefOps::kCompareTransparent>;
+    class ConfigIdTag, int64_t,
+    userver::utils::StrongTypedefOps::kCompareTransparent>;
 
 struct Service {
   std::string key;

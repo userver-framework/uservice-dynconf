@@ -31,7 +31,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   auto &http_response = request.GetHttpResponse();
   http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
-  
+
   userver::formats::json::ValueBuilder response_body;
 
   const auto &uuid = request.GetPathArg("uuid");
@@ -46,8 +46,8 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
         uservice_dynconf::utils::MakeError("404", "Not Found"));
   }
 
-  auto config = result.AsSingleRow<DBData>(
-      userver::storages::postgres::kRowTag);
+  auto config =
+      result.AsSingleRow<DBData>(userver::storages::postgres::kRowTag);
   response_body["uuid"] = config.uuid;
   response_body["service"] = config.service;
   response_body["config_name"] = config.config_name;

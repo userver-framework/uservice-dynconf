@@ -83,4 +83,4 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   response["service_uuid"] = service_uuid;
   return response.ExtractValue();
 }
-} // namespace uservice_dynconf::handlers::config_uuid_clone::post
+} // namespace uservice_dynconf::handlers::configs_uuid_clone::post

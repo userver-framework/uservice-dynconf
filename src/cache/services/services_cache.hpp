@@ -17,7 +17,7 @@ public:
 
   void insert_or_assign(Key &&key, Service &&service);
   size_t size() const;
-  
+
   ServicePtr FindServiceByName(std::string service_name) const;
   ServicePtr FindService(const Key key) const;
 

@@ -103,7 +103,7 @@ WHERE uuid=$1
 RETURNING uuid
 )~";
 
-// clone 
+// clone
 
 inline constexpr std::string_view kSelectServiceToClone = R"~(
 SELECT config_name, config_value::TEXT 

@@ -9,12 +9,12 @@
 #include "handlers/admin/v1/post-configs_delete/view.hpp"
 #include "handlers/post-configs_values/view.hpp"
 
-#include "handlers/admin/v2/post-configs/view.hpp"
-#include "handlers/admin/v2/get-services/view.hpp"
+#include "handlers/admin/v2/delete-configs_uuid/view.hpp"
 #include "handlers/admin/v2/get-configs/view.hpp"
 #include "handlers/admin/v2/get-configs_uuid/view.hpp"
-#include "handlers/admin/v2/delete-configs_uuid/view.hpp"
+#include "handlers/admin/v2/get-services/view.hpp"
 #include "handlers/admin/v2/patch-configs_uuid/view.hpp"
+#include "handlers/admin/v2/post-configs/view.hpp"
 #include "handlers/admin/v2/post-configs_uuid_clone/view.hpp"
 #include "handlers/admin/v2/post-services_uuid_clone/view.hpp"
 
@@ -48,7 +48,6 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::services_uuid_clone::post::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
-
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

@@ -130,4 +130,3 @@ async def test_clone_empty_config_value(service_client,
 
     assert response.status_code == 200
     assert 'config_uuid' in response.json()
-

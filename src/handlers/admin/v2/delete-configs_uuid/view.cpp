@@ -23,7 +23,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   auto &http_response = request.GetHttpResponse();
   http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
-  
+
   if (request.GetMethod() != userver::server::http::HttpMethod::kDelete) {
     http_response.SetStatus(
         userver::server::http::HttpStatus::kMethodNotAllowed);
@@ -58,4 +58,4 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   }
 }
 
-} // namespace uservice_dynconf::handlers::variables_uuid::del
+} // namespace uservice_dynconf::handlers::configs_uuid::del

@@ -25,9 +25,9 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   auto &http_response = request.GetHttpResponse();
   http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
-  
+
   userver::formats::json::ValueBuilder response_body;
-  
+
   const auto &uuid = request.GetPathArg("uuid");
   auto request_body = userver::formats::json::FromString(request.RequestBody());
   auto value = request_body["value"].As<std::optional<std::string>>();

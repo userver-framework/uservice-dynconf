@@ -11,7 +11,7 @@ namespace uservice_dynconf::cache::settings_cache {
 namespace {
 constexpr static const char *kDefaultService = "__default__";
 constexpr static const char *kDefaultServiceUuid = "__default_uuid__";
-}
+} // namespace
 
 userver::storages::postgres::Query ConfigCachePolicy::kQuery =
     userver::storages::postgres::Query(
@@ -21,7 +21,8 @@ void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
   auto config_ptr = std::make_shared<const Config>(std::move(config));
   configs_to_key_.insert_or_assign(key, config_ptr);
   configs_to_name_.insert_or_assign(config_ptr->config_name, config_ptr);
-  configs_by_service_[config_ptr->service_uuid].push_back(std::move(config_ptr));
+  configs_by_service_[config_ptr->service_uuid].push_back(
+      std::move(config_ptr));
 }
 
 size_t ConfigCacheContainer::size() const { return configs_to_key_.size(); }

@@ -35,8 +35,11 @@ RequestData ParseRequest(const userver::formats::json::Value &request) {
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &context)
     : HttpHandlerJsonBase(config, context),
-      configs_cache_(context.FindComponent<uservice_dynconf::cache::settings_cache::ConfigsCache>()),
-      services_cache_(context.FindComponent<uservice_dynconf::cache::settings_cache::ServicesCache>()) {}
+      configs_cache_(context.FindComponent<
+                     uservice_dynconf::cache::settings_cache::ConfigsCache>()),
+      services_cache_(
+          context.FindComponent<
+              uservice_dynconf::cache::settings_cache::ServicesCache>()) {}
 
 userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &request,

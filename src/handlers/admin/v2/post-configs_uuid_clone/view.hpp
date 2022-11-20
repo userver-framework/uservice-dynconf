@@ -25,4 +25,4 @@ public:
 private:
   const userver::storages::postgres::ClusterPtr cluster_;
 };
-} // namespace uservice_dynconf::handlers::config_uuid_clone::post
+} // namespace uservice_dynconf::handlers::configs_uuid_clone::post

@@ -1,6 +1,7 @@
 import pytest
 from testsuite.databases import pgsql
 
+
 @pytest.mark.pgsql(
     'uservice_dynconf',
     files=['default_configs.sql'],
