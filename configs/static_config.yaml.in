@@ -50,7 +50,7 @@ components_manager:
 
         handler-static:             # Finally! Static handler.
             fs-cache-component: fs-cache-main
-            path: /*                  # Registering handlers '/*' find files.
+            path: /static/*                  # Registering handlers '/static*' find files.
             method: GET              # Handle only GET requests.
             task_processor: main-task-processor  # Run it on CPU bound task processor
 
