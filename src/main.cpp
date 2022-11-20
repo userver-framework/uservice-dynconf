@@ -1,6 +1,7 @@
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/server/handlers/ping.hpp>
 #include <userver/utils/daemon_run.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
 
 #include "cache/configs/configs_cache.hpp"
 #include "cache/services/services_cache.hpp"
@@ -47,7 +48,9 @@ int main(int argc, char *argv[]) {
           .Append<service_handlers::configs_uuid_clone::post::Handler>()
           .Append<service_handlers::services_uuid_clone::post::Handler>()
           .Append<userver::components::HttpClient>()
-          .Append<userver::server::handlers::TestsControl>();
+          .Append<userver::server::handlers::TestsControl>()
+          .Append<userver::components::FsCache>("fs-cache-main")
+          .Append<userver::server::handlers::HttpHandlerStatic>();
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }
