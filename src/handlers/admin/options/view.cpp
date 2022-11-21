@@ -17,7 +17,7 @@ std::string Handler::HandleRequestThrow(
     auto &response = request.GetHttpResponse();
     response.SetHeader("Access-Control-Allow-Origin", "*");
     response.SetHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PATCH, DELETE");
-    response.SetHeader("Access-Control-Allow-Headers", "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range");
+    response.SetHeader("Access-Control-Allow-Headers", "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Ticket,User");
     response.SetHeader("Access-Control-Max-Age", "1728000");
     response.SetStatus(userver::server::http::HttpStatus::kNoContent);
     return {};
