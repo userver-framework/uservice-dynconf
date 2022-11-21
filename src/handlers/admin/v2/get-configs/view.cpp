@@ -47,6 +47,7 @@ std::string
 Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
                             userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
   std::int32_t limit = 50;
@@ -98,7 +99,6 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
     response["items"].PushBack(*row);
   }
   response["total"] = result.Size();
-  http_response.SetHeader("Content-Type", "application/json");
   return userver::formats::json::ToString(response.ExtractValue());
 }
 

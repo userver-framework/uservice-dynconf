@@ -35,6 +35,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
       json["service_name"].As<std::optional<std::string>>();
 
   auto &http_response = request.GetHttpResponse();
+  http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
   if (uuid.empty() || new_service_name.value_or("") == "") {

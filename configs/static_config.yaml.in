@@ -119,6 +119,12 @@ components_manager:
             task_processor: main-task-processor  # Run it on CPU bound task processor
 
 
+        handler-options-mock:
+            path: /*
+            method: OPTIONS
+            task_processor: main-task-processor
+
+
         testsuite-support: {}
 
         configs-cache:
