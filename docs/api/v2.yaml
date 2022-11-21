@@ -19,7 +19,7 @@ paths:
             schema:
               $ref:  '#/components/schemas/variable_full'
       responses:
-        200:
+        '200':
           description: OK
           content:
               application/json:
@@ -30,7 +30,7 @@ paths:
                       type: string
                               
               
-        400:
+        '400':
           description: ERROR
           content:
             application/json:
@@ -239,7 +239,7 @@ paths:
                 service:
                   type: string
       responses:
-        200:
+        '200':
           description: Ok
           content:
               application/json:
@@ -248,19 +248,19 @@ paths:
                   properties:
                     uuid:
                       type: string
-        400:
+        '400':
           description: Field 'uuid' or 'service' is empty
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        404:
+        '404':
           description: Service not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        409:
+        '409':
           description: Service with that name already exists
           content:
             application/json:
