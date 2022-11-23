@@ -1,7 +1,7 @@
 #include <userver/components/minimal_server_component_list.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
 #include <userver/server/handlers/ping.hpp>
 #include <userver/utils/daemon_run.hpp>
-#include <userver/server/handlers/http_handler_static.hpp>
 
 #include "cache/configs/configs_cache.hpp"
 #include "cache/services/services_cache.hpp"

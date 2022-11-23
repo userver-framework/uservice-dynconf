@@ -10,13 +10,13 @@ class Handler final : public userver::server::handlers::HttpHandlerBase {
 public:
   static constexpr std::string_view kName = "handler-options-mock";
 
-  Handler(const userver::components::ComponentConfig& config,
-          const userver::components::ComponentContext& context);
+  Handler(const userver::components::ComponentConfig &config,
+          const userver::components::ComponentContext &context);
 
   std::string HandleRequestThrow(
-      const userver::server::http::HttpRequest& request,
-      userver::server::request::RequestContext& context) const override final;
+      const userver::server::http::HttpRequest &request,
+      userver::server::request::RequestContext &context) const override final;
 };
-} // namespace uservice_dynconf::handlers::configs
+} // namespace uservice_dynconf::handlers::options
 
 void AppendOptionsMock(userver::components::ComponentList &component_list);

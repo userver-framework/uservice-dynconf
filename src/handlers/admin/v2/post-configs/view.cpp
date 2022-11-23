@@ -48,7 +48,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   const auto request_data = ParseRequest(json);
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
   http_response.SetHeader("Content-Type", "application/json");
-  
+
   if (!request_data.isValid()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return uservice_dynconf::utils::MakeError("400", "Config name is required");

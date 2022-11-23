@@ -4,11 +4,12 @@ from testsuite.databases import pgsql
 
 
 @pytest.mark.parametrize(
-    "service1, service2, config_name, config_value", [
-        ("my_service", "amogus", "my_config", "true"),
+    "service1, config_name, config_value", [
+        ("my_service", "my_config", "true"),
+        ("new_service", "my_config", None),
     ]
 )
-async def test_correct_clone(service_client, pgsql, service1, service2,
+async def test_correct_clone(service_client, pgsql, service1,
                              config_name, config_value):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
@@ -17,11 +18,6 @@ async def test_correct_clone(service_client, pgsql, service1, service2,
         'VALUES (%s) RETURNING uuid', (service1,)
     )
     service_uuid = cursor.fetchone()[0]
-    cursor.execute(
-        'INSERT INTO uservice_dynconf.services '
-        '(service_name) '
-        'VALUES (%s) RETURNING uuid', (service2,)
-    )
     cursor.execute(
         'INSERT INTO uservice_dynconf.configs '
         '(service_uuid,config_name,config_value) '
@@ -37,6 +33,7 @@ async def test_correct_clone(service_client, pgsql, service1, service2,
 
     assert response.status_code == 200
     assert 'config_uuid' in response.json()
+    assert 'service_uuid' in response.json()
 
 
 @pytest.mark.parametrize(
@@ -120,7 +117,7 @@ async def test_service_has_config(service_client, pgsql,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service_name': 'amogus'},
+        json={'service_name': service2},
     )
 
     assert response.status_code == 409
@@ -151,7 +148,7 @@ async def test_service_not_exist_ok(service_client, pgsql,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service_name': 'amogus'},
+        json={'service_name': service2},
     )
 
     assert response.status_code == 200
@@ -165,8 +162,8 @@ async def test_service_not_exist_ok(service_client, pgsql,
     ]
 )
 async def test_clone_empty_config_value(service_client,
-                                        pgsql, service1, service2,
-                                        config_name):
+                                        pgsql, service1,
+                                        service2, config_name):
     cursor = pgsql['uservice_dynconf'].cursor()
     cursor.execute(
         'INSERT INTO uservice_dynconf.services '
@@ -190,6 +187,43 @@ async def test_clone_empty_config_value(service_client,
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
         json={'service_name': 'amogus'},
+    )
+
+    assert response.status_code == 200
+    assert 'config_uuid' in response.json()
+    assert 'service_uuid' in response.json()
+
+
+@pytest.mark.parametrize(
+    "service1, config_name, config_value, new_conf, new_value", [
+        ("my_service", "my_config", "true", "aboba", '69'),
+        ("new_service", "my_config", None, "aboba", "true"),
+    ]
+)
+async def test_clone_with_edit_params(service_client, pgsql, service1,
+                                      config_name, config_value,
+                                      new_conf, new_value):
+    cursor = pgsql['uservice_dynconf'].cursor()
+    cursor.execute(
+        'INSERT INTO uservice_dynconf.services '
+        '(service_name) '
+        'VALUES (%s) RETURNING uuid ', (service1,)
+    )
+    service_uuid = cursor.fetchone()[0]
+    cursor.execute(
+        'INSERT INTO uservice_dynconf.configs '
+        '(service_uuid,config_name,config_value) '
+        'VALUES (%s, %s, %s) RETURNING uuid ',
+        (service_uuid, config_name, config_value)
+    )
+    uuid = cursor.fetchone()[0]
+
+    response = await service_client.post(
+        '/admin/v2/configs/' + str(uuid) + '/clone',
+        json={'service_name': 'amogus',
+              'config_name': new_conf,
+              'config_value': new_value
+              },
     )
 
     assert response.status_code == 200

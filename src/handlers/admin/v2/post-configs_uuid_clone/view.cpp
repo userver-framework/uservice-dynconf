@@ -25,13 +25,13 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &request,
     const userver::formats::json::Value &json,
     userver::server::request::RequestContext &) const {
-      
+
   const auto &config_uuid = request.GetPathArg("uuid");
   const auto &service_name =
       json["service_name"].As<std::optional<std::string>>();
-  const auto& inConfig_name = 
+  const auto &inConfig_name =
       json["config_name"].As<std::optional<std::string>>();
-  const auto& inConfig_value = 
+  const auto &inConfig_value =
       json["config_value"].As<std::optional<std::string>>();
 
   auto &http_response = request.GetHttpResponse();
@@ -50,32 +50,31 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (config.IsEmpty()) {
     http_response.SetStatusNotFound();
     return uservice_dynconf::utils::MakeError("404", "Config not found");
-  }    
+  }
 
   auto service = cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kSlave,
       uservice_dynconf::sql::kSelectService.data(), service_name.value());
   if (service.IsEmpty()) {
-    service =
-        cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                          uservice_dynconf::sql::kInsertService.data(),
-                          service_name.value());
+    service = cluster_->Execute(
+        userver::storages::postgres::ClusterHostType::kMaster,
+        uservice_dynconf::sql::kInsertService.data(), service_name.value());
   }
   if (service.IsEmpty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kConflict);
     return uservice_dynconf::utils::MakeError(
         "500", "Could not insert service. INSERT CONFICT. Very bad");
   }
-  const auto& service_uuid = service.AsSingleRow<std::string>();
+  const auto &service_uuid = service.AsSingleRow<std::string>();
   auto copied_config =
       config.AsSingleRow<RequestData>(userver::storages::postgres::kRowTag);
   {
-    if(inConfig_name.value_or("") != "")
+    if (inConfig_name.value_or("") != "")
       copied_config.config_name = inConfig_name.value();
-    if(inConfig_value.value_or("") != "")
+    if (inConfig_value.value_or("") != "")
       copied_config.config_value = inConfig_value.value();
   }
-  
+
   auto result = cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       uservice_dynconf::sql::kInsertClonedConfig.data(), service_uuid,
