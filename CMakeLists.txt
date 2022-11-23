@@ -16,6 +16,7 @@ add_executable(${PROJECT_NAME}
 	src/cache/configs/configs_cache.cpp
 	src/cache/services/services_cache.hpp
 	src/cache/services/services_cache.cpp
+	src/auth/auth.hpp
 	src/auth/auth.cpp
 	src/handlers/post-configs_values/view.hpp
 	src/handlers/post-configs_values/view.cpp

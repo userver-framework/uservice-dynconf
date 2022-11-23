@@ -61,7 +61,13 @@ INSERT INTO uservice_dynconf.configs
 VALUES ((SELECT uuid FROM uuid_service)::TEXT, $2, $3::jsonb)
 ON CONFLICT ON CONSTRAINT unique_in_configs
 DO NOTHING
-RETURNING uservice_dynconf.configs.uuid
+RETURNING uservice_dynconf.configs.uuid;
+)~";
+
+inline constexpr std::string_view kSelectAll = R"~(
+SELECT uuid, service, config_name, config_value::TEXT, updated_at
+FROM uservice_dynconf.configs
+WHERE LOWER(config_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%')))
 )~";
 
 inline constexpr std::string_view kSelectConfigs = R"~(

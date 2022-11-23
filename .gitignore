@@ -6,6 +6,8 @@ compile_commands.json
 .pgdata/
 .cores/
 .vscode
+.vscode/settings.json
+.devcontainer
 *.out
 *.local.*
 .DS_Store
