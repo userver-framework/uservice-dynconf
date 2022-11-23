@@ -46,6 +46,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         "404", "Config with this uuid not exists");
   }
   case 1: {
+    http_response.SetStatus(userver::server::http::HttpStatus::kOk);
     return {};
   }
   default: {
