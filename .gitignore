@@ -10,6 +10,9 @@ compile_commands.json
 *.local.*
 .DS_Store
 .ccache/
+.devcontainer
+.vscode
+.vscode/settings.json
 cmake-build-debug/
 Testing/
 !Makefile.local
