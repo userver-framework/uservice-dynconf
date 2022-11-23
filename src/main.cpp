@@ -1,28 +1,31 @@
-#include <userver/components/minimal_server_component_list.hpp>
-#include <userver/server/handlers/ping.hpp>
-#include <userver/utils/daemon_run.hpp>
-
-#include "cache/configs_cache.hpp"
-#include "handlers/admin_v1_configs.hpp"
-#include "handlers/admin_v1_configs_delete.hpp"
-#include "handlers/configs_values.hpp"
-
-#include "handlers/delete-variables_uuid/view.hpp"
-#include "handlers/get-configs/view.hpp"
-#include "handlers/get-variables/view.hpp"
-#include "handlers/get-variables_uuid/view.hpp"
-#include "handlers/patch-variables_uuid/view.hpp"
-#include "handlers/post-configs_uuid_clone/view.hpp"
-#include "handlers/post-variables/view.hpp"
-
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"
 #include "userver/testsuite/testsuite_support.hpp"
+#include <userver/components/fs_cache.hpp>
+#include <userver/components/minimal_server_component_list.hpp>
 #include <userver/server/component.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
+#include <userver/server/handlers/ping.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <userver/components/fs_cache.hpp>
-#include <userver/server/handlers/http_handler_static.hpp>
+#include <userver/utils/daemon_run.hpp>
+
+#include "cache/configs/configs_cache.hpp"
+#include "cache/services/services_cache.hpp"
+
+#include "handlers/admin/v1/post-configs/view.hpp"
+#include "handlers/admin/v1/post-configs_delete/view.hpp"
+#include "handlers/post-configs_values/view.hpp"
+
+#include "handlers/admin/v2/delete-configs_uuid/view.hpp"
+#include "handlers/admin/v2/get-configs/view.hpp"
+#include "handlers/admin/v2/get-configs_uuid/view.hpp"
+#include "handlers/admin/v2/get-services/view.hpp"
+#include "handlers/admin/v2/patch-configs_uuid/view.hpp"
+#include "handlers/admin/v2/post-configs/view.hpp"
+#include "handlers/admin/v2/post-configs_uuid_clone/view.hpp"
+
+#include "handlers/admin/options/view.hpp"
 
 int main(int argc, char *argv[]) {
   namespace service_handlers = uservice_dynconf::handlers;
@@ -33,21 +36,22 @@ int main(int argc, char *argv[]) {
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::TestsuiteSupport>()
           .Append<uservice_dynconf::cache::settings_cache::ConfigsCache>()
+          .Append<uservice_dynconf::cache::settings_cache::ServicesCache>()
           .Append<service_handlers::configs_values::post::Handler>()
           .Append<service_handlers::admin_v1_configs::post::Handler>()
           .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
-          .Append<uservice_dynconf::handlers::variables_uuid::get::Handler>()
-          .Append<uservice_dynconf::handlers::variables_uuid::patch::Handler>()
-          .Append<uservice_dynconf::handlers::variables::get::Handler>()
-          .Append<uservice_dynconf::handlers::configs::get::Handler>()
-          .Append<service_handlers::variables_uuid::del::Handler>()
-          .Append<
-              uservice_dynconf::handlers::configs_uuid_clone::post::Handler>()
+          .Append<service_handlers::configs_uuid::get::Handler>()
+          .Append<service_handlers::configs_uuid::patch::Handler>()
+          .Append<service_handlers::configs::get::Handler>()
+          .Append<service_handlers::services::get::Handler>()
+          .Append<service_handlers::configs_uuid::del::Handler>()
+          .Append<service_handlers::configs::post::Handler>()
+          .Append<service_handlers::configs_uuid_clone::post::Handler>()
+          .Append<service_handlers::options::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>()
           .Append<userver::components::FsCache>("fs-cache-main")
           .Append<userver::server::handlers::HttpHandlerStatic>();
 
-  service_handlers::variables::post::AppendVariableHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

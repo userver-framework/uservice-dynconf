@@ -8,32 +8,39 @@ add_subdirectory(third_party/userver)
 
 
 add_executable(${PROJECT_NAME}
+	src/models/service.hpp
 	src/models/config.hpp
 	src/utils/make_error.hpp
 	src/utils/make_error.cpp
-	src/cache/configs_cache.hpp
-	src/cache/configs_cache.cpp
+	src/cache/configs/configs_cache.hpp
+	src/cache/configs/configs_cache.cpp
+	src/cache/services/services_cache.hpp
+	src/cache/services/services_cache.cpp
 	src/auth/auth.hpp
 	src/auth/auth.cpp
-	src/handlers/admin_v1_configs.hpp
-	src/handlers/admin_v1_configs.cpp
-	src/handlers/configs_values.hpp
-	src/handlers/configs_values.cpp
-	src/handlers/admin_v1_configs_delete.hpp
-	src/handlers/admin_v1_configs_delete.cpp
-	src/handlers/get-variables_uuid/view.cpp
-	src/handlers/patch-variables_uuid/view.cpp
-	src/models/configvariable.cpp
-	src/handlers/delete-variables_uuid/view.cpp
-	src/handlers/delete-variables_uuid/view.hpp
-	src/handlers/get-variables/view.cpp
-	src/handlers/get-configs/view.cpp
-	src/models/variablewithdate.cpp
+	src/handlers/post-configs_values/view.hpp
+	src/handlers/post-configs_values/view.cpp
+	src/handlers/admin/v1/post-configs_delete/view.hpp
+	src/handlers/admin/v1/post-configs_delete/view.cpp
+	src/handlers/admin/v1/post-configs/view.hpp
+	src/handlers/admin/v1/post-configs/view.cpp
+	src/handlers/admin/v2/get-configs_uuid/view.hpp
+	src/handlers/admin/v2/get-configs_uuid/view.cpp
+	src/handlers/admin/v2/patch-configs_uuid/view.hpp
+	src/handlers/admin/v2/patch-configs_uuid/view.cpp
+	src/handlers/admin/v2/delete-configs_uuid/view.hpp
+	src/handlers/admin/v2/delete-configs_uuid/view.cpp
+	src/handlers/admin/v2/get-configs/view.hpp
+	src/handlers/admin/v2/get-configs/view.cpp
+	src/handlers/admin/v2/get-services/view.hpp
+	src/handlers/admin/v2/get-services/view.cpp
+	src/handlers/admin/v2/post-configs/view.hpp
+	src/handlers/admin/v2/post-configs/view.cpp
+	src/handlers/admin/v2/post-configs_uuid_clone/view.hpp
+	src/handlers/admin/v2/post-configs_uuid_clone/view.cpp
+	src/handlers/admin/options/view.hpp
+	src/handlers/admin/options/view.cpp
 	src/sql/sql_query.hpp
-	src/handlers/post-variables/view.cpp
-	src/handlers/post-variables/view.hpp
-	src/handlers/post-configs_uuid_clone/view.hpp
-	src/handlers/post-configs_uuid_clone/view.cpp
     src/main.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
