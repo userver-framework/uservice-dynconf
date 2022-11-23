@@ -46,7 +46,8 @@ async def test_correct_clone(service_client, pgsql, service1,
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
 async def test_empty_data(service_client, uuid, service):
     response = await service_client.post(
-        '/admin/v2/configs/' + uuid + '/clone',  json={'service_name': service},
+        '/admin/v2/configs/' + uuid + '/clone',
+        json={'service_name': service},
     )
 
     assert response.status_code == 400

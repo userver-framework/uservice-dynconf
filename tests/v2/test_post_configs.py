@@ -11,8 +11,10 @@ class PostgresqlClient:
     def variable_is_present(self, uuid, service_name, config_name):
         cursor = self.connection.cursor()
         cursor.execute('SELECT serv.service_name, conf.config_name FROM '
-                       'uservice_dynconf.configs conf JOIN uservice_dynconf.services serv '
-                       'ON conf.service_uuid=serv.uuid WHERE conf.uuid = %s', (uuid, ))
+                       'uservice_dynconf.configs conf '
+                       'JOIN uservice_dynconf.services serv '
+                       'ON conf.service_uuid=serv.uuid '
+                       'WHERE conf.uuid = %s', (uuid, ))
         service_res, config_res = cursor.fetchone()
         if service_res == service_name and config_res == config_name:
             return True
