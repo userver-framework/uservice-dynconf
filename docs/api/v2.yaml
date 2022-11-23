@@ -37,7 +37,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     get:
-      description: Get configs with offset and limit (temporary variant)
+      description: Get configs with params (page, limit, s, s_services)
       parameters:
       - in: query
         name: page
@@ -53,9 +53,14 @@ paths:
           default: 50
       - in: query
         name: s
-        description: searches for configs with the specified name
+        description: searches for configs with the specified config name
         schema:
-          type: string                
+          type: string    
+      - in: query
+        name: s_services
+        description: searches for configs with the specified service name
+        schema:
+          type: string               
       responses:
         '200':
           description: OK
