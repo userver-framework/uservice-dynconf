@@ -13,11 +13,6 @@
 
 namespace uservice_dynconf::handlers::configs_uuid_clone::post {
 
-struct RequestData {
-  std::string config_name;
-  std::optional<std::string> config_value;
-};
-
 Handler::Handler(const userver::components::ComponentConfig &config,
                  const userver::components::ComponentContext &component_context)
     : HttpHandlerJsonBase(config, component_context),
@@ -30,15 +25,20 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::server::http::HttpRequest &request,
     const userver::formats::json::Value &json,
     userver::server::request::RequestContext &) const {
-  const auto &uuid = request.GetPathArg("uuid");
+      
+  const auto &config_uuid = request.GetPathArg("uuid");
   const auto &service_name =
       json["service_name"].As<std::optional<std::string>>();
+  const auto& inConfig_name = 
+      json["config_name"].As<std::optional<std::string>>();
+  const auto& inConfig_value = 
+      json["config_value"].As<std::optional<std::string>>();
 
   auto &http_response = request.GetHttpResponse();
   http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
-  if (uuid.empty() || service_name.value_or("") == "") {
+  if (config_uuid.empty() || service_name.value_or("") == "") {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return uservice_dynconf::utils::MakeError(
         "400", "Field 'uuid' or 'service_name' is empty");
@@ -46,32 +46,40 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   auto config = cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kSlave,
-      uservice_dynconf::sql::kSelectServiceToClone.data(), uuid);
-
+      uservice_dynconf::sql::kSelectConfigToClone.data(), config_uuid);
   if (config.IsEmpty()) {
     http_response.SetStatusNotFound();
     return uservice_dynconf::utils::MakeError("404", "Config not found");
-  }
-  const auto copied_config =
-      config.AsSingleRow<RequestData>(userver::storages::postgres::kRowTag);
+  }    
 
   auto service = cluster_->Execute(
-      userver::storages::postgres::ClusterHostType::kMaster,
+      userver::storages::postgres::ClusterHostType::kSlave,
       uservice_dynconf::sql::kSelectService.data(), service_name.value());
-
   if (service.IsEmpty()) {
     service =
         cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                          uservice_dynconf::sql::kInsertClonedService.data(),
+                          uservice_dynconf::sql::kInsertService.data(),
                           service_name.value());
   }
-
-  const auto service_uuid = service.AsSingleRow<std::string>();
+  if (service.IsEmpty()) {
+    http_response.SetStatus(userver::server::http::HttpStatus::kConflict);
+    return uservice_dynconf::utils::MakeError(
+        "500", "Could not insert service. INSERT CONFICT. Very bad");
+  }
+  const auto& service_uuid = service.AsSingleRow<std::string>();
+  auto copied_config =
+      config.AsSingleRow<RequestData>(userver::storages::postgres::kRowTag);
+  {
+    if(inConfig_name.value_or("") != "")
+      copied_config.config_name = inConfig_name.value();
+    if(inConfig_value.value_or("") != "")
+      copied_config.config_value = inConfig_value.value();
+  }
+  
   auto result = cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
       uservice_dynconf::sql::kInsertClonedConfig.data(), service_uuid,
       copied_config.config_name, copied_config.config_value);
-
   if (result.IsEmpty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kConflict);
     return uservice_dynconf::utils::MakeError(

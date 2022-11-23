@@ -220,9 +220,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /admin/v2/services/{uuid}/clone:
+  /admin/v2/configs/{uuid}/clone:
     post:
-      description: Clone existed service and all its configs
+      description: Clone an existing config. It can change service_name, config_name and config_value of cloned config if it does not contradict existing services and configurations.
       parameters:
       - in: path
         required: true
@@ -236,7 +236,11 @@ paths:
           application/json:
             schema:
               properties:
-                service:
+                service_name:
+                  type: string
+                config_name:
+                  type: string
+                config_value:
                   type: string
       responses:
         '200':
@@ -244,24 +248,25 @@ paths:
           content:
               application/json:
                 schema:
-                  type: object
                   properties:
-                    uuid:
+                    config_uuid:
+                      type: string
+                    service_uuid:
                       type: string
         '400':
-          description: Field 'uuid' or 'service' is empty
+          description: Field 'uuid' or 'service_name' is empty
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         '404':
-          description: Service not found
+          description: Config not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
         '409':
-          description: Service with that name already exists
+          description: Service with that config_name already exists
           content:
             application/json:
               schema:

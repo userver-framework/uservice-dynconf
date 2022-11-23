@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS uservice_dynconf.configs (
     uuid TEXT PRIMARY KEY DEFAULT uuid_generate_v4(),
     service_uuid TEXT NOT NULL DEFAULT '__default_uuid__',
     config_name TEXT NOT NULL,
-    config_value JSONB,
+    config_value JSONB DEFAULT NULL,
 
     created_at timestamptz DEFAULT NOW(),
     updated_at timestamptz DEFAULT NOW(),

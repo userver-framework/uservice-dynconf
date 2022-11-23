@@ -105,30 +105,22 @@ RETURNING uuid
 
 // clone
 
-inline constexpr std::string_view kSelectServiceToClone = R"~(
+inline constexpr std::string_view kSelectConfigToClone = R"~(
 SELECT config_name, config_value::TEXT 
 FROM uservice_dynconf.configs 
 WHERE uuid=$1 
-)~";
-
-inline constexpr std::string_view kInsertClonedService = R"~(
-INSERT INTO uservice_dynconf.services (service_name) VALUES ($1)
-ON CONFLICT DO NOTHING
-RETURNING uuid
-)~";
-
-inline constexpr std::string_view kInsertClonedConfigs = R"~(
-INSERT INTO uservice_dynconf.configs
-(service_uuid, config_name, config_value)
-VALUES ($1, $2, $3::jsonb)
-ON CONFLICT DO NOTHING
-RETURNING uservice_dynconf.configs.uuid
 )~";
 
 inline constexpr std::string_view kSelectService = R"~(
 SELECT uuid 
 FROM uservice_dynconf.services
 WHERE service_name = $1
+)~";
+
+inline constexpr std::string_view kInsertService = R"~(
+INSERT INTO uservice_dynconf.services (service_name) VALUES ($1)
+ON CONFLICT DO NOTHING
+RETURNING uuid
 )~";
 
 inline constexpr std::string_view kInsertClonedConfig = R"~(

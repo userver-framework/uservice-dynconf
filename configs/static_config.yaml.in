@@ -100,11 +100,6 @@ components_manager:
             path: /admin/v2/configs/{uuid}/clone
             method: POST
             task_processor: main-task-processor
-        
-        handler-services-uuid-clone:
-            path: /admin/v2/services/{uuid}/clone
-            method: POST
-            task_processor: main-task-processor
 
 
         fs-cache-main:
