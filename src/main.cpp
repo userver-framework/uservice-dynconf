@@ -1,14 +1,14 @@
-#include <userver/components/minimal_server_component_list.hpp>
-#include <userver/server/handlers/http_handler_static.hpp>
-#include <userver/server/handlers/ping.hpp>
-#include <userver/utils/daemon_run.hpp>
 #include "userver/clients/dns/component.hpp"
 #include "userver/clients/http/component.hpp"
 #include "userver/testsuite/testsuite_support.hpp"
+#include <userver/components/fs_cache.hpp>
+#include <userver/components/minimal_server_component_list.hpp>
 #include <userver/server/component.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
+#include <userver/server/handlers/ping.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <userver/components/fs_cache.hpp>
+#include <userver/utils/daemon_run.hpp>
 
 #include "cache/configs/configs_cache.hpp"
 #include "cache/services/services_cache.hpp"
@@ -26,7 +26,6 @@
 #include "handlers/admin/v2/post-configs_uuid_clone/view.hpp"
 
 #include "handlers/admin/options/view.hpp"
-
 
 int main(int argc, char *argv[]) {
   namespace service_handlers = uservice_dynconf::handlers;
