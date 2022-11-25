@@ -25,7 +25,7 @@ private:
   userver::storages::postgres::ClusterPtr pg_cluster_;
   const std::string LIMIT = "limit";
   const std::string PAGE = "page";
-  const std::string S = "s";
-  const std::string S_SERVICES = "s_services";
+  const std::string CONF = "config";
+  const std::string SERVICE = "service";
 };
 } // namespace uservice_dynconf::handlers::configs::get

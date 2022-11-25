@@ -17,7 +17,6 @@ struct RequestData {
   std::string service;
   std::string config_name;
   std::optional<std::string> config_value;
-  std::chrono::system_clock::time_point updated_at;
 };
 
 userver::formats::json::Value
@@ -25,13 +24,12 @@ Serialize(const RequestData &response,
           userver::formats::serialize::To<userver::formats::json::Value>) {
   userver::formats::json::ValueBuilder item;
   item["uuid"] = response.uuid;
-  item["service"] = response.service;
-  item["name"] = response.config_name;
+  item["service_name"] = response.service;
+  item["config_name"] = response.config_name;
   if (response.config_value.has_value())
     item["config_value"] = response.config_value.value();
   else
     item["config_value"] = "null";
-  item["updated_at"] = response.updated_at;
   return item.ExtractValue();
 }
 
@@ -52,8 +50,8 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   std::int32_t limit = 50;
   std::int32_t page = 1;
-  std::string s;
-  std::string s_services;
+  std::string conf;
+  std::string service;
   if (request.HasArg(PAGE)) {
     try {
       page = stoi(request.GetArg(PAGE));
@@ -70,11 +68,11 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
       return {};
     }
   }
-  if (request.HasArg(S)) {
-    s = request.GetArg(S);
+  if (request.HasArg(CONF)) {
+    conf = request.GetArg(CONF);
   }
-  if (request.HasArg(S_SERVICES)) {
-    s_services = request.GetArg(S_SERVICES);
+  if (request.HasArg(SERVICE)) {
+    service = request.GetArg(SERVICE);
   }
 
   if (page <= 0 || limit <= 0) {
@@ -84,7 +82,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectConfigs.data(), s, s_services);
+      uservice_dynconf::sql::kSelectConfigs.data(), conf, service);
 
   userver::formats::json::ValueBuilder response;
   response["items"].Resize(0);

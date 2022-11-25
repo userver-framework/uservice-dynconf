@@ -28,9 +28,9 @@ async def test_default_values(service_client, pgsql, load_json, service,
         '/admin/v2/configs/' + str(uuid),
     )
     assert response.status_code == 200
-    assert response.json()['name'] == config_name
-    assert response.json()['value'] == config_value
-    assert response.json()['service'] == config_value
+    assert response.json()['service_name'] == config_value
+    assert response.json()['config_name'] == config_name
+    assert response.json()['config_value'] == config_value
 
 
 @pytest.mark.parametrize(

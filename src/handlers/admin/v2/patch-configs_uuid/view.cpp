@@ -30,11 +30,11 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   const auto &uuid = request.GetPathArg("uuid");
   auto request_body = userver::formats::json::FromString(request.RequestBody());
-  auto value = request_body["value"].As<std::optional<std::string>>();
+  auto value = request_body["config_value"].As<std::optional<std::string>>();
   if (!value.has_value()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return userver::formats::json::ToString(uservice_dynconf::utils::MakeError(
-        "400", "no 'value' field in request"));
+        "400", "no 'config_value' field in request"));
   }
 
   try {
@@ -42,7 +42,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   } catch (const userver::formats::json::ParseException &e) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return userver::formats::json::ToString(uservice_dynconf::utils::MakeError(
-        "400", "'value' field is not a json object"));
+        "400", "'config_value' field is not a json object"));
   }
 
   auto result = cluster_->Execute(

@@ -25,7 +25,7 @@ async def test_default_values(service_client, pgsql, load_json, service,
     )
     uuid = cursor.fetchone()[0]
     response = await service_client.patch(
-        '/admin/v2/configs/' + str(uuid),  json={'value': new_value},
+        '/admin/v2/configs/' + str(uuid),  json={'config_value': new_value},
     )
     assert response.status_code == 200
 

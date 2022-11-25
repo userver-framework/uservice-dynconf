@@ -28,11 +28,11 @@ async def test_correct_clone(service_client, pgsql, service1,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service': 'amogus'},
+        json={'service_name': 'amogus'},
     )
 
     assert response.status_code == 200
-    assert 'config_uuid' in response.json()
+    assert 'uuid' in response.json()
     assert 'service_uuid' in response.json()
 
 
@@ -47,7 +47,7 @@ async def test_correct_clone(service_client, pgsql, service1,
 async def test_empty_data(service_client, uuid, service):
     response = await service_client.post(
         '/admin/v2/configs/' + uuid + '/clone',
-        json={'service': service},
+        json={'service_name': service},
     )
 
     assert response.status_code == 400
@@ -75,7 +75,7 @@ async def test_config_not_exists(service_client, pgsql, service,
         (service_uuid, config_name, config_value)
     )
     response = await service_client.post(
-        '/admin/v2/configs/bad_uuid/clone',  json={'service': service},
+        '/admin/v2/configs/bad_uuid/clone',  json={'service_name': service},
     )
 
     assert response.status_code == 404
@@ -118,7 +118,7 @@ async def test_service_has_config(service_client, pgsql,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service': service2},
+        json={'service_name': service2},
     )
 
     assert response.status_code == 409
@@ -149,11 +149,11 @@ async def test_service_not_exist_ok(service_client, pgsql,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service': service2},
+        json={'service_name': service2},
     )
 
     assert response.status_code == 200
-    assert 'config_uuid' in response.json()
+    assert 'uuid' in response.json()
     assert 'service_uuid' in response.json()
 
 
@@ -187,11 +187,11 @@ async def test_clone_empty_config_value(service_client,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service': 'amogus'},
+        json={'service_name': 'amogus'},
     )
 
     assert response.status_code == 200
-    assert 'config_uuid' in response.json()
+    assert 'uuid' in response.json()
     assert 'service_uuid' in response.json()
 
 
@@ -221,12 +221,12 @@ async def test_clone_with_edit_params(service_client, pgsql, service1,
 
     response = await service_client.post(
         '/admin/v2/configs/' + str(uuid) + '/clone',
-        json={'service': 'amogus',
+        json={'service_name': 'amogus',
               'config_name': new_conf,
               'config_value': new_value
               },
     )
 
     assert response.status_code == 200
-    assert 'config_uuid' in response.json()
+    assert 'uuid' in response.json()
     assert 'service_uuid' in response.json()

@@ -14,21 +14,22 @@
 namespace uservice_dynconf::handlers::configs::post {
 namespace {
 struct RequestData {
-  std::optional<std::string> config_value{};
-  std::string config_name{};
   std::string service_name{};
+  std::string config_name{};
+  std::optional<std::string> config_value{};
   bool isValid() const { return !config_name.empty(); }
 };
 
 RequestData ParseRequest(const userver::formats::json::Value &request) {
   RequestData result;
-  result.config_value = request["value"].As<std::optional<std::string>>();
+  result.config_value =
+      request["config_value"].As<std::optional<std::string>>();
   if (result.config_value.has_value() &&
       result.config_value.value() == "null") {
     result.config_value.reset();
   }
-  result.config_name = request["name"].As<std::string>({});
-  result.service_name = request["service"].As<std::string>("__default__");
+  result.config_name = request["config_name"].As<std::string>({});
+  result.service_name = request["service_name"].As<std::string>("__default__");
   return result;
 }
 } // namespace
@@ -67,7 +68,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   if (result.IsEmpty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kConflict);
     return uservice_dynconf::utils::MakeError(
-        "409", "Config variable already exists for that service");
+        "409", "Config already exists for that service");
   }
   userver::formats::json::ValueBuilder response;
   response["uuid"] = result.AsSingleRow<std::string>();

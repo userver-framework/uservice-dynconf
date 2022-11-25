@@ -1,6 +1,7 @@
 #include "view.hpp"
 #include "cache/configs/configs_cache.hpp"
 #include "sql/sql_query.hpp"
+#include "userver/formats/json.hpp"
 #include "userver/formats/json/inline.hpp"
 #include "userver/formats/json/value.hpp"
 #include "userver/formats/json/value_builder.hpp"
@@ -28,7 +29,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   std::int32_t limit = 50;
   std::int32_t page = 1;
-  std::string s;
+
   if (request.HasArg(PAGE)) {
     try {
       page = stoi(request.GetArg(PAGE));
@@ -45,9 +46,6 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
       return {};
     }
   }
-  if (request.HasArg(S)) {
-    s = request.GetArg(S);
-  }
 
   if (page <= 0 || limit <= 0) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
@@ -56,16 +54,17 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
 
   auto result = pg_cluster_->Execute(
       userver::storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kSelectAllServices.data(), s);
+      uservice_dynconf::sql::kSelectAllServices.data());
 
-  userver::formats::json::ValueBuilder response;
+  userver::formats::json::ValueBuilder response, service_name;
   response["items"].Resize(0);
   for (auto row = result.AsSetOf<std::string>().begin() +
                   std::min((page - 1) * limit, (int32_t)result.Size());
        row < result.AsSetOf<std::string>().begin() +
                  std::min((page)*limit, (int32_t)result.Size());
        ++row) {
-    response["items"].PushBack(*row);
+    service_name["service_name"] = *row;
+    response["items"].PushBack(service_name.ExtractValue());
   }
   response["total"] = result.Size();
   return userver::formats::json::ToString(response.ExtractValue());

@@ -80,12 +80,6 @@ WHERE LOWER(config_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%'))) AND
 inline constexpr std::string_view kSelectAllServices = R"~(
 SELECT DISTINCT service_name
 FROM uservice_dynconf.services
-WHERE LOWER(service_name) LIKE LOWER(CONCAT('%', CONCAT($1, '%')))
-)~";
-
-inline constexpr std::string_view kSelectServices = R"~(
-SELECT service_name 
-FROM uservice_dynconf.services
 )~";
 
 inline constexpr std::string_view kSelectConfigWithValue = R"~(
@@ -111,7 +105,13 @@ FROM uservice_dynconf.configs
 WHERE uuid=$1 
 )~";
 
-inline constexpr std::string_view kSelectService = R"~(
+inline constexpr std::string_view kSelectServiceUuid = R"~(
+SELECT service_uuid 
+FROM uservice_dynconf.configs
+WHERE uuid = $1
+)~";
+
+inline constexpr std::string_view kSelectServiceByName = R"~(
 SELECT uuid 
 FROM uservice_dynconf.services
 WHERE service_name = $1

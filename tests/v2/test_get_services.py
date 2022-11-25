@@ -25,7 +25,7 @@ async def test_get_ok(service_client):
     assert response.status == 200
     assert len(response.json().get('items')) == 1
     assert response.json().get('total') == 1
-    assert response.json().get('items') == ["__default__"]
+    assert response.json().get('items') == [{'service_name': '__default__'}]
 
 
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
@@ -45,4 +45,4 @@ async def test_get_ok_with_params(service_client):
     assert response.status == 200
     assert len(response.json().get('items')) == 1
     assert response.json().get('total') == 1
-    assert response.json().get('items') == ["__default__"]
+    assert response.json().get('items') == [{'service_name': '__default__'}]
