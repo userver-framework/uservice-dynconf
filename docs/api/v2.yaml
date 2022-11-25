@@ -241,7 +241,7 @@ paths:
           application/json:
             schema:
               properties:
-                service_name:
+                service:
                   type: string
                 config_name:
                   type: string

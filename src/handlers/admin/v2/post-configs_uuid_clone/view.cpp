@@ -28,7 +28,7 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
 
   const auto &config_uuid = request.GetPathArg("uuid");
   const auto &service_name =
-      json["service_name"].As<std::optional<std::string>>();
+      json["service"].As<std::optional<std::string>>();
   const auto &inConfig_name =
       json["config_name"].As<std::optional<std::string>>();
   const auto &inConfig_value =
@@ -38,10 +38,12 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
   http_response.SetHeader("Content-Type", "application/json");
   http_response.SetHeader("Access-Control-Allow-Origin", "*");
 
-  if (config_uuid.empty() || service_name.value_or("") == "") {
+  if (config_uuid.empty() || 
+  (service_name.value_or("") == "" && inConfig_name.value_or("") == "")) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return uservice_dynconf::utils::MakeError(
-        "400", "Field 'uuid' or 'service_name' is empty");
+        "400",
+        "Field 'uuid' and one of ('service' or 'config_name') are required");
   }
 
   auto config = cluster_->Execute(
