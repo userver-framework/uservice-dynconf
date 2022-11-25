@@ -14,7 +14,7 @@ struct DBData {
   std::string uuid;
   std::string service;
   std::string config_name;
-  std::string config_value;
+  std::optional<std::string> config_value;
 };
 
 Handler::Handler(const userver::components::ComponentConfig &config,
@@ -50,8 +50,11 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
       result.AsSingleRow<DBData>(userver::storages::postgres::kRowTag);
   response_body["uuid"] = config.uuid;
   response_body["service"] = config.service;
-  response_body["name"] = config.config_name;
-  response_body["config_value"] = config.config_value;
+  response_body["config_name"] = config.config_name;
+  if (config.config_value.has_value())
+    response_body["config_value"] = config.config_value.value();
+  else
+    response_body["config_value"] = "null";
   return userver::formats::json::ToString(response_body.ExtractValue());
 }
 
