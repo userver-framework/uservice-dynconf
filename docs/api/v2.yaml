@@ -235,7 +235,7 @@ paths:
         schema:
           type: string
       requestBody:
-        description: Service name to assign to cloned service
+        description: Service name, config name and config value to assign to cloned service
         required: true
         content:
           application/json:
@@ -259,7 +259,7 @@ paths:
                     service_uuid:
                       type: string
         '400':
-          description: Field 'uuid' or 'service_name' is empty
+          description: Field 'uuid' and one of ('service' or 'config_name') are required
           content:
             application/json:
               schema:
