@@ -8,9 +8,10 @@
 #include <string_view>
 #include <userver/components/component_list.hpp>
 
-using namespace userver;
 
 namespace uservice_dynconf::handlers::configs_uuid_clone::post {
+
+using namespace userver;
 
 class Handler final : public server::handlers::HttpHandlerJsonBase {
 public:
@@ -20,8 +21,7 @@ public:
           const components::ComponentContext &component_context);
 
   std::optional<std::string>
-  GetServiceUuid(const std::string &uuid,
-                 const std::optional<std::string> &service_name) const;
+  GetServiceUuid(const std::optional<std::string> &service_name) const;
 
   formats::json::Value HandleRequestJsonThrow(
       const server::http::HttpRequest &request,
@@ -30,6 +30,7 @@ public:
 
 private:
   struct RequestData {
+    std::string service_uuid;
     std::string config_name;
     std::optional<std::string> config_value;
   };

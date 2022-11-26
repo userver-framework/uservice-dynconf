@@ -100,15 +100,9 @@ RETURNING uuid
 // clone
 
 inline constexpr std::string_view kSelectConfigToClone = R"~(
-SELECT config_name, config_value::TEXT 
+SELECT service_uuid, config_name, config_value::TEXT 
 FROM uservice_dynconf.configs 
 WHERE uuid=$1 
-)~";
-
-inline constexpr std::string_view kSelectServiceUuid = R"~(
-SELECT service_uuid 
-FROM uservice_dynconf.configs
-WHERE uuid = $1
 )~";
 
 inline constexpr std::string_view kSelectServiceByName = R"~(

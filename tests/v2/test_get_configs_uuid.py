@@ -18,10 +18,10 @@ async def test_default_values(service_client, pgsql, load_json, service,
     )
     service_uuid = cursor.fetchone()
     cursor.execute(
-        'INSERT INTO uservice_dynconf.configs (service_uuid, config_value, '
-        'config_name) '
-        ' VALUES (%s, %s, %s) RETURNING uuid', (service_uuid,
-                                                config_value, config_name)
+        'INSERT INTO uservice_dynconf.configs '
+        '(service_uuid, config_value, config_name) '
+        'VALUES (%s, %s, %s) RETURNING uuid ',
+        (service_uuid, config_value, config_name)
     )
     uuid = cursor.fetchone()
     response = await service_client.get(
@@ -33,14 +33,8 @@ async def test_default_values(service_client, pgsql, load_json, service,
     assert response.json()['config_value'] == config_value
 
 
-@pytest.mark.parametrize(
-    "service,config_value,config_name", [
-        ("main-service", "10000", "main-varibale"),
-    ],
-)
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
-async def test_default_values(service_client, pgsql, load_json, service,
-                              config_value, config_name):
+async def test_default_values(service_client):
     uuid = str(uuid4())
     response = await service_client.get(
         '/admin/v2/configs/' + str(uuid),

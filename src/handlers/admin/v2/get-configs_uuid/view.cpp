@@ -49,7 +49,7 @@ Handler::HandleRequestThrow(const userver::server::http::HttpRequest &request,
   auto config =
       result.AsSingleRow<DBData>(userver::storages::postgres::kRowTag);
   response_body["uuid"] = config.uuid;
-  response_body["servic_name"] = config.service;
+  response_body["service_name"] = config.service;
   response_body["config_name"] = config.config_name;
   if (config.config_value.has_value())
     response_body["config_value"] = config.config_value.value();

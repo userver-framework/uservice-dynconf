@@ -21,21 +21,9 @@ Handler::Handler(const components::ComponentConfig &config,
                    .FindComponent<components::Postgres>("settings-database")
                    .GetCluster()) {}
 
+//Find service by name, create it if does not exist
 std::optional<std::string>
-Handler::GetServiceUuid(const std::string &uuid,
-                        const std::optional<std::string> &service_name) const {
-  // If service_name is empty get default name
-  if (service_name.value_or("") == "") {
-    auto service = cluster_->Execute(
-        storages::postgres::ClusterHostType::kSlave,
-        uservice_dynconf::sql::kSelectServiceUuid.data(), uuid);
-    if (service.IsEmpty())
-      return std::nullopt;
-
-    return service.AsSingleRow<std::string>();
-  }
-  // If service_name has value, then find it or create new if does not exist
-  else {
+Handler::GetServiceUuid(const std::optional<std::string> &service_name) const {
     auto service =
         cluster_->Execute(storages::postgres::ClusterHostType::kSlave,
                           uservice_dynconf::sql::kSelectServiceByName.data(),
@@ -45,13 +33,11 @@ Handler::GetServiceUuid(const std::string &uuid,
                                   uservice_dynconf::sql::kInsertService.data(),
                                   service_name.value());
     }
+    //Insertion should not fail, if it fails then 500 error will be returned
     if (service.IsEmpty())
       return std::nullopt;
 
     return service.AsSingleRow<std::string>();
-  }
-  // Should not return here
-  return std::nullopt;
 }
 
 formats::json::Value
@@ -87,26 +73,34 @@ Handler::HandleRequestJsonThrow(const server::http::HttpRequest &request,
     return uservice_dynconf::utils::MakeError("404", "Config not found");
   }
 
-  const auto &service_uuid = GetServiceUuid(config_uuid, service_name);
-  if (!service_uuid.has_value()) {
-    http_response.SetStatus(server::http::HttpStatus::kInternalServerError);
-    return uservice_dynconf::utils::MakeError(
-        "500", "Could not get service. Very bad");
-  }
-
   auto copied_config =
       config.AsSingleRow<RequestData>(storages::postgres::kRowTag);
+  
+  std::string service_uuid;
+  if(service_name.value_or("") != "")
   {
-    if (inConfig_name.value_or("") != "")
-      copied_config.config_name = inConfig_name.value();
-    if (inConfig_value.value_or("") != "")
-      copied_config.config_value = inConfig_value.value();
+    const auto& returned_uuid = GetServiceUuid(service_name);
+    if(!returned_uuid.has_value())
+    {
+      http_response.SetStatus(server::http::HttpStatus::kInternalServerError);
+      return uservice_dynconf::utils::MakeError(
+        "500", "Could not get service. Very bad");
+    }
+
+    service_uuid = returned_uuid.value();
+    copied_config.service_uuid = service_uuid;
   }
+
+  if (inConfig_name.value_or("") != "")
+      copied_config.config_name = inConfig_name.value();
+  if (inConfig_value.value_or("") != "")
+      copied_config.config_value = inConfig_value.value();
 
   auto result = cluster_->Execute(
       storages::postgres::ClusterHostType::kMaster,
-      uservice_dynconf::sql::kInsertClonedConfig.data(), service_uuid,
-      copied_config.config_name, copied_config.config_value);
+      uservice_dynconf::sql::kInsertClonedConfig.data(),
+      copied_config.service_uuid,copied_config.config_name,
+      copied_config.config_value);
   if (result.IsEmpty()) {
     http_response.SetStatus(server::http::HttpStatus::kConflict);
     return uservice_dynconf::utils::MakeError(
@@ -116,7 +110,7 @@ Handler::HandleRequestJsonThrow(const server::http::HttpRequest &request,
   http_response.SetStatusOk();
   formats::json::ValueBuilder response;
   response["uuid"] = result.AsSingleRow<std::string>();
-  response["service_uuid"] = service_uuid;
+  response["service_uuid"] = copied_config.service_uuid;
   return response.ExtractValue();
 }
 } // namespace uservice_dynconf::handlers::configs_uuid_clone::post
