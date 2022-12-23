@@ -80,12 +80,12 @@ format:
 # Build and run service in docker environment
 .PHONY: docker-start-service-debug docker-start-service-release
 docker-start-service-debug docker-start-service-release: docker-start-service-%:
-	@docker-compose run -p 8080:8080 --rm uservice-dynconf $(MAKE) -- --in-docker-start-$*
+	@docker-compose run -p 8080:8080 --rm uservice-dynconf-container $(MAKE) -- --in-docker-start-$*
 
 # Start targets makefile in docker environment
 .PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release
 docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release: docker-%:
-	docker-compose run --rm uservice-dynconf $(MAKE) $*
+	docker-compose run --rm uservice-dynconf-container $(MAKE) $*
 
 # Stop docker container and remove PG data
 .PHONY: docker-clean-data

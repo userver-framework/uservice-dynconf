@@ -3,9 +3,6 @@ import typing
 
 import pytest
 
-from testsuite.daemons import service_client
-from testsuite import utils
-
 from testsuite.databases.pgsql import discover
 
 pytest_plugins = [
@@ -35,12 +32,12 @@ def initial_data_path(
 def pgsql_local(root_dir, pgsql_local_create):
     """Create schemas databases for tests"""
     databases = discover.find_schemas(
-        'uservice_dynconf',
+        'testdb',
         [root_dir.joinpath('postgresql/schemas')],
     )
     return pgsql_local_create(list(databases.values()))
 
 
 @pytest.fixture
-def client_deps(pgsql):
+def client_deps(pgsql, pgsql_local):
     pass
