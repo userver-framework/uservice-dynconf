@@ -79,6 +79,7 @@ components_manager:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor
             dns_resolver: async
+            sync-start: true
 
         http-client:
             load-enabled: $is_testing

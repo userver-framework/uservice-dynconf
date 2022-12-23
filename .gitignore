@@ -8,6 +8,7 @@ compile_commands.json
 .ccache/
 cmake-build-debug/
 Testing/
+configs/static_config.yaml
 !Makefile.local
 !third_party/
 !third_party/userver/
