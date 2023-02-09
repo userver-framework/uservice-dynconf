@@ -50,6 +50,11 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
+        handler-variables-post:
+            path: /admin/v1/variables
+            method: POST
+            task_processor: main-task-processor
+
         handler-configs-values:
             path: /configs/values
             method: POST
@@ -63,6 +68,21 @@ components_manager:
         handler-admin-v1-configs-delete:
             path: /admin/v1/configs/delete
             method: POST
+            task_processor: main-task-processor
+
+        handler-variables-get:
+            path: /admin/v1/variables
+            method: GET
+            task_processor: main-task-processor
+
+        handler-configs-get:
+            path: /admin/v1/configs
+            method: GET
+            task_processor: main-task-processor
+
+        handler-delete-variable:
+            path: /api/v1/variables/{uuid}
+            method: DELETE
             task_processor: main-task-processor
 
         testsuite-support: {}
