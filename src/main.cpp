@@ -23,9 +23,12 @@ int main(int argc, char *argv[]) {
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::TestsuiteSupport>()
           .Append<uservice_dynconf::cache::settings_cache::ConfigsCache>()
-          .Append<service_handlers::configs_values::post::Handler>()
-          .Append<service_handlers::admin_v1_configs::post::Handler>()
-          .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
+          .Append<service_handlers::variables_get::get::Handler>()
+          .Append<service_handlers::variables_get_uid::get::Handler>()
+          .Append<service_handlers::variables_patch::patch::Handler>()
+          .Append<service_handlers::variables_delete::delete::Handler>()
+          .Append<service_handlers::variables_post::post::Handler>()
+          .Append<service_handlers::config_get::get::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
   return userver::utils::DaemonMain(argc, argv, component_list);

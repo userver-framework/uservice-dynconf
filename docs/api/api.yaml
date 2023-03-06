@@ -24,7 +24,7 @@ paths:
                             properties:
                                 ids:
                                     type: array
-                                   description: list of config ids
+                                    description: list of config ids
                                     items:
                                         type: string
                                         description: config id
