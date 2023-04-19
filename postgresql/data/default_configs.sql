@@ -17,6 +17,7 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
 }'),
 ('MONGO_DEFAULT_MAX_TIME_MS', '200'),
 ('POSTGRES_CONNECTION_SETTINGS', '{}'),
+('POSTGRES_CONNLIMIT_MODE_AUTO_ENABLED', 'false'),
 ('POSTGRES_DEFAULT_COMMAND_CONTROL', '{
   "network_timeout_ms": 750,
   "statement_timeout_ms": 500
@@ -56,6 +57,8 @@ VALUES ('HTTP_CLIENT_CONNECT_THROTTLE', '{
 }'),
 ('USERVER_RPS_CCONTROL_ENABLED', 'false'),
 ('USERVER_TASK_PROCESSOR_PROFILER_DEBUG', '{}'),
+('BAGGAGE_SETTINGS', '{"allowed_keys": []}'),
+('USERVER_BAGGAGE_ENABLED', 'false'),
 ('USERVER_TASK_PROCESSOR_QOS', '{
   "default-service": {
     "default-task-processor": {
