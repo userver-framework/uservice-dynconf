@@ -8,10 +8,6 @@
     "per-host-limit": 3000,
     "per-host-per-second": 500
   },
-  "HTTP_CLIENT_ENFORCE_TASK_DEADLINE": {
-    "cancel-request": false,
-    "update-timeout": false
-  },
   "POSTGRES_CONNECTION_POOL_SETTINGS": {
     "__default__": {
       "max_pool_size": 15,
@@ -19,8 +15,10 @@
       "min_pool_size": 4
     }
   },
+  "POSTGRES_CONGESTION_CONTROL_SETTINGS": {},
   "POSTGRES_CONNECTION_SETTINGS": {},
   "POSTGRES_CONNLIMIT_MODE_AUTO_ENABLED": false,
+  "POSTGRES_CONNECTION_PIPELINE_EXPERIMENT": 1,
   "POSTGRES_DEFAULT_COMMAND_CONTROL": {
     "network_timeout_ms": 750,
     "statement_timeout_ms": 500
@@ -28,10 +26,11 @@
   "POSTGRES_HANDLERS_COMMAND_CONTROL": {},
   "POSTGRES_QUERIES_COMMAND_CONTROL": {},
   "POSTGRES_STATEMENT_METRICS_SETTINGS": {},
-  "POSTGRES_CONNECTION_PIPELINE_ENABLED": false,
+  "POSTGRES_DEADLINE_PROPAGATION_VERSION": 1,
   "USERVER_CACHES": {},
   "USERVER_CANCEL_HANDLE_REQUEST_BY_DEADLINE": false,
   "USERVER_CHECK_AUTH_IN_HANDLERS": false,
+  "USERVER_DEADLINE_PROPAGATION_ENABLED": true,
   "USERVER_DUMPS": {},
   "USERVER_HTTP_PROXY": "",
   "USERVER_HANDLER_STREAM_API_ENABLED": false,
