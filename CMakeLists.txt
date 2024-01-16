@@ -12,21 +12,12 @@ add_subdirectory(third_party/userver)
 userver_setup_environment()
 
 # Service target
-add_executable("${PROJECT_NAME}"
-  src/models/config.hpp
-  src/utils/make_error.hpp
-  src/utils/make_error.cpp
-  src/cache/configs_cache.hpp
-  src/cache/configs_cache.cpp
-  src/handlers/admin_v1_configs.hpp
-  src/handlers/admin_v1_configs.cpp
-  src/handlers/configs_values.hpp
-  src/handlers/configs_values.cpp
-  src/handlers/admin_v1_configs_delete.hpp
-  src/handlers/admin_v1_configs_delete.cpp
-  src/sql/sql_query.hpp
-  src/main.cpp
+file(
+    GLOB_RECURSE SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
 )
+add_executable("${PROJECT_NAME}" ${SOURCES})
 
 target_include_directories("${PROJECT_NAME}" PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
 target_link_libraries("${PROJECT_NAME}" userver-core userver-postgresql)
