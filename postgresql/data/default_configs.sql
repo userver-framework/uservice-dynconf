@@ -1,4 +1,4 @@
--- See https://userver.tech/dd/d2c/md_en_schemas_dynamic_configs.html
+-- See https://userver.tech/de/d10/md_en_2schemas_2dynamic__configs.html
 -- for description of dynamic configs.
 
 INSERT INTO uservice_dynconf.configs (config_name, config_value)

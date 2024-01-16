@@ -40,7 +40,6 @@ In [file `static_configs.yaml`](https://github.com/userver-framework/service_tem
             http-timeout: 20s
         dynamic-config-client-updater:
             config-settings: false
-            fallback-path: dynamic_config_fallback.json
             full-update-interval: 1m
             load-only-my-values: true
             store-enabled: true
