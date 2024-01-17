@@ -1,20 +1,10 @@
-# yaml
-
-config_vars: @CONFIG_VAR_PATH@
-
 components_manager:
-    coro_pool:
-        initial_size: 500
-        max_size: 1000
-
     task_processors:
         main-task-processor:
             worker_threads: $worker-threads
-            thread_name: main-worker
 
         fs-task-processor:
             worker_threads: $worker-threads
-            thread_name: fs-worker
 
     default_task_processor: main-task-processor
 
@@ -30,15 +20,6 @@ components_manager:
                     file_path: '@stderr'
                     level: $logger-level
                     overflow_behavior: discard
-
-        tracer:
-            service-name: uservice-dynconf
-
-        dynamic-config:
-            fs-cache-path: ''
-
-        dynamic-config-fallbacks:
-            fallback-path: @CONFIG_FALLBACK_PATH@
 
         dns-client:
             fs-task-processor: fs-task-processor
