@@ -25,7 +25,22 @@ jobs:
 
         name: '${{matrix.os}}: ${{matrix.info}}'
         runs-on: ${{matrix.os}}
+        services:
+          postgres:
+            image: postgres
 
+            env:
+              POSTGRES_PASSWORD: password
+              POSTGRES_USER: uservice_dynconf
+              POSTGRES_DB: uservice_dynconf
+
+            options: >-
+              --health-cmd pg_isready
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 5
+            ports:
+              - 5432:5432
         steps:
           - uses: actions/checkout@v2
             with:
@@ -50,19 +65,6 @@ jobs:
             run: |
                 ccache -M 2.0GB
                 ccache -s
-
-          - name: Run postgresql
-            if: matrix.make == 'test-release'
-            run: |
-                sudo service postgresql restart
-                pg_lsclusters
-                sudo -u postgres psql --command="CREATE USER uservice_dynconf PASSWORD 'password'" --command="\du"
-                sudo -u postgres createdb --owner=uservice_dynconf uservice_dynconf
-
-          - name: Run migrations
-            if: matrix.make == 'test-release'
-            run: |
-                PGPASSWORD=password psql 'postgresql://uservice_dynconf@localhost:5432/uservice_dynconf' -f ./postgresql/schemas/uservice_dynconf.sql
 
           - name: Run ${{matrix.make}}
             run: |
