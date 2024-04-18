@@ -17,32 +17,22 @@ services:
           - postgres
 
     uservice-dynconf-container:
-        image: ghcr.io/userver-framework/ubuntu-userver-build-base:v1
+        image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest
         privileged: true
         environment:
           - POSTGRES_DB=uservice_dynconf
           - POSTGRES_USER=uservice_dynconf
           - POSTGRES_PASSWORD=password
           - PREFIX=${PREFIX:-~/.local}
-          - CC
           - CCACHE_DIR=/uservice-dynconf/.ccache
-          - CCACHE_HASHDIR
-          - CCACHE_NOHASHDIR
-          - CCACHE_PREFIX
-          - CCACHE_SIZE
-          - CMAKE_OPTS
           - CORES_DIR=/cores
-          - CXX
-          - MAKE_OPTS
-          - CMAKE_COMMON_FLAGS
         volumes:
           - .:/uservice-dynconf:rw
-          - ./third_party/userver/tools/docker:/tools:ro
         ports:
           - 8083:8083
         working_dir: /uservice-dynconf
         entrypoint:
-          - /tools/run_as_user.sh
+          - ./tests/run_as_user.sh
         depends_on:
           - postgres
         networks:

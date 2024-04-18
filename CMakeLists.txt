@@ -8,7 +8,21 @@ set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
 set(USERVER_FEATURE_CRYPTOPP_BLAKE2 OFF CACHE BOOL "" FORCE)
 
 # Adding userver dependency
-add_subdirectory(third_party/userver)
+find_package(userver COMPONENTS core postgresql QUIET)
+if(NOT userver_FOUND)  # Fallback to subdirectory usage
+    # Enable userver libraries that are needed in this project
+    set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
+
+    # Compatibility mode: some systems don't support these features
+    set(USERVER_FEATURE_CRYPTOPP_BLAKE2 OFF CACHE BOOL "" FORCE)
+
+    if (EXISTS third_party/userver)
+        message(STATUS "Using userver framework from third_party/userver")
+        add_subdirectory(third_party/userver)
+    else()
+        message(FATAL_ERROR "Either install the userver or provide a path to it")
+    endif()
+endif()
 userver_setup_environment()
 
 # Service target
