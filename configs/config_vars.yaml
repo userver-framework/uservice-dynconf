@@ -1,5 +1,5 @@
 worker-threads: 4
-logger-level: debug
+logger-level: info
 
 is_testing: false
 
