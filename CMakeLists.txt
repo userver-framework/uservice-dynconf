@@ -24,7 +24,7 @@ if(NOT userver_FOUND)  # Fallback to subdirectory usage
     endif()
 endif()
 userver_setup_environment()
-enable_testing()
+
 
 # Service target
 file(
