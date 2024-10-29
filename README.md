@@ -1,7 +1,7 @@
 # uservice-dynconf
 [![CI](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml/badge.svg)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml)
 
-The service to control [dynamic configs](https://userver-framework.github.io/dd/d2c/md_en_schemas_dynamic_configs.html) of the other userver-based services.
+The service to control [dynamic configs](https://userver.tech/d5/d46/md_en_2userver_2dynamic__config.html) of the other userver-based services.
 
 Service using postgres db version 10+
 
@@ -29,7 +29,7 @@ uservice-dynconf --config /etc/uservice-dynconf/config_vars.yaml
 
 ## HowTo configure other userver-based microservices to use uservice-dynconf
 
-In [file `static_configs.yaml`](https://github.com/userver-framework/service_template/blob/develop/configs/static_config.yaml.in#L22) of the microservice add the following lines to connect and retrieve configurations from the `uservice-dynconf`:
+In [file `static_configs.yaml`](https://github.com/userver-framework/service_template/blob/develop/configs/static_config.yaml#L26) of the microservice add the following lines to connect and retrieve configurations from the `uservice-dynconf`:
 ```yaml
         dynamic-config-client:
             # uservice-dynconf address
