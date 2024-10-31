@@ -4,7 +4,7 @@ body:
   - type: markdown
     attributes:
         value: |
-            **Note:** By creating a PR or an issue you automatically agree to the CLA. See [CONTRIBUTING.md](https://github.com/userver-framework/userver/blob/develop/CONTRIBUTING.md).
+            **Note:** By creating a PR or an issue you automatically agree to the CLA. See [CONTRIBUTING.md](https://github.com/userver-framework/uservice-dynconf/blob/develop/CONTRIBUTING.md).
   - type: textarea
     id: what-happened
     attributes:
