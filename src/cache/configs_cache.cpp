@@ -1,10 +1,11 @@
-#include "configs_cache.hpp"
-#include "userver/logging/log.hpp"
-#include "userver/storages/postgres/query.hpp"
+#include <cache/configs_cache.hpp>
 
-#include "sql/sql_query.hpp"
-#include "userver/utils/algo.hpp"
 #include <string_view>
+
+#include <userver/logging/log.hpp>
+#include <userver/storages/postgres/query.hpp>
+#include <userver/utils/algo.hpp>
+#include <uservice_dynconf/sql_queries.hpp>
 
 namespace uservice_dynconf::cache::settings_cache {
 
@@ -12,9 +13,9 @@ namespace {
 constexpr static const char *kDefaultService = "__default__";
 }
 
-userver::storages::postgres::Query ConfigCachePolicy::kQuery =
-    userver::storages::postgres::Query(
-        uservice_dynconf::sql::kSelectSettingsForCache.data());
+userver::storages::postgres::Query ConfigCachePolicy::GetQuery() {
+  return uservice_dynconf::sql::kSelectSettingsForCache;
+}
 
 void ConfigCacheContainer::insert_or_assign(Key &&key, Config &&config) {
   auto config_ptr = std::make_shared<const Config>(std::move(config));

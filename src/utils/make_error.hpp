@@ -1,7 +1,8 @@
 #pragma once
 
-#include "userver/formats/json/value.hpp"
 #include <string_view>
+
+#include <userver/formats/json/value.hpp>
 
 namespace uservice_dynconf::utils {
 

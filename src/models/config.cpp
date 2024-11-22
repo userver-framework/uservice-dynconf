@@ -1,4 +1,5 @@
-#include "config.hpp"
+#include <models/config.hpp>
+
 #include <cassert>
 #include <string>
 

@@ -1,41 +1,25 @@
-#include "admin_v1_configs.hpp"
-#include "userver/formats/json/inline.hpp"
-#include "userver/formats/json/value.hpp"
-#include "userver/formats/yaml/value_builder.hpp"
-#include "userver/storages/postgres/cluster.hpp"
-#include "userver/storages/postgres/component.hpp"
+#include <handlers/admin_v1_configs.hpp>
 
-#include "models/config.hpp"
-#include "sql/sql_query.hpp"
-#include "utils/make_error.hpp"
 #include <string>
 #include <unordered_set>
-#include <vector>
+
+#include <userver/formats/json/inline.hpp>
+#include <userver/formats/json/value.hpp>
+#include <userver/formats/yaml/value_builder.hpp>
+#include <userver/storages/postgres/cluster.hpp>
+#include <userver/storages/postgres/component.hpp>
+
+#include <docs/api/api.hpp>
+#include <uservice_dynconf/sql_queries.hpp>
+
+#include <models/config.hpp>
+#include <utils/make_error.hpp>
 
 namespace uservice_dynconf::handlers::admin_v1_configs::post {
 
 namespace {
-struct RequestData {
-  userver::formats::json::Value configs;
-  std::unordered_set<std::string> kill_switches_enabled;
-  std::unordered_set<std::string> kill_switches_disabled;
-  std::string service{};
-};
 
-RequestData ParseRequest(const userver::formats::json::Value &request) {
-  RequestData result;
-  if (request["configs"].IsObject()) {
-    result.configs = request["configs"];
-  }
-  result.service = request["service"].As<std::string>({});
-  result.kill_switches_enabled =
-      request["kill_switches_enabled"].As<std::unordered_set<std::string>>({});
-  result.kill_switches_disabled =
-      request["kill_switches_disabled"].As<std::unordered_set<std::string>>({});
-  return result;
-}
-
-bool ConsitstsOfIdsFromConfigs(
+bool ConsistsOfIdsFromConfigs(
     const std::unordered_set<std::string> &kill_switches,
     const userver::formats::json::Value &configs) {
   for (const auto &kill_switch : kill_switches) {
@@ -91,37 +75,44 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
     const userver::formats::json::Value &request_json,
     userver::server::request::RequestContext &) const {
   auto &http_response = request.GetHttpResponse();
-  const auto request_data = ParseRequest(request_json);
+  auto &&request_data = request_json.As<AdminConfigsRequestBody>();
 
-  if (request_data.configs.IsEmpty() || request_data.service.empty()) {
+  if (!request_data.configs.has_value() ||
+      request_data.configs.value().extra.IsEmpty() ||
+      !request_data.service.has_value() ||
+      request_data.service.value().empty()) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return uservice_dynconf::utils::MakeError(
         "400", "Fields 'configs' and 'service' are required");
   }
-  if (!ConsitstsOfIdsFromConfigs(request_data.kill_switches_enabled,
-                                 request_data.configs) ||
-      !ConsitstsOfIdsFromConfigs(request_data.kill_switches_disabled,
-                                 request_data.configs)) {
+
+  const auto configs = request_data.configs.value().extra;
+  const auto kill_switches_enabled =
+      request_data.kill_switches_enabled.value_or(
+          std::unordered_set<std::string>{});
+  const auto kill_switches_disabled =
+      request_data.kill_switches_disabled.value_or(
+          std::unordered_set<std::string>{});
+
+  if (!ConsistsOfIdsFromConfigs(kill_switches_enabled, configs) ||
+      !ConsistsOfIdsFromConfigs(kill_switches_disabled, configs)) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return uservice_dynconf::utils::MakeError(
         "400", "Fields 'kill_switches_enabled' and 'kill_switches_disabled' "
                "must consist of ids from 'configs' field");
   }
-  if (HasIntersection(request_data.kill_switches_enabled,
-                      request_data.kill_switches_disabled)) {
+  if (HasIntersection(kill_switches_enabled, kill_switches_disabled)) {
     http_response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
     return uservice_dynconf::utils::MakeError(
         "400", "Ids in 'kill_switches_enabled' and 'kill_switches_disabled' "
                "must not overlap");
   }
 
-  const auto config_mode_map = MakeConfigModeMap(
-      request_data.configs, request_data.kill_switches_enabled,
-      request_data.kill_switches_disabled);
+  const auto config_mode_map =
+      MakeConfigModeMap(configs, kill_switches_enabled, kill_switches_disabled);
   cluster_->Execute(userver::storages::postgres::ClusterHostType::kMaster,
-                    uservice_dynconf::sql::kInsertConfigValue.data(),
-                    request_data.service, request_data.configs,
-                    config_mode_map);
+                    uservice_dynconf::sql::kInsertConfigValue,
+                    request_data.service.value(), configs, config_mode_map);
 
   http_response.SetStatus(userver::server::http::HttpStatus::kNoContent);
 

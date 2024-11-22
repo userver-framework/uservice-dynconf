@@ -2,10 +2,11 @@
 
 #include <memory>
 #include <unordered_map>
+
 #include <userver/cache/base_postgres_cache.hpp>
 #include <userver/storages/postgres/io/chrono.hpp>
 
-#include "models/config.hpp"
+#include <models/config.hpp>
 
 namespace uservice_dynconf::cache::settings_cache {
 
@@ -29,11 +30,11 @@ private:
 };
 
 struct ConfigCachePolicy {
+  static userver::storages::postgres::Query GetQuery();
   static constexpr auto kName = "configs-cache";
   using ValueType = uservice_dynconf::models::Config;
   using CacheContainer = ConfigCacheContainer;
   static constexpr auto kKeyMember = &uservice_dynconf::models::Config::key;
-  static userver::storages::postgres::Query kQuery;
   static constexpr auto kUpdatedField = "updated_at";
   using UpdatedFieldType = userver::storages::postgres::TimePointTz;
 };
