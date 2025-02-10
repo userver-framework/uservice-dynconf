@@ -23,8 +23,11 @@ cmake-debug:
 cmake-release:
 	cmake -B build_release $(CMAKE_RELEASE_FLAGS)
 
-build_debug/CMakeCache.txt: cmake-debug
-build_release/CMakeCache.txt: cmake-release
+build_debug/CMakeCache.txt:
+	$(MAKE) cmake-debug
+
+build_release/CMakeCache.txt:
+	$(MAKE) cmake-release
 
 # Build using cmake
 .PHONY: build-debug build-release
