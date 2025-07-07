@@ -1,0 +1,27 @@
+button {
+    font-size: 120%;
+}
+
+.changed-cell {
+    background-color: lightgreen;
+}
+
+#apply-edits {
+    height: 70pt;
+    margin-top: 10pt;
+    margin-bottom: 20pt;
+    width: 30%;
+}
+
+#rows {
+    margin-top: 10pt;
+    float: right;
+    width: 50%;
+}
+
+
+#add-row, #del-row {
+    height: 33pt;
+    margin: 1pt;
+    width: 90%;
+}
