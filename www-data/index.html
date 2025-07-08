@@ -22,6 +22,8 @@
 <div id="the-table"></div>
 
 <script>
+    document.getElementById("apply-edits").disabled = true;
+
     function OnCellChange(cell){
         cell.getElement().classList.add("changed-cell");
         document.getElementById("apply-edits").disabled = false;
@@ -40,34 +42,40 @@
         columns:[
 	        {title:"Name", field:"name", width:"20%", cellEdited:OnCellChange, editor:"input"},
 	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
-	        {title:"Value", field:"value", cellEdited:OnCellChange, editor:"textarea"}
+	        {title:"Value", field:"value", cellEdited:OnCellChange, editor:"input"},
         ],
     });
 
-    function OnDeleteRow(row_data){
-        request = {
-            "ids": [row_data["name"]],
-            "service": row_data["service"] || "__default__"
-        };
-
-        fetch('/admin/v1/configs/delete', {
+    function PostToBackend(url, request){
+        fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(request)
+            body: JSON.stringify(request),
         })
         .then(response => response.text())
         .then(response => console.log(response))
         .catch(error => alert("Error: " + error));
     }
-    function OnRowUpdate(data){
-        alert(data["name"] + " " + data["service"] + " " + data["value"]);
-        // TODO: upload to server
+
+    function OnDeleteRow(row_data){
+        request = {
+            ids: [row_data["name"]],
+            service: row_data["service"] || "__default__",
+        };
+
+        PostToBackend('/admin/v1/configs/delete', request);
     }
-    function OnConfigsReceived(data){
-        data.forEach(row_data => {
-            //row_data["value"] = JSON.stringify(row_data["value"]);
-            table.addRow(row_data);
-        });
+    function OnRowUpdate(data){
+        request = {
+            configs: {},
+            service: data["service"] || "__default__",
+        };
+        request["configs"][data["name"]] = data["value"];
+
+        PostToBackend('/admin/v1/configs', request);
+    }
+    function OnConfigsReceived(rows){
+        rows.forEach(row_data => table.addRow(row_data));
     }
 
     document.getElementById("add-row").addEventListener("click", function(){
@@ -99,15 +107,12 @@
     fetch('/admin/v1/configs/get', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},  
-        body: JSON.stringify({})  
+        body: JSON.stringify({}),
     })
     .then(response => response.json())
-    .then(data => OnConfigsReceived(data))
+    .then(OnConfigsReceived)
     .catch(error => alert("Error: " + error));
 </script>
 
   </body>
 </html>
-
-
-

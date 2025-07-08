@@ -1,7 +1,7 @@
 SELECT 
     service,
     config_name,
-    config_value
+    config_value::text
 FROM 
     uservice_dynconf.configs
 WHERE
