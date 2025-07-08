@@ -58,7 +58,15 @@
             body: JSON.stringify(request),
         })
         .then(response => response.text())
-        .then(response => console.log(response))
+        .then(response => {
+            console.log(response);
+            try {
+                json = JSON.parse(response);
+                if (!json["code"].startsWith("2")) {
+                    alert("Error from backend: " + json["message"] + "\n" + json["details"]);
+                }
+            } catch (e) {}
+        })
         .catch(error => alert("Error from backend: " + error));
     }
 
