@@ -40,11 +40,8 @@ target_link_libraries("${PROJECT_NAME}" userver::core userver::postgresql)
 # Adding JSON schema codegen
 file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/docs/*.yaml)
 userver_target_generate_chaotic(${PROJECT_NAME}-chgen
-    ARGS
-        -n "/components/schemas/([^/]*)/=uservice_dynconf::handlers::{0}"
-        -f "(.*)={0}"
-        --clang-format=
-        --generate-serializers
+    LAYOUT "/components/schemas/([^/]*)/=uservice_dynconf::handlers::{0}"
+    GENERATE_SERIALIZERS
     OUTPUT_DIR
         ${CMAKE_CURRENT_BINARY_DIR}/src
     SCHEMAS
