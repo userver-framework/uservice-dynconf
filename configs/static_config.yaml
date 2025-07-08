@@ -62,6 +62,15 @@ components_manager:
             dns_resolver: async
             sync-start: true
 
+        resources-cache:
+            dir: www-data/
+            update-period: 1s
+
+        handler-static:
+            fs-cache-component: resources-cache
+            path: /*
+            method: GET
+
         http-client:
             load-enabled: $is_testing
             fs-task-processor: fs-task-processor

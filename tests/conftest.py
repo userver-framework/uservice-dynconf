@@ -6,7 +6,19 @@ import pytest
 from testsuite.databases.pgsql import discover
 
 pytest_plugins = ['pytest_userver.plugins.postgresql']
+USERVER_CONFIG_HOOKS = ['static_config_hook']
 
+
+@pytest.fixture(scope='session')
+def static_config_hook(service_source_dir):
+    def _patch_config(config_yaml, config_vars):
+        components = config_yaml['components_manager']['components']
+        assert 'resources-cache' in components
+        components['resources-cache']['dir'] = str(
+            pathlib.Path(service_source_dir).joinpath('www-data'),
+        )
+
+    return _patch_config
 
 @pytest.fixture(scope='session')
 def service_source_dir():

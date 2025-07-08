@@ -53,7 +53,9 @@
         // TODO: upload to server
     }
     function OnConfigsReceived(data){
-        data.forEach((input) => table.addRow(input));
+        for (const [key, value] of Object.entries(data["configs"])) {
+            table.addRow({"name": key, "value": JSON.stringify(value)});
+        }
     }
 
     document.getElementById("add-row").addEventListener("click", function(){
@@ -67,17 +69,17 @@
         } else if (!confirm("Are you sure you want to delete " + selected_rows.length + " rows?")) {
             return;
         }
-        table.getSelectedRows().forEach((row) => OnRowDelete(row.getData()));
+        table.getSelectedRows().forEach(row => OnRowDelete(row.getData()));
 
         window.location.reload()
     });
     document.getElementById("apply-edits").addEventListener("click", function(){
         const affected_rows = new Set()
-        table.getEditedCells().forEach((cell) => affected_rows.add(cell.getRow()));
+        table.getEditedCells().forEach(cell => affected_rows.add(cell.getRow()));
         if (!confirm("Are you sure you want to apply changes to " + affected_rows.size + " rows?")) {
             return;
         }
-        affected_rows.forEach((row) => OnRowUpdate(row.getData()));
+        affected_rows.forEach(row => OnRowUpdate(row.getData()));
 
         window.location.reload()
     });
@@ -87,61 +89,9 @@
         headers: {'Content-Type': 'application/json'},  
         body: JSON.stringify({})  
     })
-    .then((response) => response.json())  
-    .then(OnConfigsReceived)
-    .catch(function(error){
-        //alert("Error:" + error)
-        
-        fake_data = [
-            {"name": "USERVER_SAMPLE_CONFIG", "service": "example-service", "value": "42"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
-            {"name": "SAMPLE_CONFIGCPP", "value": "44"},
-        ];
-        OnConfigsReceived(fake_data);
-    });
+    .then(response => response.json())
+    .then(data => OnConfigsReceived(data))
+    .catch(error => alert("Error: " + error));
 </script>
 
   </body>
