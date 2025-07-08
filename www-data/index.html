@@ -57,6 +57,7 @@
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(request),
+            signal: AbortSignal.timeout(2000),
         })
         .then(response => response.text())
         .then(response => {
@@ -64,11 +65,15 @@
             try {
                 json = JSON.parse(response);
                 if (!json["code"].startsWith("2")) {
-                    alert("Error from backend: " + json["message"] + "\n" + json["details"]);
+                    alert("Error from backend: " + json["message"] + "\n" + json["details"] + "\nThe page will be reloaded");
+                    window.location.reload();
                 }
             } catch (e) {}
         })
-        .catch(error => alert("Error from backend: " + error));
+        .catch(error => {
+            alert("Error from backend: " + error);
+            window.location.reload();
+        });
     }
 
     function OnDeleteRow(row_data) {
@@ -131,7 +136,10 @@
         })
         .then(response => response.json())
         .then(OnConfigsReceived)
-        .catch(error => alert("Error while retrieving initial data from backend: " + error));
+        .catch(error => {
+            alert("Error while retrieving initial data from backend: " + error);
+            window.location.reload();
+        });
     }
 
     document.addEventListener('DOMContentLoaded', OnLoaded);
