@@ -11,9 +11,9 @@
 
 <div class="nav-bar">
   <div class="nav-controls">
-    <button class="nav-button" id="apply-edits" disabled>☑️ Apply Edits</button>
-    <button class="nav-button" id="del-row">🗑</button>
-    <button class="nav-button" id="add-row">➕ Add Blank Row</button>
+    <button class="nav-button" id="apply-edits" disabled onclick="ApplyEdits()">☑️ Apply Edits</button>
+    <button class="nav-button" id="del-row" onclick="DeleteRow()">🗑</button>
+    <button class="nav-button" id="add-row" onclick="AddRow()">➕ Add Blank Row</button>
   </div>
 </div>
 
@@ -22,9 +22,7 @@
 <div id="the-table"></div>
 
 <script>
-    document.getElementById("apply-edits").disabled = true;
-
-    function OnCellChange(cell){
+    function OnCellChange(cell) {
         cell.getElement().classList.add("changed-cell");
         document.getElementById("apply-edits").disabled = false;
     }
@@ -33,9 +31,15 @@
     const table = new Tabulator("#the-table", {
         height:"100%",
         rowHeader:{
-            headerSort:false, resizable: false, frozen:true, headerHozAlign:"center", hozAlign:"center", formatter:"rowSelection", titleFormatter:"rowSelection",
-            cellClick:function(e, cell){
-              cell.getRow().toggleSelect();
+            headerSort:false,
+            resizable: false,
+            frozen:true,
+            headerHozAlign:"center",
+            hozAlign:"center",
+            formatter:"rowSelection",
+            titleFormatter:"rowSelection",
+            cellClick:function(e, cell) {
+                cell.getRow().toggleSelect();
             }
         },
         layout:"fitDataStretch",
@@ -47,7 +51,7 @@
         ],
     });
 
-    function PostToBackend(url, request){
+    function PostToBackend(url, request) {
         fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -58,7 +62,7 @@
         .catch(error => alert("Error from backend: " + error));
     }
 
-    function OnDeleteRow(row_data){
+    function OnDeleteRow(row_data) {
         request = {
             ids: [row_data["name"]],
             service: row_data["service"] || "__default__",
@@ -66,7 +70,7 @@
 
         PostToBackend('/admin/v1/configs/delete', request);
     }
-    function OnRowUpdate(data){
+    function OnRowUpdate(data) {
         request = {
             configs: {},
             service: data["service"] || "__default__",
@@ -75,15 +79,15 @@
 
         PostToBackend('/admin/v1/configs', request);
     }
-    function OnConfigsReceived(rows){
+    function OnConfigsReceived(rows) {
         rows.forEach(row_data => table.addRow(row_data));
     }
 
     // Button actions
-    document.getElementById("add-row").addEventListener("click", function(){
+    function AddRow() {
         table.addRow({}, /*add_to_top=*/ true);
-    });
-    document.getElementById("del-row").addEventListener("click", function(){
+    }
+    function DeleteRow() {
         const selected_rows = table.getSelectedRows();
         if (selected_rows.length === 0) {
             alert("No rows selected for deletion. Select the rows via the checkboxes on the left side of the table");
@@ -95,8 +99,8 @@
             OnDeleteRow(row.getData())
             row.delete();
         });
-    });
-    document.getElementById("apply-edits").addEventListener("click", function(){
+    }
+    function ApplyEdits() {
         const affected_rows = new Set();
         const changed_cells = table.getEditedCells();
         changed_cells.forEach(cell => affected_rows.add(cell.getRow()));
@@ -106,17 +110,22 @@
         affected_rows.forEach(row => OnRowUpdate(row.getData()));
         changed_cells.forEach(cell => cell.getElement().classList.remove("changed-cell"));
         document.getElementById("apply-edits").disabled = true;
-    });
+    }
 
-    // Load data
-    fetch('/admin/v1/configs/get', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},  
-        body: JSON.stringify({}),
-    })
-    .then(response => response.json())
-    .then(OnConfigsReceived)
-    .catch(error => alert("Error while retrieving initial data from backend: " + error));
+    function OnLoaded() {
+        document.getElementById("apply-edits").disabled = true;
+
+        fetch('/admin/v1/configs/get', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({}),
+        })
+        .then(response => response.json())
+        .then(OnConfigsReceived)
+        .catch(error => alert("Error while retrieving initial data from backend: " + error));
+    }
+
+    document.addEventListener('DOMContentLoaded', OnLoaded);
 </script>
 
   </body>
