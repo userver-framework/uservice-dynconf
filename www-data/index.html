@@ -9,13 +9,15 @@
   </head>
   <body>
 
-<div id="controls">
-    <button id="apply-edits" disabled>☑️ Apply Edits</button>
-    <div id="rows">
-        <button id="add-row">➕ Add Blank Row</button>
-        <button id="del-row">🗑 Remove Selected Rows</button>
-    </div>
+<div class="nav-bar">
+  <div class="nav-controls">
+    <button class="nav-button" id="apply-edits" disabled>☑️ Apply Edits</button>
+    <button class="nav-button" id="del-row">🗑</button>
+    <button class="nav-button" id="add-row">➕ Add Blank Row</button>
+  </div>
 </div>
+
+<div class="clear-both"></div>
 
 <div id="the-table"></div>
 
@@ -36,38 +38,46 @@
         },
         layout:"fitDataStretch",
         columns:[
-	        {title:"Name", field:"name", width:200, cellEdited:OnCellChange, editor:"input"},
-	        {title:"Service", field:"service", width:80, cellEdited:OnCellChange, editor:"input"},
-	        {title:"Value", field:"value", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Name", field:"name", width:"15%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Value", field:"value", cellEdited:OnCellChange, editor:"input"}
         ],
     });
 
-    const rows_deleted = new Set();
+    function OnRowDelete(data){
+        alert("DELETED: " + data["name"] + " " + data["service"] + " " + data["value"]);
+        // TODO: upload to server
+    }
+    function OnRowUpdate(data){
+        alert(data["name"] + " " + data["service"] + " " + data["value"]);
+        // TODO: upload to server
+    }
+    function OnConfigsReceived(data){
+        data.forEach((input) => table.addRow(input));
+    }
+
     document.getElementById("add-row").addEventListener("click", function(){
         table.addRow({}, /*add_to_top=*/ true);
     });
     document.getElementById("del-row").addEventListener("click", function(){
-        table.getSelectedRows().forEach(function(row){
-            rows_deleted.add(row);
-            row.delete();
-            document.getElementById("apply-edits").disabled = false;
-        });
+        const selected_rows = table.getSelectedRows();
+        if (selected_rows.length === 0) {
+            alert("No rows selected for deletion. Select the rows via the checkboxes on the left side of the table");
+            return;
+        } else if (!confirm("Are you sure you want to delete " + selected_rows.length + " rows?")) {
+            return;
+        }
+        table.getSelectedRows().forEach((row) => OnRowDelete(row.getData()));
+
+        window.location.reload()
     });
     document.getElementById("apply-edits").addEventListener("click", function(){
         const affected_rows = new Set()
-        table.getEditedCells().forEach(function(cell){
-            affected_rows.add(cell.getRow());
-        });
-        affected_rows.forEach(function(row){
-            const data = row.getData();
-            alert(data["name"] + " " + data["service"] + " " + data["value"]);
-            // TODO: upload to server
-        });
-        rows_deleted.forEach(function(row){
-            const data = row.getData();
-            alert("DELETED: " + data["name"] + " " + data["service"] + " " + data["value"]);
-            // TODO: upload to server
-        });
+        table.getEditedCells().forEach((cell) => affected_rows.add(cell.getRow()));
+        if (!confirm("Are you sure you want to apply changes to " + affected_rows.size + " rows?")) {
+            return;
+        }
+        affected_rows.forEach((row) => OnRowUpdate(row.getData()));
 
         window.location.reload()
     });
@@ -78,13 +88,11 @@
         body: JSON.stringify({})  
     })
     .then((response) => response.json())  
-    .then(function(data){
-        alert("Success:" + data);
-    })  
+    .then(OnConfigsReceived)
     .catch(function(error){
         //alert("Error:" + error)
         
-        data = [
+        fake_data = [
             {"name": "USERVER_SAMPLE_CONFIG", "service": "example-service", "value": "42"},
             {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
             {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
@@ -132,9 +140,7 @@
             {"name": "SAMPLE_CONFIG", "service": "example-service2", "value": "43"},
             {"name": "SAMPLE_CONFIGCPP", "value": "44"},
         ];
-        data.forEach(function(input){
-            table.addRow(input);
-        });
+        OnConfigsReceived(fake_data);
     });
 </script>
 
