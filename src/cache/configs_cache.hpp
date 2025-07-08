@@ -24,6 +24,9 @@ public:
   std::vector<ConfigPtr> FindConfigs(std::string_view service,
                                      const std::vector<std::string> &ids) const;
 
+  auto begin() const { return configs_to_key_.begin(); }
+  auto end() const { return configs_to_key_.end(); }
+
 private:
   std::unordered_map<Key, ConfigPtr> configs_to_key_;
   std::unordered_map<std::string, std::vector<ConfigPtr>> configs_by_service_;

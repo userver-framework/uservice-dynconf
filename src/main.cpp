@@ -12,6 +12,7 @@
 
 #include <cache/configs_cache.hpp>
 #include <handlers/admin_v1_configs.hpp>
+#include <handlers/admin_v1_configs_get.hpp>
 #include <handlers/admin_v1_configs_delete.hpp>
 #include <handlers/configs_values.hpp>
 
@@ -28,6 +29,7 @@ int main(int argc, char *argv[]) {
           .Append<uservice_dynconf::cache::settings_cache::ConfigsCache>()
           .Append<service_handlers::configs_values::post::Handler>()
           .Append<service_handlers::admin_v1_configs::post::Handler>()
+          .Append<service_handlers::admin_v1_configs_get::post::Handler>()
           .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();

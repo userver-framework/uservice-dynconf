@@ -32,6 +32,27 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/ConfigsValuesResponseBody'
 
+    /admin/v1/configs/get:
+        post:
+            description: |
+                Handle getting all the configs.
+            requestBody:
+                description: |
+                    Config parameters (you can add bulk)
+                content:
+                    application/json: {}
+
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            type: array
+                            description: list of config ids
+                            items:
+                                schema:
+                                    $ref: '#/components/schemas/AdminConfigsValuesResponseBody'
+
     /admin/v1/configs:
         post:
             description: |
@@ -47,7 +68,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/AdminConfigsRequestBody'
-                           
+
             responses:
                 204:
                     description: OK
@@ -57,7 +78,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Error'
-    
+
     /admin/v1/configs/delete:
         post:
             description: |
@@ -69,7 +90,7 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/AdminConfigsDeleteRequestBody'
-                            
+
             responses:
                 204:
                     description: OK
@@ -144,6 +165,24 @@ components:
                     items:
                         type: string
                         description: id конфига
+        AdminConfigsValuesResponseBody:
+            description: Response to the config/values request (with code 200)
+            type: object
+            additionalProperties: false
+            required:
+            - name
+            - service
+            - value
+            properties:
+                name:
+                    type: string
+                    description: config name
+                service:
+                    type: string
+                    description: service the config belongs to
+                value:
+                    type: string
+                    description: value of the config
         AdminConfigsRequestBody:
             description: The body of the /admin/v1/configs request
             type: object

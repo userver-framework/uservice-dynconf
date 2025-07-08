@@ -38,24 +38,36 @@
         },
         layout:"fitDataStretch",
         columns:[
-	        {title:"Name", field:"name", width:"15%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Name", field:"name", width:"20%", cellEdited:OnCellChange, editor:"input"},
 	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
-	        {title:"Value", field:"value", cellEdited:OnCellChange, editor:"input"}
+	        {title:"Value", field:"value", cellEdited:OnCellChange, editor:"textarea"}
         ],
     });
 
-    function OnRowDelete(data){
-        alert("DELETED: " + data["name"] + " " + data["service"] + " " + data["value"]);
-        // TODO: upload to server
+    function OnDeleteRow(row_data){
+        request = {
+            "ids": [row_data["name"]],
+            "service": row_data["service"] || "__default__"
+        };
+
+        fetch('/admin/v1/configs/delete', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(request)
+        })
+        .then(response => response.text())
+        .then(response => console.log(response))
+        .catch(error => alert("Error: " + error));
     }
     function OnRowUpdate(data){
         alert(data["name"] + " " + data["service"] + " " + data["value"]);
         // TODO: upload to server
     }
     function OnConfigsReceived(data){
-        for (const [key, value] of Object.entries(data["configs"])) {
-            table.addRow({"name": key, "value": JSON.stringify(value)});
-        }
+        data.forEach(row_data => {
+            //row_data["value"] = JSON.stringify(row_data["value"]);
+            table.addRow(row_data);
+        });
     }
 
     document.getElementById("add-row").addEventListener("click", function(){
@@ -69,7 +81,7 @@
         } else if (!confirm("Are you sure you want to delete " + selected_rows.length + " rows?")) {
             return;
         }
-        table.getSelectedRows().forEach(row => OnRowDelete(row.getData()));
+        table.getSelectedRows().forEach(row => OnDeleteRow(row.getData()));
 
         window.location.reload()
     });
@@ -84,7 +96,7 @@
         window.location.reload()
     });
 
-    fetch('/configs/values', {
+    fetch('/admin/v1/configs/get', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},  
         body: JSON.stringify({})  

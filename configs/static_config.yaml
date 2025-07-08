@@ -36,6 +36,11 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-admin-v1-configs-get:
+            path: /admin/v1/configs/get
+            method: POST
+            task_processor: main-task-processor
+
         handler-admin-v1-configs:
             path: /admin/v1/configs
             method: POST
