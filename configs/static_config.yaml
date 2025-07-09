@@ -69,7 +69,7 @@ components_manager:
 
         resources-cache:
             dir: www-data/
-            update-period: 1s
+            update-period: 10s
 
         handler-static:
             fs-cache-component: resources-cache
