@@ -1,5 +1,6 @@
 # uservice-dynconf
 [![CI](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml/badge.svg)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml)
+[![Docker build](https://github.com/userver-framework/uservice-dynconf/actions/workflows/docker.yaml/badge.svg?branch=develop)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/docker.yaml)
 
 The service to control [dynamic configs](https://userver.tech/d5/d46/md_en_2userver_2dynamic__config.html) of the other userver-based services.
 
