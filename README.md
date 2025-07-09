@@ -14,7 +14,7 @@ Started service at http://localhost:8083/
 At the provided address the web interface is available: ![image](https://github.com/user-attachments/assets/44465a82-21d2-41ea-999e-fd9ecdc7f209)
 
 
-## Run uservice-dynconf
+## Run uservice-dynconf without testsuite
 
 ```sh
 # Clone the service
