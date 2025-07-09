@@ -23,11 +23,11 @@
 
 #apply-edits {
     width: 20%;
-    float: right;;
+    float: right;
 }
 
 #apply-edits:enabled {
-    background-color: lightgreen
+    background-color: lightgreen;
 }
 
 #del-row {
@@ -36,9 +36,16 @@
 }
 
 #add-row {
-    width: 75%;
+    width: 70%;
     float: left;
     margin-left: 2px;
+}
+
+#tasks-running {
+    width: 80px;
+    float: right;
+    background-color: inherit;
+    border: 0;
 }
 
 .clear-both {

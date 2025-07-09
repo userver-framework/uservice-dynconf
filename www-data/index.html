@@ -15,6 +15,9 @@
     <button class="nav-button" id="apply-edits" disabled onclick="ApplyEdits()">✔️ Apply Edits</button>
     <button class="nav-button" id="del-row" onclick="DeleteRow()">🗑</button>
     <button class="nav-button" id="add-row" onclick="AddRow()">➕ Add Blank Row</button>
+    <div class = "name" onmouseover="show()" onmouseout="hide()" title="Count of requests to backend running in background">
+        <button class="nav-button" id="tasks-running" disabled></button>
+    </div>
   </div>
 </div>
 
@@ -53,6 +56,7 @@
     });
 
     function PostToBackend(url, request) {
+        UpdateInFlightRequests(+1);
         fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -69,11 +73,27 @@
                     window.location.reload();
                 }
             } catch (e) {}
+            UpdateInFlightRequests(-1);
         })
         .catch(error => {
+            UpdateInFlightRequests(-1);
             alert("Error from backend: " + error);
             window.location.reload();
         });
+    }
+
+    function UpdateInFlightRequests(change) {
+        if (typeof UpdateInFlightRequests.counter == 'undefined') {
+            UpdateInFlightRequests.counter = 0;
+        }
+        UpdateInFlightRequests.counter += change;
+
+        info = document.getElementById("tasks-running");
+        if (UpdateInFlightRequests.counter > 0) {
+            info.textContent = "🏃‍➡️ x " + UpdateInFlightRequests.counter;
+        } else {
+            info.textContent = "";
+        }
     }
 
     function OnDeleteRow(row_data) {
@@ -94,7 +114,12 @@
         PostToBackend('/admin/v1/configs', request);
     }
     function OnConfigsReceived(rows) {
-        rows.forEach(row_data => table.addRow(row_data));
+        if (rows) {
+            rows.forEach(row_data => table.addRow(row_data));
+        } else {
+            AddRow();
+        }
+        UpdateInFlightRequests(-1);
     }
 
     // Button actions
@@ -129,6 +154,7 @@
     function OnLoaded() {
         document.getElementById("apply-edits").disabled = true;
 
+        UpdateInFlightRequests(+1);
         fetch('/admin/v1/configs/get', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
