@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.mark.servicetest
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
 async def test_service_default_start(service_client, service_baseurl):

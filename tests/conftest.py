@@ -20,6 +20,7 @@ def static_config_hook(service_source_dir):
 
     return _patch_config
 
+
 @pytest.fixture(scope='session')
 def service_source_dir():
     return pathlib.Path(__file__).parent.parent
