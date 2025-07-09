@@ -1,7 +1,9 @@
 #include <userver/clients/dns/component.hpp>
 #include <userver/clients/http/component.hpp>
+#include <userver/components/fs_cache.hpp>
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/server/component.hpp>
+#include <userver/server/handlers/http_handler_static.hpp>
 #include <userver/server/handlers/ping.hpp>
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/storages/postgres/component.hpp>
@@ -10,6 +12,7 @@
 
 #include <cache/configs_cache.hpp>
 #include <handlers/admin_v1_configs.hpp>
+#include <handlers/admin_v1_configs_get.hpp>
 #include <handlers/admin_v1_configs_delete.hpp>
 #include <handlers/configs_values.hpp>
 
@@ -21,9 +24,12 @@ int main(int argc, char *argv[]) {
           .Append<userver::components::Postgres>("settings-database")
           .Append<userver::clients::dns::Component>()
           .Append<userver::components::TestsuiteSupport>()
+          .Append<userver::components::FsCache>("resources-cache")
+          .Append<userver::server::handlers::HttpHandlerStatic>()
           .Append<uservice_dynconf::cache::settings_cache::ConfigsCache>()
           .Append<service_handlers::configs_values::post::Handler>()
           .Append<service_handlers::admin_v1_configs::post::Handler>()
+          .Append<service_handlers::admin_v1_configs_get::post::Handler>()
           .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();

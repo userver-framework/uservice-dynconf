@@ -1,0 +1,46 @@
+.changed-cell {
+    background-color: lightgreen;
+}
+
+.nav-bar {
+    top: 0;
+    width: 100%;
+    position: sticky;
+    z-index: 255;
+    overflow: hidden;
+    background-color: #fdfdfd;
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+.nav-button {
+    height: 40px;
+    font-size: 120%;
+    border-radius: 3px;
+}
+
+.nav-controls {}
+
+#apply-edits {
+    width: 20%;
+    float: right;;
+}
+
+#apply-edits:enabled {
+    background-color: lightgreen
+}
+
+#del-row {
+    width: 40px;
+    float: left;
+}
+
+#add-row {
+    width: 75%;
+    float: left;
+    margin-left: 2px;
+}
+
+.clear-both {
+    clear: both;
+}

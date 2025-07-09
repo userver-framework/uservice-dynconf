@@ -4,4 +4,4 @@ SELECT
     config_mode, 
     updated_at
 FROM 
-    uservice_dynconf.configs;
+    uservice_dynconf.configs

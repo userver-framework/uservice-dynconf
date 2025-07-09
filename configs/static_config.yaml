@@ -36,6 +36,11 @@ components_manager:
             method: POST
             task_processor: main-task-processor
 
+        handler-admin-v1-configs-get:
+            path: /admin/v1/configs/get
+            method: POST
+            task_processor: main-task-processor
+
         handler-admin-v1-configs:
             path: /admin/v1/configs
             method: POST
@@ -61,6 +66,15 @@ components_manager:
             blocking_task_processor: fs-task-processor
             dns_resolver: async
             sync-start: true
+
+        resources-cache:
+            dir: www-data/
+            update-period: 10s
+
+        handler-static:
+            fs-cache-component: resources-cache
+            path: /*
+            method: GET
 
         http-client:
             load-enabled: $is_testing

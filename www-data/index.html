@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>🐙 userver: Dynamic Configs</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link href="tabulator/css/tabulator.min.css" rel="stylesheet">
+    <link href="custom.css" rel="stylesheet">
+    <script type="text/javascript" src="tabulator/js/tabulator.min.js"></script>
+  </head>
+  <body>
+
+<div class="nav-bar">
+  <div class="nav-controls">
+    <button class="nav-button" id="apply-edits" disabled onclick="ApplyEdits()">☑️ Apply Edits</button>
+    <button class="nav-button" id="del-row" onclick="DeleteRow()">🗑</button>
+    <button class="nav-button" id="add-row" onclick="AddRow()">➕ Add Blank Row</button>
+  </div>
+</div>
+
+<div class="clear-both"></div>
+
+<div id="the-table"></div>
+
+<script>
+    function OnCellChange(cell) {
+        cell.getElement().classList.add("changed-cell");
+        document.getElementById("apply-edits").disabled = false;
+    }
+
+    // See https://tabulator.info/
+    const table = new Tabulator("#the-table", {
+        height:"100%",
+        rowHeader:{
+            headerSort:false,
+            resizable: false,
+            frozen:true,
+            headerHozAlign:"center",
+            hozAlign:"center",
+            formatter:"rowSelection",
+            titleFormatter:"rowSelection",
+            cellClick:function(e, cell) {
+                cell.getRow().toggleSelect();
+            }
+        },
+        layout:"fitDataStretch",
+        placeholder:"⏳ Loading Data",
+        columns:[
+	        {title:"Config Name", field:"name", width:"20%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Config Value", field:"value", cellEdited:OnCellChange, editor:"input"},
+        ],
+    });
+
+    function PostToBackend(url, request) {
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(request),
+            signal: AbortSignal.timeout(2000),
+        })
+        .then(response => response.text())
+        .then(response => {
+            console.log(response);
+            try {
+                json = JSON.parse(response);
+                if (!json["code"].startsWith("2")) {
+                    alert("Error from backend: " + json["message"] + "\n" + json["details"] + "\nThe page will be reloaded");
+                    window.location.reload();
+                }
+            } catch (e) {}
+        })
+        .catch(error => {
+            alert("Error from backend: " + error);
+            window.location.reload();
+        });
+    }
+
+    function OnDeleteRow(row_data) {
+        request = {
+            ids: [row_data["name"]],
+            service: row_data["service"] || "__default__",
+        };
+
+        PostToBackend('/admin/v1/configs/delete', request);
+    }
+    function OnRowUpdate(data) {
+        request = {
+            configs: {},
+            service: data["service"] || "__default__",
+        };
+        request["configs"][data["name"]] = data["value"];
+
+        PostToBackend('/admin/v1/configs', request);
+    }
+    function OnConfigsReceived(rows) {
+        rows.forEach(row_data => table.addRow(row_data));
+    }
+
+    // Button actions
+    function AddRow() {
+        table.addRow({}, /*add_to_top=*/ true);
+    }
+    function DeleteRow() {
+        const selected_rows = table.getSelectedRows();
+        if (selected_rows.length === 0) {
+            alert("No rows selected for deletion. Select the rows via the checkboxes on the left side of the table");
+            return;
+        } else if (!confirm("Are you sure you want to delete " + selected_rows.length + " rows?")) {
+            return;
+        }
+        selected_rows.forEach(row => {
+            OnDeleteRow(row.getData())
+            row.delete();
+        });
+    }
+    function ApplyEdits() {
+        const affected_rows = new Set();
+        const changed_cells = table.getEditedCells();
+        changed_cells.forEach(cell => affected_rows.add(cell.getRow()));
+        if (!confirm("Are you sure you want to apply changes to " + affected_rows.size + " rows?")) {
+            return;
+        }
+        affected_rows.forEach(row => OnRowUpdate(row.getData()));
+        changed_cells.forEach(cell => cell.getElement().classList.remove("changed-cell"));
+        document.getElementById("apply-edits").disabled = true;
+    }
+
+    function OnLoaded() {
+        document.getElementById("apply-edits").disabled = true;
+
+        fetch('/admin/v1/configs/get', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({}),
+        })
+        .then(response => response.json())
+        .then(OnConfigsReceived)
+        .catch(error => {
+            alert("Error while retrieving initial data from backend: " + error);
+            window.location.reload();
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', OnLoaded);
+</script>
+
+  </body>
+</html>
