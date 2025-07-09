@@ -8,9 +8,9 @@ Service using PostgreSQL version 10+
 
 The service is ready to use, contains minimal web interface for configs administration. `make start-*` commands will start the service with a message close to:
 ```
-====================================================================================================
+=================================================
 Started service at http://localhost:8083/
-====================================================================================================
+=================================================
 ```
 At the provided address the web interface is available: ![web interface](https://github.com/user-attachments/assets/42edc615-bc7b-48c7-8627-43a05771bc19)
 
