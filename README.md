@@ -3,9 +3,16 @@
 
 The service to control [dynamic configs](https://userver.tech/d5/d46/md_en_2userver_2dynamic__config.html) of the other userver-based services.
 
-Service using postgres db version 10+
+Service using PostgreSQL version 10+
 
-The service is ready to use. Web interface for configs administration would be added soon.
+The service is ready to use, contains minimal web interface for configs administration. `make start-*` commands will start the service with a message close to:
+```
+====================================================================================================
+Started service at http://localhost:8083/
+====================================================================================================
+```
+At the provided address the web interface is available: ![image](https://github.com/user-attachments/assets/44465a82-21d2-41ea-999e-fd9ecdc7f209)
+
 
 ## Run uservice-dynconf
 
@@ -58,8 +65,8 @@ Makefile contains useful targets for development:
 * `make build-release` - release build of the service with LTO
 * `make test-debug` - does a `make build-debug` and runs all the tests on the result
 * `make test-release` - does a `make build-release` and runs all the tests on the result
-* `make start-debug` - builds the service in debug mode and starts it
-* `make start-release` - builds the service in release mode and starts it
+* `make start-debug` - builds the service in debug mode and starts it with web interface
+* `make start-release` - builds the service in release mode and starts it with web interface
 * `make` or `make all` - builds and runs all the tests in release and debug modes
 * `make format` - autoformat all the C++ and Python sources
 * `make clean-` - cleans the object files
