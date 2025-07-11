@@ -50,6 +50,7 @@
         placeholder:"⏳ Loading Data",
         columns:[
 	        {title:"Config Name", field:"name", width:"20%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Kill Switch", field:"is_kill_switch", cellEdited:OnCellChange, editor:"tickCross"},
 	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
 	        {title:"Config Value", field:"value", cellEdited:OnCellChange, editor:"input"},
         ],
@@ -107,9 +108,19 @@
     function OnRowUpdate(data) {
         request = {
             configs: {},
+            kill_switches_enabled: [],
+            kill_switches_disabled: [],
             service: data["service"] || "__default__",
         };
         request["configs"][data["name"]] = data["value"];
+
+        if (data["is_kill_switch"]) {
+            if (data["value"] == "true") {
+                request["kill_switches_enabled"].push(data["name"]);
+            } else {
+                request["kill_switches_disabled"].push(data["name"]);
+            }
+        }
 
         PostToBackend('/admin/v1/configs', request);
     }
@@ -124,7 +135,7 @@
 
     // Button actions
     function AddRow() {
-        table.addRow({}, /*add_to_top=*/ true);
+        table.addRow({is_kill_switch: false, service: "__default__"}, /*add_to_top=*/ true);
     }
     function DeleteRow() {
         const selected_rows = table.getSelectedRows();
