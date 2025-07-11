@@ -166,7 +166,7 @@ components:
                         type: string
                         description: id конфига
         AdminConfigsValuesResponseBody:
-            description: Response to the config/values request (with code 200) with confisgs sorted by name and service
+            description: Response to the config/values request (with code 200) with configs sorted by name and service
             type: object
             additionalProperties: false
             required:
@@ -186,7 +186,7 @@ components:
                     description: value of the config
                 is_kill_switch:
                     type: boolean
-                    description: trie uff this is a kill switch
+                    description: trie iff this is a kill switch
         AdminConfigsRequestBody:
             description: The body of the /admin/v1/configs request
             type: object

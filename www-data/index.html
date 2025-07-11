@@ -147,7 +147,7 @@
 
     // Button actions
     function AddRow() {
-        table.addRow({is_kill_switch: false, service: "__default__"}, /*add_to_top=*/ true);
+        table.addRow({is_kill_switch: false, service: "__default__", value: "{}"}, /*add_to_top=*/ true);
     }
     function DeleteRow() {
         const selected_rows = table.getSelectedRows();
