@@ -30,6 +30,18 @@
         cell.getElement().classList.add("changed-cell");
         document.getElementById("apply-edits").disabled = false;
     }
+    function CustomFormatter(cell, formatterParams, onRendered) {
+        cell.getElement().style.whiteSpace = "pre-wrap";
+        try {
+            return result = JSON.stringify(
+                JSON.parse(cell.getValue()),
+                null,
+                "  "
+            );
+        } catch (e) {
+            return "##ERROR (" + e + ")";
+        }
+    }
 
     // See https://tabulator.info/
     const table = new Tabulator("#the-table", {
@@ -52,7 +64,7 @@
 	        {title:"Config Name", field:"name", width:"20%", cellEdited:OnCellChange, editor:"input"},
 	        {title:"Kill Switch", field:"is_kill_switch", cellEdited:OnCellChange, editor:"tickCross"},
 	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
-	        {title:"Config Value", field:"value", cellEdited:OnCellChange, editor:"input"},
+	        {title:"JSON Config Value", field:"value", cellEdited:OnCellChange, editor:"input", formatter:CustomFormatter},
         ],
     });
 
