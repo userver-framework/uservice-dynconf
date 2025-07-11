@@ -12,7 +12,7 @@ The service is ready to use, contains minimal web interface for configs administ
 Started service at http://localhost:8083/
 =================================================
 ```
-At the provided address the web interface is available: ![web interface](https://github.com/user-attachments/assets/42edc615-bc7b-48c7-8627-43a05771bc19)
+At the provided address the web interface is available: ![web interface](https://github.com/user-attachments/assets/f4011abe-941f-4fe4-985a-dfac47643586)
 
 
 ## Run uservice-dynconf without testsuite
