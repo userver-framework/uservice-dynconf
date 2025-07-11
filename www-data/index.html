@@ -12,9 +12,12 @@
 
 <div class="nav-bar">
   <div class="nav-controls">
-    <button class="nav-button" id="apply-edits" disabled onclick="ApplyEdits()">☑️ Apply Edits</button>
+    <button class="nav-button" id="apply-edits" disabled onclick="ApplyEdits()">✔️ Apply Edits</button>
     <button class="nav-button" id="del-row" onclick="DeleteRow()">🗑</button>
     <button class="nav-button" id="add-row" onclick="AddRow()">➕ Add Blank Row</button>
+    <div class = "name" onmouseover="show()" onmouseout="hide()" title="Count of requests to backend running in background">
+        <button class="nav-button" id="tasks-running" disabled></button>
+    </div>
   </div>
 </div>
 
@@ -26,6 +29,18 @@
     function OnCellChange(cell) {
         cell.getElement().classList.add("changed-cell");
         document.getElementById("apply-edits").disabled = false;
+    }
+    function CustomFormatter(cell, formatterParams, onRendered) {
+        cell.getElement().style.whiteSpace = "pre-wrap";
+        try {
+            return result = JSON.stringify(
+                JSON.parse(cell.getValue()),
+                null,
+                "  "
+            );
+        } catch (e) {
+            return "##ERROR (" + e + ")";
+        }
     }
 
     // See https://tabulator.info/
@@ -47,12 +62,14 @@
         placeholder:"⏳ Loading Data",
         columns:[
 	        {title:"Config Name", field:"name", width:"20%", cellEdited:OnCellChange, editor:"input"},
+	        {title:"Kill Switch", field:"is_kill_switch", cellEdited:OnCellChange, editor:"tickCross"},
 	        {title:"Service", field:"service", width:"15%", cellEdited:OnCellChange, editor:"input"},
-	        {title:"Config Value", field:"value", cellEdited:OnCellChange, editor:"input"},
+	        {title:"JSON Config Value", field:"value", cellEdited:OnCellChange, editor:"input", formatter:CustomFormatter},
         ],
     });
 
     function PostToBackend(url, request) {
+        UpdateInFlightRequests(+1);
         fetch(url, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -69,11 +86,27 @@
                     window.location.reload();
                 }
             } catch (e) {}
+            UpdateInFlightRequests(-1);
         })
         .catch(error => {
+            UpdateInFlightRequests(-1);
             alert("Error from backend: " + error);
             window.location.reload();
         });
+    }
+
+    function UpdateInFlightRequests(change) {
+        if (typeof UpdateInFlightRequests.counter == 'undefined') {
+            UpdateInFlightRequests.counter = 0;
+        }
+        UpdateInFlightRequests.counter += change;
+
+        info = document.getElementById("tasks-running");
+        if (UpdateInFlightRequests.counter > 0) {
+            info.textContent = "🏃‍➡️ x " + UpdateInFlightRequests.counter;
+        } else {
+            info.textContent = "";
+        }
     }
 
     function OnDeleteRow(row_data) {
@@ -87,19 +120,34 @@
     function OnRowUpdate(data) {
         request = {
             configs: {},
+            kill_switches_enabled: [],
+            kill_switches_disabled: [],
             service: data["service"] || "__default__",
         };
         request["configs"][data["name"]] = data["value"];
 
+        if (data["is_kill_switch"]) {
+            if (data["value"] == "true") {
+                request["kill_switches_enabled"].push(data["name"]);
+            } else {
+                request["kill_switches_disabled"].push(data["name"]);
+            }
+        }
+
         PostToBackend('/admin/v1/configs', request);
     }
     function OnConfigsReceived(rows) {
-        rows.forEach(row_data => table.addRow(row_data));
+        if (rows) {
+            rows.forEach(row_data => table.addRow(row_data));
+        } else {
+            AddRow();
+        }
+        UpdateInFlightRequests(-1);
     }
 
     // Button actions
     function AddRow() {
-        table.addRow({}, /*add_to_top=*/ true);
+        table.addRow({is_kill_switch: false, service: "__default__", value: "{}"}, /*add_to_top=*/ true);
     }
     function DeleteRow() {
         const selected_rows = table.getSelectedRows();
@@ -129,6 +177,7 @@
     function OnLoaded() {
         document.getElementById("apply-edits").disabled = true;
 
+        UpdateInFlightRequests(+1);
         fetch('/admin/v1/configs/get', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

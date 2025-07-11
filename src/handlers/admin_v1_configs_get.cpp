@@ -38,7 +38,8 @@ userver::formats::json::Value Handler::HandleRequestJsonThrow(
         userver::formats::json::MakeObject(
             "name", row["config_name"].As<std::string>(),
             "service", row["service"].As<std::string>(),
-            "value", row["config_value"].As<std::string>()
+            "value", row["config_value"].As<std::string>(),
+            "is_kill_switch", row["is_kill_switch"].As<bool>()
         )
       );
   }

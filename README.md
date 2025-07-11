@@ -1,13 +1,21 @@
 # uservice-dynconf
 [![CI](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml/badge.svg)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/ci.yml)
+[![Docker build](https://github.com/userver-framework/uservice-dynconf/actions/workflows/docker.yaml/badge.svg?branch=develop)](https://github.com/userver-framework/uservice-dynconf/actions/workflows/docker.yaml)
 
 The service to control [dynamic configs](https://userver.tech/d5/d46/md_en_2userver_2dynamic__config.html) of the other userver-based services.
 
-Service using postgres db version 10+
+Service using PostgreSQL version 10+
 
-The service is ready to use. Web interface for configs administration would be added soon.
+The service is ready to use, contains minimal web interface for configs administration. `make start-*` commands will start the service with a message close to:
+```
+=================================================
+Started service at http://localhost:8083/
+=================================================
+```
+At the provided address the web interface is available: ![web interface](https://github.com/user-attachments/assets/f4011abe-941f-4fe4-985a-dfac47643586)
 
-## Run uservice-dynconf
+
+## Run uservice-dynconf without testsuite
 
 ```sh
 # Clone the service
@@ -58,8 +66,8 @@ Makefile contains useful targets for development:
 * `make build-release` - release build of the service with LTO
 * `make test-debug` - does a `make build-debug` and runs all the tests on the result
 * `make test-release` - does a `make build-release` and runs all the tests on the result
-* `make start-debug` - builds the service in debug mode and starts it
-* `make start-release` - builds the service in release mode and starts it
+* `make start-debug` - builds the service in debug mode and starts it with web interface
+* `make start-release` - builds the service in release mode and starts it with web interface
 * `make` or `make all` - builds and runs all the tests in release and debug modes
 * `make format` - autoformat all the C++ and Python sources
 * `make clean-` - cleans the object files
