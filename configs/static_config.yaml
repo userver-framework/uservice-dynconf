@@ -68,7 +68,7 @@ components_manager:
             sync-start: true
 
         resources-cache:
-            dir: www-data/
+            dir: /var/www/uservice-dynconf/
             update-period: 10s
 
         handler-static:

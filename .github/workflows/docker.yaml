@@ -1,4 +1,4 @@
-name: Docker build
+name: uservice-dynconf Docker build
 
 'on':
     schedule:

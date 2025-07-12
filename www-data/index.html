@@ -32,6 +32,7 @@
     }
     function CustomFormatter(cell, formatterParams, onRendered) {
         cell.getElement().style.whiteSpace = "pre-wrap";
+        cell.getElement().classList.remove("error-cell");
         try {
             return result = JSON.stringify(
                 JSON.parse(cell.getValue()),
@@ -39,6 +40,7 @@
                 "  "
             );
         } catch (e) {
+            cell.getElement().classList.add("error-cell");
             return "##ERROR (" + e + ")";
         }
     }
@@ -161,6 +163,9 @@
             OnDeleteRow(row.getData())
             row.delete();
         });
+        if (table.getDataCount() === 0) {
+            AddRow();
+        }
     }
     function ApplyEdits() {
         const affected_rows = new Set();
