@@ -29,7 +29,7 @@ async def test_default_values(pgsql, load_json):
 @pytest.mark.pgsql('uservice_dynconf', files=['default_configs.sql'])
 async def test_default_values_smoke(pgsql, service_client):
     response = await service_client.post('/admin/v1/configs/get', json={})
-    response_json = response.json();
+    response_json = response.json()
     assert len(response_json) > 1
     assert response_json[0]['service'] == '__default__'
 
