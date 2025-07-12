@@ -2,6 +2,10 @@
     background-color: lightgreen;
 }
 
+.error-cell, .changed-cell.error-cell {
+    background-color: red;
+}
+
 .nav-bar {
     top: 0;
     width: 100%;
