@@ -1,4 +1,4 @@
-name: CI
+name: uservice-dynconf CI
 
 'on':
     schedule:
@@ -82,11 +82,14 @@ jobs:
 
           - name: Test run after install
             if: matrix.make == 'test-release'
-            run: >-
-                ./local_installation/bin/uservice-dynconf
-                --config=./local_installation/etc/uservice-dynconf/static_config.yaml
-                --config_vars=./local_installation/etc/uservice-dynconf/config_vars.yaml
-                &
+            run: |
+                sed -i "s|/var/www/uservice-dynconf/|`pwd`/local_installation/var/www/uservice-dynconf/|g" \
+                    ./local_installation/etc/uservice-dynconf/static_config.yaml
+
+                ./local_installation/bin/uservice-dynconf \
+                    --config=./local_installation/etc/uservice-dynconf/static_config.yaml \
+                    --config_vars=./local_installation/etc/uservice-dynconf/config_vars.yaml \
+                    &
 
           - name: Check work run service
             if: matrix.make == 'test-release'
