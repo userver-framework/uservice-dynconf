@@ -6,7 +6,6 @@
 
 namespace uservice_dynconf::utils {
 
-userver::formats::json::Value MakeError(std::string_view code,
-                                        std::string_view message);
+userver::formats::json::Value MakeError(std::string_view code, std::string_view message);
 
 }
