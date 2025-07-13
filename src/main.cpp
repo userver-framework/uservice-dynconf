@@ -12,26 +12,25 @@
 
 #include <cache/configs_cache.hpp>
 #include <handlers/admin_v1_configs.hpp>
-#include <handlers/admin_v1_configs_get.hpp>
 #include <handlers/admin_v1_configs_delete.hpp>
+#include <handlers/admin_v1_configs_get.hpp>
 #include <handlers/configs_values.hpp>
 
-int main(int argc, char *argv[]) {
-  namespace service_handlers = uservice_dynconf::handlers;
-  auto component_list =
-      userver::components::MinimalServerComponentList()
-          .Append<userver::server::handlers::Ping>()
-          .Append<userver::components::Postgres>("settings-database")
-          .Append<userver::clients::dns::Component>()
-          .Append<userver::components::TestsuiteSupport>()
-          .Append<userver::components::FsCache>("resources-cache")
-          .Append<userver::server::handlers::HttpHandlerStatic>()
-          .Append<uservice_dynconf::cache::settings_cache::ConfigsCache>()
-          .Append<service_handlers::configs_values::post::Handler>()
-          .Append<service_handlers::admin_v1_configs::post::Handler>()
-          .Append<service_handlers::admin_v1_configs_get::post::Handler>()
-          .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
-          .Append<userver::components::HttpClient>()
-          .Append<userver::server::handlers::TestsControl>();
-  return userver::utils::DaemonMain(argc, argv, component_list);
+int main(int argc, char* argv[]) {
+    namespace service_handlers = uservice_dynconf::handlers;
+    auto component_list = userver::components::MinimalServerComponentList()
+                              .Append<userver::server::handlers::Ping>()
+                              .Append<userver::components::Postgres>("settings-database")
+                              .Append<userver::clients::dns::Component>()
+                              .Append<userver::components::TestsuiteSupport>()
+                              .Append<userver::components::FsCache>("resources-cache")
+                              .Append<userver::server::handlers::HttpHandlerStatic>()
+                              .Append<uservice_dynconf::cache::settings_cache::ConfigsCache>()
+                              .Append<service_handlers::configs_values::post::Handler>()
+                              .Append<service_handlers::admin_v1_configs::post::Handler>()
+                              .Append<service_handlers::admin_v1_configs_get::post::Handler>()
+                              .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
+                              .Append<userver::components::HttpClient>()
+                              .Append<userver::server::handlers::TestsControl>();
+    return userver::utils::DaemonMain(argc, argv, component_list);
 }
