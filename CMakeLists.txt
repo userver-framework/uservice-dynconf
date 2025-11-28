@@ -1,13 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(uservice-dynconf CXX)
 
-# Enable userver libraries that are needed in this project
-set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
-
-# Compatibility mode: some systems don't support these features
-set(USERVER_FEATURE_CRYPTOPP_BLAKE2 OFF CACHE BOOL "" FORCE)
-
-# Adding userver dependency
 find_package(userver COMPONENTS core postgresql chaotic QUIET)
 if(NOT userver_FOUND)  # Fallback to subdirectory usage
     # Enable userver libraries that are needed in this project

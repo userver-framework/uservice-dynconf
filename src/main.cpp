@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
                               .Append<service_handlers::admin_v1_configs::post::Handler>()
                               .Append<service_handlers::admin_v1_configs_get::post::Handler>()
                               .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
+                              .Append<userver::components::HttpClientCore>()
                               .Append<userver::components::HttpClient>()
                               .Append<userver::server::handlers::TestsControl>();
     return userver::utils::DaemonMain(argc, argv, component_list);
