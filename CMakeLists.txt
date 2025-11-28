@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(uservice-dynconf CXX)
 
-# Adding userver dependency
 find_package(userver COMPONENTS core postgresql chaotic QUIET)
 if(NOT userver_FOUND)  # Fallback to subdirectory usage
     # Enable userver libraries that are needed in this project
