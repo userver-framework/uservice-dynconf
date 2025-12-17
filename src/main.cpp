@@ -1,5 +1,5 @@
 #include <userver/clients/dns/component.hpp>
-#include <userver/clients/http/component.hpp>
+#include <userver/clients/http/component_list.hpp>
 #include <userver/components/fs_cache.hpp>
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/server/component.hpp>
@@ -30,8 +30,7 @@ int main(int argc, char* argv[]) {
                               .Append<service_handlers::admin_v1_configs::post::Handler>()
                               .Append<service_handlers::admin_v1_configs_get::post::Handler>()
                               .Append<service_handlers::admin_v1_configs_delete::post::Handler>()
-                              .Append<userver::components::HttpClientCore>()
-                              .Append<userver::components::HttpClient>()
+                              .AppendComponentList(userver::clients::http::ComponentList())
                               .Append<userver::server::handlers::TestsControl>();
     return userver::utils::DaemonMain(argc, argv, component_list);
 }
