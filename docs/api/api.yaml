@@ -124,7 +124,7 @@ components:
                     items:
                         type: string
                         description: config id
-                update_since:
+                updated_since:
                     type: string
                     format: date-time
                     description: the date from which to watch config updates

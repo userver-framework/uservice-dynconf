@@ -43,7 +43,7 @@ userver::formats::json::Value Handler::
     userver::formats::json::ValueBuilder configs_found{userver::formats::json::MakeObject()};
     for (const auto& config : configs) {
         if (config &&
-            request_data.update_since.value_or(kMinTime).GetTimePoint() <= config->updated_at.GetUnderlying()) {
+            request_data.updated_since.value_or(kMinTime).GetTimePoint() <= config->updated_at.GetUnderlying()) {
             configs_found[config->key.config_name] = config->config_value;
             switch (config->mode) {
                 case uservice_dynconf::models::Mode::kKillSwitchEnabled:
