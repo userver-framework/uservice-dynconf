@@ -32,7 +32,7 @@ psql -f ./postgresql/data/default_configs.sql
 make install
 
 # Run service
-uservice-dynconf --config /etc/uservice-dynconf/config_vars.yaml
+uservice-dynconf --config /etc/uservice-dynconf/static_config.yaml --config_vars /etc/uservice-dynconf/config_vars.yaml
 ```
 
 ## HowTo configure other userver-based microservices to use uservice-dynconf
