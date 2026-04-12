@@ -78,7 +78,7 @@ async def test_configs_delete_values(
         '/admin/v1/configs/delete', json={'service': service, 'ids': ids},
     )
 
-    response.status_code == 204
+    assert response.status_code == 204
 
     await service_client.invalidate_caches(cache_names=['configs-cache'])
     await check_configs_state(
@@ -142,7 +142,7 @@ async def test_remove_kill_switches(
         },
     )
 
-    response.status_code == 204
+    assert response.status_code == 204
 
     await service_client.invalidate_caches(cache_names=['configs-cache'])
     await check_configs_state(
