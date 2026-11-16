@@ -3,7 +3,7 @@ version: "2.3"
 services:
     postgres:
         container_name: uservice-dynconf-postgres
-        image: postgres:15
+        image: postgres:18
         environment:
           - POSTGRES_DB=uservice_dynconf
           - POSTGRES_USER=uservice_dynconf
