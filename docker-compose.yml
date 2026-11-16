@@ -3,7 +3,7 @@ version: "2.3"
 services:
     postgres:
         container_name: uservice-dynconf-postgres
-        image: postgres:12
+        image: postgres:18
         environment:
           - POSTGRES_DB=uservice_dynconf
           - POSTGRES_USER=uservice_dynconf
@@ -17,7 +17,7 @@ services:
           - postgres
 
     uservice-dynconf-container:
-        image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest
+        image: ghcr.io/userver-framework/ubuntu-24.04-userver:latest
         privileged: true
         environment:
           - POSTGRES_DB=uservice_dynconf
