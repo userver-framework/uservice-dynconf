@@ -11,7 +11,7 @@ if(NOT userver_FOUND)  # Fallback to subdirectory usage
 
     if (EXISTS third_party/userver)
         message(STATUS "Using userver framework from third_party/userver")
-        add_subdirectory(third_party/userver)
+        add_subdirectory(third_party/userver EXCLUDE_FROM_ALL)
     else()
         message(FATAL_ERROR "Either install the userver or provide a path to it")
     endif()
